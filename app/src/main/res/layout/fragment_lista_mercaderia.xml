@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0EBF6"
+    android:id="@+id/fl"
+    tools:context=".ListaMercaderia">
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:text="Lista de Mercaderia"
+        />
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="65dp"
+        android:background="@color/cardview_dark_background">
+    </View>
+
+
+
+    <Button
+        android:id="@+id/btnAgregar"
+        android:layout_width="50dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="340dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/circulo_mas"
+        android:cursorVisible="true"></Button>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="170dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="100dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idProd"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:hint="producto"
+            android:inputType="text"
+            android:padding="10dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="190dp"
+        android:textColorHint="@color/cardview_shadow_start_color"
+        android:outlineAmbientShadowColor="@color/cardview_shadow_start_color">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idMarca"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:hint="Marca"
+            android:inputType="text"
+            android:padding="10dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<ListView
+      android:id="@+id/idlistView"
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      android:footerDividersEnabled="true"
+    android:layout_marginTop="200dp">
+</ListView>
+
+    <Button
+        android:id="@+id/btnFiltrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="600dp"
+        android:text="Filtrar"></Button>
+
+    <Button
+        android:id="@+id/btnbuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="600dp">
+    </Button>
+
+
+
+</FrameLayout>

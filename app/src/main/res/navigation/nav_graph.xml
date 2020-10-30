@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/inicio">
+
+    <fragment
+        android:id="@+id/inicio"
+        android:name="com.example.myoffers_2.Inicio"
+        android:label="fragment_inicio"
+        tools:layout="@layout/fragment_inicio" >
+        <action
+            android:id="@+id/action_inicio_to_registrar"
+            app:destination="@id/registrar" />
+        <action
+            android:id="@+id/action_inicio_to_bienvenida"
+            app:destination="@id/bienvenida" />
+        <action
+            android:id="@+id/action_inicio_to_recupClave"
+            app:destination="@id/recupClave" />
+    </fragment>
+    <fragment
+        android:id="@+id/bienvenida"
+        android:name="com.example.myoffers_2.Bienvenida"
+        android:label="fragment_bienvenida"
+        tools:layout="@layout/fragment_bienvenida" >
+        <action
+            android:id="@+id/action_bienvenida_to_listaMercaderia"
+            app:destination="@id/listaMercaderia" />
+        <action
+            android:id="@+id/action_bienvenida_to_regisProducto"
+            app:destination="@id/regisProducto" />
+        <argument
+            android:name="NomUsuario"
+            app:argType="string"
+            android:defaultValue="Sin Nombre" />
+        <action
+            android:id="@+id/action_bienvenida_to_superCercanos"
+            app:destination="@id/superCercanos" />
+        <action
+            android:id="@+id/action_bienvenida_to_ofertasCercas"
+            app:destination="@id/ofertasCercas" />
+    </fragment>
+    <fragment
+        android:id="@+id/listaMercaderia"
+        android:name="com.example.myoffers_2.ListaMercaderia"
+        android:label="fragment_lista_mercaderia"
+        tools:layout="@layout/fragment_lista_mercaderia" >
+        <action
+            android:id="@+id/action_listaMercaderia_to_resultBusqueda"
+            app:destination="@id/resultBusqueda" />
+        <argument
+            android:name="NomUsuario"
+            app:argType="string"
+            android:defaultValue="Sin Nombre" />
+    </fragment>
+    <fragment
+        android:id="@+id/regisProducto"
+        android:name="com.example.myoffers_2.RegisProducto"
+        android:label="fragment_regis_producto"
+        tools:layout="@layout/fragment_regis_producto" >
+        <argument
+            android:name="NomUsuario"
+            app:argType="string"
+            android:defaultValue="Sin Nombre" />
+        <action
+            android:id="@+id/action_regisProducto_to_nueva_oferta"
+            app:destination="@id/nueva_oferta" />
+        <action
+            android:id="@+id/action_regisProducto_to_editar_oferta"
+            app:destination="@id/editar_oferta" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrar"
+        android:name="com.example.myoffers_2.Registrar"
+        android:label="fragment_registrar"
+        tools:layout="@layout/fragment_registrar" >
+        <action
+            android:id="@+id/action_registrar_to_inicio"
+            app:destination="@id/inicio" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultBusqueda"
+        android:name="com.example.myoffers_2.ResultBusqueda"
+        android:label="fragment_result_busqueda"
+        tools:layout="@layout/fragment_result_busqueda" >
+        <argument
+            android:name="productos"
+            app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/ofertasCercas"
+        android:name="com.example.myoffers_2.ofertasCercas"
+        android:label="fragment_ofertas_cercas"
+        tools:layout="@layout/fragment_ofertas_cercas" />
+    <fragment
+        android:id="@+id/recupClave"
+        android:name="com.example.myoffers_2.recupClave"
+        android:label="fragment_recup_clave"
+        tools:layout="@layout/fragment_recup_clave" />
+    <fragment
+        android:id="@+id/superCercanos"
+        android:name="com.example.myoffers_2.superCercanos"
+        android:label="fragment_super_cercanos"
+        tools:layout="@layout/fragment_super_cercanos" />
+    <fragment
+        android:id="@+id/nueva_oferta"
+        android:name="com.example.myoffers_2.nueva_oferta"
+        android:label="fragment_nueva_oferta"
+        tools:layout="@layout/fragment_nueva_oferta" >
+        <argument
+            android:name="nombre"
+            app:argType="string"
+            android:defaultValue="sin nombre" />
+    </fragment>
+    <fragment
+        android:id="@+id/editar_oferta"
+        android:name="com.example.myoffers_2.editar_oferta"
+        android:label="fragment_editar_oferta"
+        tools:layout="@layout/fragment_editar_oferta" >
+        <argument
+            android:name="nombre"
+            app:argType="string"
+            android:defaultValue="sin nombre" />
+    </fragment>
+</navigation>

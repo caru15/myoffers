@@ -1,0 +1,304 @@
+package com.example.myoffers_2;
+
+import android.os.Bundle;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import cz.msebera.android.httpclient.Header;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link nueva_oferta#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class nueva_oferta extends Fragment {
+
+    private Spinner spinner, spinner2;
+    private AdminBD bd=new AdminBD();
+    private supermercados super1 = new supermercados();
+    private String uri;
+    private int identificador;
+    private String direccion;
+    AsyncHttpClient conexion=new AsyncHttpClient();
+    RequestParams params= new RequestParams();
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public nueva_oferta() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment nueva_oferta.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static nueva_oferta newInstance(String param1, String param2) {
+        nueva_oferta fragment = new nueva_oferta();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_nueva_oferta, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        TextView tv = view.findViewById(R.id.Idusuario);
+        EditText tvprecio=view.findViewById(R.id.Id_precio);
+        EditText tvCantidad=view.findViewById(R.id.Id_cant);
+        Button guardar= view.findViewById(R.id.IdGuardar);
+        spinner= view.findViewById(R.id.spinner_super);
+        spinner2=view.findViewById(R.id.spinner_prod);
+identificador=0;
+        String usuario=nueva_ofertaArgs.fromBundle(getArguments()).getNombre();
+        List<supermercados> ListaSuper= new ArrayList<supermercados>();
+        List<productos> ListPro =new ArrayList<productos>();
+        llenar_Spinner(ListaSuper, view);
+        llenar_Spinner2(ListPro, view);
+        tv.setText(usuario);
+
+        // aqui hago el evento onclick para guardar los datos en la base de datos
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String pre = tvprecio.getText().toString();
+                String can=tvCantidad.getText().toString();
+                String dir=bd.dirProdSuper();
+                int id_super=Devuelve_id(spinner);
+                int id_prod=Devuelve_id(spinner2);
+                DevolverIdUsuario(usuario,identificador);
+                double precio = Double.parseDouble(pre);
+               int cantidad = Integer.parseInt(can);
+               params.put("type","alta");
+               params.put("id_super",id_super);
+               params.put("id_prod",id_prod);
+               params.put("usuario",identificador);
+               params.put("precio",precio);
+               params.put("cant",cantidad);
+               conexion.post(dir, params, new TextHttpResponseHandler() {
+                   @Override
+                   public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                       Toast toast = Toast.makeText(v.getContext(), "no se conecto", Toast.LENGTH_SHORT);
+                       toast.show();
+                   }
+
+                   @Override
+                   public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                      try {
+                          JSONArray array= new JSONArray(responseString);
+                          String info=array.getJSONObject(0).getString("message");
+                          Toast toast = Toast.makeText(v.getContext(),info, Toast.LENGTH_SHORT);
+                          toast.show();
+
+                      }catch (Exception e){
+                          Log.d("aquiii esta el error",responseString);
+                          Toast toast = Toast.makeText(v.getContext(), "entro por el catch no se guardo", Toast.LENGTH_SHORT);
+                          toast.show();
+                       }
+                   }
+               });
+            }
+        });
+    }
+    public int Devuelve_id(Spinner sp){
+
+        String sup=sp.getSelectedItem().toString();
+        String [] vect = sup.split("-");
+        int id=Integer.valueOf(vect[0].trim());
+        return id;
+    }
+    public void DevolverIdUsuario(String usuario, int id){
+
+            uri=bd.dirUsuarios();
+        params.put("type","buscar");
+        params.put("apellido","nada");
+        params.put("nombre","nada");
+        params.put("usuario",usuario);
+        params.put("email","nada");
+        params.put("password","nada");
+        params.put("reputacion",1);
+        conexion.post(uri, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("Error","no se conecto "+responseString);
+                 int id  =0;
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+             try {
+
+                JSONObject json= new JSONObject(responseString);
+                int id=json.getInt("usuario");
+
+                 }
+
+             catch (Exception e){
+                 e.printStackTrace();
+                 Log.d("ERROR","entramos por el catch "+e.toString());
+                 int id=0;
+             }
+            }
+
+        });
+    }
+
+    public void llenar_Spinner(List<supermercados> lista, View v){
+     //  direccion="http://192.168.0.22/myOffers/supermercados.php";
+        uri=bd.dirSuper();
+        params.put("type","listar");
+        params.put("nombre","nada");
+        params.put("direccion","nada");
+        params.put("localidad","nada");
+        params.put("provincia","nada");
+        conexion.post(uri, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                supermercados misuper = new supermercados("nada","nada","nada","nada");
+                lista.add(misuper);
+                Log.d("caru","no cargo"+statusCode);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String response) {
+                Log.d("caru","entramos "+response);
+                try {
+
+                    JSONArray jsonArray= new JSONArray(response);
+                    for (int i = 0;i < jsonArray.length();i++){
+                        supermercados misuper = new supermercados();
+                        misuper.setId(jsonArray.getJSONObject(i).getInt("id_supermercados"));
+                        misuper.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+                        misuper.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
+                        misuper.setLocalidad(jsonArray.getJSONObject(i).getString("localidad"));
+                        Log.d("Super",misuper.getNombre());
+                        misuper.setProvincia(jsonArray.getJSONObject(i).getString("provincia"));
+                        lista.add(misuper);
+                    }
+                    int pos;
+                    String nom;
+                    supermercados sup= new supermercados();
+                    List<String> sp = new ArrayList<>();
+                    for (int i=0;i<lista.size();i++){
+                        sup =lista.get(i);
+                        pos=sup.getId();
+                        nom= String.valueOf(pos)+"-"+ sup.getNombre()+"-"+sup.getDireccion();
+                        sp.add(nom);
+                    }
+                    ArrayAdapter<String> a = new ArrayAdapter<String>(v.getContext(),android.R.layout.simple_dropdown_item_1line,sp);
+                    spinner.setAdapter(a);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("ERROR","entramos por el catch "+e.toString());
+
+                } }
+
+        });
+
+    }
+    public void llenar_Spinner2(List<productos> list, View view){
+     //   uri="http://192.168.0.22/myOffers/producto.php";
+        direccion=bd.dirProd();
+        params.put("type","listar");
+       params.put("nombre","nada");
+        params.put("descripcion","nda");
+        params.put("cant",1);
+        params.put("marca","nda");
+        params.put("imagen",0);
+        conexion.post(direccion, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                productos pro = new productos("nada","nada","nada",1,1);
+                list.add(pro);
+                Log.d("caru","no cargo"+statusCode);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("caru","entramos2 "+responseString);
+                try {
+
+                    JSONArray jsonA= new JSONArray(responseString);
+                    for (int i = 0;i < jsonA.length();i++){
+                        productos pro=new productos();
+                        pro.setId(jsonA.getJSONObject(i).getInt("id_producto"));
+                        pro.setNombre(jsonA.getJSONObject(i).getString("nombre"));
+                        pro.setMarca(jsonA.getJSONObject(i).getString("marca"));
+                        Log.d("producto",pro.getNombre());
+                        pro.setDescripcion(jsonA.getJSONObject(i).getString("descripcion"));
+                        pro.setCant_unidad(jsonA.getJSONObject(i).getInt("cant_unidad"));
+                        //pro.setImagen(jsonA.getJSONObject(i).getInt("imagen"));
+                        //aqui falta settear la imagen
+                        list.add(pro);
+                    }
+                    int pos;
+                    String nom;
+                    productos producto1= new productos();
+                    List<String> sp = new ArrayList<>();
+                    for (int i=0;i<list.size();i++){
+                        producto1 =list.get(i);
+                        pos=producto1.getId();
+                        nom= String.valueOf(pos)+"-"+ producto1.getNombre()+"-"+producto1.getDescripcion();
+
+                        sp.add(nom);
+                    }
+                    ArrayAdapter<String> a = new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_dropdown_item_1line,sp);
+                    spinner2.setAdapter(a);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("ERROR","entramos porel catch2 "+e.toString());
+
+                } }
+
+        });
+
+    }
+}

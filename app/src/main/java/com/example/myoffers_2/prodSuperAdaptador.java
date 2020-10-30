@@ -1,0 +1,78 @@
+package com.example.myoffers_2;
+
+import android.content.Context;
+import android.os.Build;
+import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+
+public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.prodViewHolder> {
+
+    private List<ProdxSuper> items;
+    private Context micontext;
+
+    public prodSuperAdaptador(List<ProdxSuper> items,@NonNull Context context){
+        this.items=items;
+        this.micontext=context;
+    }
+
+    public ProdxSuper getItem(int position) {
+        return items.get(position);
+    }
+
+    @NonNull
+    @Override
+    public prodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_layout, parent, false);
+        return new prodViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder( prodViewHolder holder, int position) {
+        holder.image.setImageResource(R.mipmap.logo);
+        holder.titulo.setText(String.valueOf(items.get(position).getId_prod()));
+        holder.descripcion.setText(String.valueOf(items.get(position).getCantPraoferta()));
+        holder.precio.setText(String.valueOf(items.get(position).getPrecio()));
+        ProdxSuper ps=items.get(position);
+        holder.contenedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+                    holder.image.setTransitionName("imgTransition");
+                    Pair<View, String> pair=Pair.create((View) holder.image,"imgTransition");
+                    ActivityOptionsCompat options;
+                   // options = ActivityOptionsCompat.makeSceneTransitionAnimation(v.getContext(), pair);
+                }
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public static class prodViewHolder extends RecyclerView.ViewHolder{
+    public ImageView image;
+    public TextView titulo, descripcion;
+    public TextView precio;
+    View contenedor;
+
+    public prodViewHolder(View v){
+        super(v);
+        image=(ImageView) v.findViewById(R.id.rv_imagen);
+        titulo=(TextView)v.findViewById(R.id.rv_nombre);
+        descripcion=(TextView)v.findViewById(R.id.rv_descripcion);
+        precio=(TextView)v.findViewById(R.id.rv_precio);
+        contenedor=v;
+    }
+    }
+}
