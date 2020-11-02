@@ -22,13 +22,13 @@ public class AdminBD {
 
     public AdminBD() {
 
-       Uri="http://192.168.0.22/myOffers/";
+       Uri="http://192.168.0.20/myOffers/";
                      }
 
 //me devuelve la uri de mi producto
     public String dirProd(){
 
-       String dir=this.Uri+"producto.php";
+       String dir=this.Uri+"productos.php";
         return dir;
     }
 
@@ -39,11 +39,11 @@ public class AdminBD {
     }
 
     public String dirProdSuper(){
-        String dir=this.Uri+"prod_super.php";
+        String dir=this.Uri+"prodxsuper.php";
         return dir;
     }
     public String dirUsuarios(){
-        String dir=this.Uri+"usuario.php";
+        String dir=this.Uri+"usuarios.php";
         return dir;
     }
 

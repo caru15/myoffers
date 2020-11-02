@@ -97,7 +97,7 @@ public class nueva_oferta extends Fragment {
         Button guardar= view.findViewById(R.id.IdGuardar);
         spinner= view.findViewById(R.id.spinner_super);
         spinner2=view.findViewById(R.id.spinner_prod);
-identificador=0;
+         identificador=0;
         String usuario=nueva_ofertaArgs.fromBundle(getArguments()).getNombre();
         List<supermercados> ListaSuper= new ArrayList<supermercados>();
         List<productos> ListPro =new ArrayList<productos>();
@@ -118,11 +118,11 @@ identificador=0;
                 double precio = Double.parseDouble(pre);
                int cantidad = Integer.parseInt(can);
                params.put("type","alta");
-               params.put("id_super",id_super);
-               params.put("id_prod",id_prod);
+               params.put("super",id_super);
+               params.put("prod",id_prod);
                params.put("usuario",identificador);
-               params.put("precio",precio);
-               params.put("cant",cantidad);
+               params.put("pre",precio);
+               params.put("oferta",cantidad);
                conexion.post(dir, params, new TextHttpResponseHandler() {
                    @Override
                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -159,12 +159,12 @@ identificador=0;
 
             uri=bd.dirUsuarios();
         params.put("type","buscar");
-        params.put("apellido","nada");
-        params.put("nombre","nada");
-        params.put("usuario",usuario);
+        params.put("ape","nada");
+        params.put("name","nada");
+        params.put("usua",usuario);
         params.put("email","nada");
         params.put("password","nada");
-        params.put("reputacion",1);
+        params.put("repu",1);
         conexion.post(uri, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -195,10 +195,9 @@ identificador=0;
      //  direccion="http://192.168.0.22/myOffers/supermercados.php";
         uri=bd.dirSuper();
         params.put("type","listar");
-        params.put("nombre","nada");
-        params.put("direccion","nada");
+        params.put("nom","nada");
+        params.put("dir","nada");
         params.put("localidad","nada");
-        params.put("provincia","nada");
         conexion.post(uri, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -214,12 +213,11 @@ identificador=0;
                     JSONArray jsonArray= new JSONArray(response);
                     for (int i = 0;i < jsonArray.length();i++){
                         supermercados misuper = new supermercados();
-                        misuper.setId(jsonArray.getJSONObject(i).getInt("id_supermercados"));
+                        misuper.setId(jsonArray.getJSONObject(i).getInt("id_supermercado"));
                         misuper.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
                         misuper.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
                         misuper.setLocalidad(jsonArray.getJSONObject(i).getString("localidad"));
                         Log.d("Super",misuper.getNombre());
-                        misuper.setProvincia(jsonArray.getJSONObject(i).getString("provincia"));
                         lista.add(misuper);
                     }
                     int pos;
@@ -248,8 +246,8 @@ identificador=0;
      //   uri="http://192.168.0.22/myOffers/producto.php";
         direccion=bd.dirProd();
         params.put("type","listar");
-       params.put("nombre","nada");
-        params.put("descripcion","nda");
+       params.put("nom","nada");
+        params.put("desc","nda");
         params.put("cant",1);
         params.put("marca","nda");
         params.put("imagen",0);
@@ -270,9 +268,10 @@ identificador=0;
                         productos pro=new productos();
                         pro.setId(jsonA.getJSONObject(i).getInt("id_producto"));
                         pro.setNombre(jsonA.getJSONObject(i).getString("nombre"));
+                        pro.setDescripcion(jsonA.getJSONObject(i).getString("descripcion"));
                         pro.setMarca(jsonA.getJSONObject(i).getString("marca"));
                         Log.d("producto",pro.getNombre());
-                        pro.setDescripcion(jsonA.getJSONObject(i).getString("descripcion"));
+
                         pro.setCant_unidad(jsonA.getJSONObject(i).getInt("cant_unidad"));
                         //pro.setImagen(jsonA.getJSONObject(i).getInt("imagen"));
                         //aqui falta settear la imagen

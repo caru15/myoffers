@@ -100,13 +100,13 @@ public class Inicio extends Fragment {
                 }else{
                 final AsyncHttpClient client = new AsyncHttpClient();
                 final RequestParams params = new RequestParams();
-                params.put("type", "login");
+                //params.put("type", "login");
                 final String user = usuario.getText().toString();
                 final String login=contraseña.getText().toString();
 
                 params.put("username", user);
                 params.put("password", login);
-                client.post("http://192.168.0.22/login.php", params, new TextHttpResponseHandler() {
+                client.post("http://192.168.0.20/myOffers/login.php", params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Snackbar.make(v, "algo salio mal",Snackbar.LENGTH_LONG).setAction("Action",null).show();
