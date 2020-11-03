@@ -97,7 +97,7 @@ public class nueva_oferta extends Fragment {
         Button guardar= view.findViewById(R.id.IdGuardar);
         spinner= view.findViewById(R.id.spinner_super);
         spinner2=view.findViewById(R.id.spinner_prod);
-         identificador=0;
+
         String usuario=nueva_ofertaArgs.fromBundle(getArguments()).getNombre();
         List<supermercados> ListaSuper= new ArrayList<supermercados>();
         List<productos> ListPro =new ArrayList<productos>();
@@ -111,40 +111,13 @@ public class nueva_oferta extends Fragment {
             public void onClick(View v) {
                 String pre = tvprecio.getText().toString();
                 String can=tvCantidad.getText().toString();
-                String dir=bd.dirProdSuper();
+
                 int id_super=Devuelve_id(spinner);
                 int id_prod=Devuelve_id(spinner2);
-                DevolverIdUsuario(usuario,identificador);
                 double precio = Double.parseDouble(pre);
                int cantidad = Integer.parseInt(can);
-               params.put("type","alta");
-               params.put("super",id_super);
-               params.put("prod",id_prod);
-               params.put("usuario",identificador);
-               params.put("pre",precio);
-               params.put("oferta",cantidad);
-               conexion.post(dir, params, new TextHttpResponseHandler() {
-                   @Override
-                   public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                       Toast toast = Toast.makeText(v.getContext(), "no se conecto", Toast.LENGTH_SHORT);
-                       toast.show();
-                   }
+                DevolverIdUsuario(v,usuario,id_super,id_prod,precio,cantidad);
 
-                   @Override
-                   public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                      try {
-                          JSONArray array= new JSONArray(responseString);
-                          String info=array.getJSONObject(0).getString("message");
-                          Toast toast = Toast.makeText(v.getContext(),info, Toast.LENGTH_SHORT);
-                          toast.show();
-
-                      }catch (Exception e){
-                          Log.d("aquiii esta el error",responseString);
-                          Toast toast = Toast.makeText(v.getContext(), "entro por el catch no se guardo", Toast.LENGTH_SHORT);
-                          toast.show();
-                       }
-                   }
-               });
             }
         });
     }
@@ -155,9 +128,9 @@ public class nueva_oferta extends Fragment {
         int id=Integer.valueOf(vect[0].trim());
         return id;
     }
-    public void DevolverIdUsuario(String usuario, int id){
+    public void DevolverIdUsuario(View v,String usuario,int id_super, int id_prod,double precio,int cantidad){
 
-            uri=bd.dirUsuarios();
+        uri=bd.dirUsuarios();
         params.put("type","buscar");
         params.put("ape","nada");
         params.put("name","nada");
@@ -175,10 +148,40 @@ public class nueva_oferta extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
              try {
+                JSONArray jsonArray=new JSONArray(responseString);
 
-                JSONObject json= new JSONObject(responseString);
-                int id=json.getInt("usuario");
+                int id=jsonArray.getJSONObject(0).getInt("id_usuario");
+                identificador=id;
+                 String dir=bd.dirProdSuper();
+                 params.put("type","alta");
+                 params.put("super",id_super);
+                 params.put("prod",id_prod);
+                 params.put("usuario",identificador);
+                 Log.d("este es el id",String.valueOf(identificador));
+                 params.put("pre",precio);
+                 params.put("oferta",cantidad);
+                 conexion.post(dir, params, new TextHttpResponseHandler() {
+                     @Override
+                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                         Toast toast = Toast.makeText(v.getContext(), "no se conecto", Toast.LENGTH_SHORT);
+                         toast.show();
+                     }
 
+                     @Override
+                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                         try {
+                             JSONObject jsonObject= new JSONObject(responseString);
+                             String info=jsonObject.getString("message");
+                             Toast toast = Toast.makeText(v.getContext(),info, Toast.LENGTH_SHORT);
+                             toast.show();
+
+                         }catch (Exception e){
+                             Log.d("aquiii esta el error",responseString);
+                             Toast toast = Toast.makeText(v.getContext(), "entro por el catch no se guardo", Toast.LENGTH_SHORT);
+                             toast.show();
+                         }
+                     }
+                 });
                  }
 
              catch (Exception e){
