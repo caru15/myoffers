@@ -51,20 +51,13 @@ public class RegisProducto extends Fragment {
     private AdminBD bd=new AdminBD();
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
-    private ProdxSuper PS=new ProdxSuper();
+    private ProdxSuper PS;
+    List<ProdxSuper> items= new ArrayList<>();
     public RegisProducto() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisProducto.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static RegisProducto newInstance(String param1, String param2) {
         RegisProducto fragment = new RegisProducto();
         Bundle args = new Bundle();
@@ -97,10 +90,9 @@ public class RegisProducto extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
-
         dir=bd.dirProdSuper();
         uri=bd.dirProd();
-        List<ProdxSuper> items= new ArrayList<>();
+
         params.put("type","join");
         params.put("super","nada");
         params.put("prod","nada");
@@ -117,19 +109,23 @@ public class RegisProducto extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String response) {
                 Log.d("caru", "entramos " + response);
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        PS.setId(jsonArray.getJSONObject(i).getInt("id"));
-                        PS.setNombre(jsonArray.getJSONObject(i).getString("nom"));
-                        PS.setCantPraoferta(jsonArray.getJSONObject(i).getInt("cantidad"));
-                        PS.setDescripcion(jsonArray.getJSONObject(i).getString("des"));
-                        PS.setSuperNom(jsonArray.getJSONObject(i).getString("super"));
-                        PS.setPrecio(jsonArray.getJSONObject(i).getDouble("precio"));
-                        items.add(i,PS);
-                    }
-
                     RecyclerView.Adapter adapter= new prodSuperAdaptador(items, view.getContext());
                     recyclerView.setAdapter(adapter);
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length();i++) {
+                        int id= jsonArray.getJSONObject(i).getInt("id");
+                        String nom= jsonArray.getJSONObject(i).getString("nom");
+                        int cant= jsonArray.getJSONObject(i).getInt("cantidad");
+                        String descripcion =jsonArray.getJSONObject(i).getString("des");
+                        String supNombre =jsonArray.getJSONObject(i).getString("super");
+                        double pre=jsonArray.getJSONObject(i).getDouble("precio");
+                        String imagen=jsonArray.getJSONObject(i).getString("imagen");
+                 PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
+                        items.add(PS);
+                        adapter.notifyDataSetChanged();
+                    }
+                    Log.d("esto tiene la lista",items.get(0).getNombre()+" "+items.get(1).getNombre()+" "+items.get(2).getNombre()+" "+items.get(3).getNombre());
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
