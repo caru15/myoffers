@@ -149,7 +149,6 @@ public class nueva_oferta extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
              try {
                 JSONArray jsonArray=new JSONArray(responseString);
-
                 int id=jsonArray.getJSONObject(0).getInt("id_usuario");
                 identificador=id;
                  String dir=bd.dirProdSuper();

@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.prodViewHolder> {
@@ -19,7 +21,7 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
     private List<ProdxSuper> items;
     private Context micontext;
 
-    public prodSuperAdaptador(List<ProdxSuper> items,@NonNull Context context){
+    public prodSuperAdaptador(List<ProdxSuper> items, Context context){
         this.items=items;
         this.micontext=context;
     }
@@ -36,12 +38,13 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
     }
 
     @Override
-    public void onBindViewHolder( prodViewHolder holder, int position) {
-        holder.image.setImageResource(R.mipmap.logo);
-        holder.titulo.setText(String.valueOf(items.get(position).getId_prod()));
-        holder.descripcion.setText(String.valueOf(items.get(position).getCantPraoferta()));
+    public void onBindViewHolder( prodViewHolder holder,final int position) {
+        holder.image.setImageResource(R.mipmap.logo);//aqui cambiale por la imagen q viene de la base de datos
+        final ProdxSuper obj=items.get(position);
+        holder.titulo.setText(obj.getNombre());
+        holder.descripcion.setText(items.get(position).getDescripcion());
         holder.precio.setText(String.valueOf(items.get(position).getPrecio()));
-        ProdxSuper ps=items.get(position);
+        //ProdxSuper ps=items.get(position);
         holder.contenedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +57,15 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
             }
         });
     }
-
+public void add(ProdxSuper PS){
+        items.add(PS);
+        notifyItemInserted(items.size()-1);
+}
+public void addAll(ArrayList<ProdxSuper> ps){
+        for (ProdxSuper prodxSuper: ps){
+            add(prodxSuper);
+        }
+}
     @Override
     public int getItemCount() {
         return items.size();

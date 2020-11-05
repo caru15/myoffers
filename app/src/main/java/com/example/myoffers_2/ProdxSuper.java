@@ -1,19 +1,33 @@
 package com.example.myoffers_2;
 
 public class ProdxSuper {
-    private int id, id_super, id_prod, id_usua, cantPraoferta;
+    private int id;
     private double precio;
+    private String imagen;
+    private String nombre;
+    private int cant;
+    private String descripcion;
+    private String superNom;
 
     public ProdxSuper() {
 
     }
-    public ProdxSuper(int id,int id_super,int id_prod, int id_usua, int cant, double precio){
+    public ProdxSuper(int id,String nombre, int cant,String descripcion,String superNom, double precio, String imagen){
         this.id=id;
-        this.id_super=id_super;
-        this.id_prod=id_prod;
-        this.id_usua=id_usua;
-        this.cantPraoferta=cant;
+        this.nombre=nombre;
+        this.cant=cant;
+        this.descripcion=descripcion;
+        this.superNom=superNom;
         this.precio=precio;
+        this.imagen=imagen;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public int getId() {
@@ -24,36 +38,12 @@ public class ProdxSuper {
         this.id = id;
     }
 
-    public int getId_super() {
-        return id_super;
-    }
-
-    public void setId_super(int id_super) {
-        this.id_super = id_super;
-    }
-
-    public int getId_prod() {
-        return id_prod;
-    }
-
-    public void setId_prod(int id_prod) {
-        this.id_prod = id_prod;
-    }
-
-    public int getId_usua() {
-        return id_usua;
-    }
-
-    public void setId_usua(int id_usua) {
-        this.id_usua = id_usua;
-    }
-
     public int getCantPraoferta() {
-        return cantPraoferta;
+        return cant;
     }
 
     public void setCantPraoferta(int cantPraoferta) {
-        this.cantPraoferta = cantPraoferta;
+        this.cant= cantPraoferta;
     }
 
     public double getPrecio() {
@@ -62,5 +52,28 @@ public class ProdxSuper {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getSuperNom() {
+        return superNom;
+    }
+
+    public void setSuperNom(String superNom) {
+        this.superNom = superNom;
     }
 }

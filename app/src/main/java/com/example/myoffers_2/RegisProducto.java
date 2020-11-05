@@ -12,35 +12,46 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
 
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.LayoutInflater;
 
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisProducto#newInstance} factory method to
- * create an instance of this fragment.
- */
+import cz.msebera.android.httpclient.Header;
+
 public class RegisProducto extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private String dirProducto;
+    private String dirProdxSup;
+    private String dir, uri;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private AdminBD bd=new AdminBD();
+    AsyncHttpClient conexion=new AsyncHttpClient();
+    RequestParams params= new RequestParams();
+    private ProdxSuper PS=new ProdxSuper();
     public RegisProducto() {
         // Required empty public constructor
     }
@@ -82,22 +93,55 @@ public class RegisProducto extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List items = new ArrayList();
-        items.add(new ProdxSuper(1,2,3,4,5,25.20));
-        items.add(new ProdxSuper(7,8,9,4,5,45.20));
-        items.add(new ProdxSuper(5,4,2,7,1,75.20));
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
-        RecyclerView.Adapter adapter= new prodSuperAdaptador(items,view.getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));
+
+        dir=bd.dirProdSuper();
+        uri=bd.dirProd();
+        List<ProdxSuper> items= new ArrayList<>();
+        params.put("type","join");
+        params.put("super","nada");
+        params.put("prod","nada");
+        params.put("usuario","nada");
+        params.put("pre","nada");
+        params.put("oferta","nada");
+        conexion.post(dir, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("Error","no se conecto "+responseString);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String response) {
+                Log.d("caru", "entramos " + response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        PS.setId(jsonArray.getJSONObject(i).getInt("id"));
+                        PS.setNombre(jsonArray.getJSONObject(i).getString("nom"));
+                        PS.setCantPraoferta(jsonArray.getJSONObject(i).getInt("cantidad"));
+                        PS.setDescripcion(jsonArray.getJSONObject(i).getString("des"));
+                        PS.setSuperNom(jsonArray.getJSONObject(i).getString("super"));
+                        PS.setPrecio(jsonArray.getJSONObject(i).getDouble("precio"));
+                        items.add(i,PS);
+                    }
+
+                    RecyclerView.Adapter adapter= new prodSuperAdaptador(items, view.getContext());
+                    recyclerView.setAdapter(adapter);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("ERROR", "entramos por el catch " + e.toString());
+                }
+            }
+        });
+
         //Recibo parametro del fragment anterior
         String nom=RegisProductoArgs.fromBundle(getArguments()).getNomUsuario();
 
         //instancio mi boton floating
-
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
