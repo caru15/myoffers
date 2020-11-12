@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +41,11 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
 
     @Override
     public void onBindViewHolder( prodViewHolder holder,final int position) {
-        holder.image.setImageResource(R.mipmap.logo);//aqui cambiale por la imagen q viene de la base de datos
+
+       // holder.image.setImageResource(R.mipmap.logo);
         final ProdxSuper obj=items.get(position);
+        //aqui estoy cargando la imagen
+        Glide.with(micontext).load(obj.getImagen()).into(holder.image);
         holder.titulo.setText(obj.getNombre());
         holder.descripcion.setText(items.get(position).getDescripcion());
         holder.precio.setText(String.valueOf(items.get(position).getPrecio()));

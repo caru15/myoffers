@@ -106,7 +106,7 @@ public class Inicio extends Fragment {
 
                 params.put("username", user);
                 params.put("password", login);
-                client.post("http://192.168.0.20/myOffers/login.php", params, new TextHttpResponseHandler() {
+                client.post("http://192.168.0.22/myOffers/login.php", params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Snackbar.make(v, "algo salio mal",Snackbar.LENGTH_LONG).setAction("Action",null).show();
