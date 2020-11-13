@@ -124,7 +124,7 @@ public class RegisProducto extends Fragment {
                         items.add(PS);
                         adapter.notifyDataSetChanged();
                     }
-                    Log.d("esto tiene la lista",items.get(0).getNombre()+" "+items.get(1).getNombre()+" "+items.get(2).getNombre()+" "+items.get(3).getNombre());
+                    Log.d("esto tiene el producto",items.get(5).getNombre()+" "+items.get(5).getImagen());
 
 
                 } catch (Exception e) {
