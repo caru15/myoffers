@@ -22,7 +22,7 @@ public class AdminBD {
 
     public AdminBD() {
 
-       Uri="http://192.168.0.12/myOffers/";
+       Uri="http://192.168.0.18/myOffers/";
                      }
 
 //me devuelve la uri de mi producto

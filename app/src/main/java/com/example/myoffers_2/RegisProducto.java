@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,6 +50,7 @@ public class RegisProducto extends Fragment {
     private String mParam1;
     private String mParam2;
     private AdminBD bd=new AdminBD();
+    private   RecyclerView recyclerView;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
     private ProdxSuper PS;
@@ -56,7 +58,6 @@ public class RegisProducto extends Fragment {
     public RegisProducto() {
         // Required empty public constructor
     }
-
 
     public static RegisProducto newInstance(String param1, String param2) {
         RegisProducto fragment = new RegisProducto();
@@ -81,15 +82,17 @@ public class RegisProducto extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_regis_producto, container, false);
+        //setteo una escucha anonima con el set onclicklistener
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
+
         dir=bd.dirProdSuper();
         uri=bd.dirProd();
 
@@ -132,6 +135,7 @@ public class RegisProducto extends Fragment {
                     Log.d("ERROR", "entramos por el catch " + e.toString());
                 }
             }
+
         });
 
         //Recibo parametro del fragment anterior
@@ -152,6 +156,5 @@ public class RegisProducto extends Fragment {
         });
 
     }
-
 
 }

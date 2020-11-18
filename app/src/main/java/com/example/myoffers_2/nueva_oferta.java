@@ -11,6 +11,7 @@ import cz.msebera.android.httpclient.Header;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -115,9 +116,9 @@ public class nueva_oferta extends Fragment {
                 int id_super=Devuelve_id(spinner);
                 int id_prod=Devuelve_id(spinner2);
                 double precio = Double.parseDouble(pre);
-               int cantidad = Integer.parseInt(can);
+                int cantidad = Integer.parseInt(can);
                 DevolverIdUsuario(v,usuario,id_super,id_prod,precio,cantidad);
-
+                Navigation.findNavController(v).navigate(R.id.regisProducto);
             }
         });
     }
@@ -232,7 +233,7 @@ public class nueva_oferta extends Fragment {
                         nom= String.valueOf(pos)+"-"+ sup.getNombre()+"-"+sup.getDireccion();
                         sp.add(nom);
                     }
-                    ArrayAdapter<String> a = new ArrayAdapter<String>(v.getContext(),android.R.layout.simple_dropdown_item_1line,sp);
+                    ArrayAdapter<String> a = new ArrayAdapter<String>(v.getContext(),R.layout.spinner_item_fer,sp);
                     spinner.setAdapter(a);
 
                 }catch (Exception e){
@@ -290,7 +291,7 @@ public class nueva_oferta extends Fragment {
 
                         sp.add(nom);
                     }
-                    ArrayAdapter<String> a = new ArrayAdapter<String>(view.getContext(),android.R.layout.simple_dropdown_item_1line,sp);
+                    ArrayAdapter<String> a = new ArrayAdapter<String>(view.getContext(),R.layout.spinner_item_fer,sp);
                     spinner2.setAdapter(a);
 
                 }catch (Exception e){

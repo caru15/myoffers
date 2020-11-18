@@ -69,7 +69,8 @@
             app:destination="@id/nueva_oferta" />
         <action
             android:id="@+id/action_regisProducto_to_editar_oferta"
-            app:destination="@id/editar_oferta" />
+            app:destination="@id/editar_oferta"
+            app:popUpTo="@id/regisProducto" />
     </fragment>
     <fragment
         android:id="@+id/registrar"
@@ -113,6 +114,9 @@
             android:name="nombre"
             app:argType="string"
             android:defaultValue="sin nombre" />
+        <action
+            android:id="@+id/action_nueva_oferta_to_regisProducto"
+            app:destination="@id/regisProducto" />
     </fragment>
     <fragment
         android:id="@+id/editar_oferta"

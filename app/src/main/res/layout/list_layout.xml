@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="140dp"
     card_view:cardCornerRadius="7dp"
-    card_view:cardElevation="4dp"
+    card_view:cardElevation="7dp"
     card_view:cardUseCompatPadding="true"
     android:divider="@color/design_default_color_primary"
     >
