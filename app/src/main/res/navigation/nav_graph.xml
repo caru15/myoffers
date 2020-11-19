@@ -127,5 +127,9 @@
             android:name="nombre"
             app:argType="string"
             android:defaultValue="sin nombre" />
+        <argument
+            android:name="Posicion"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 </navigation>

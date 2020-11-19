@@ -64,6 +64,7 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
                                                     PosicionMarcada=pos;
                                                     Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+position, Toast.LENGTH_SHORT);
                                                     toast.show();
+                                                    
                                                     notifyDataSetChanged();
                                                 }
                                             });

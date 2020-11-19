@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -92,7 +94,16 @@ public class RegisProducto extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
-
+       /* ImageButton btn=(ImageButton) view.findViewById(R.id.btnEditar);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RegisProductoDirections.ActionRegisProductoToEditarOferta action=RegisProductoDirections.actionRegisProductoToEditarOferta();
+                action.setNombre("carina");
+                action.setPosicion(2);
+                Navigation.findNavController(v).navigate(action);
+            }
+        });*/
         dir=bd.dirProdSuper();
         uri=bd.dirProd();
 
@@ -142,6 +153,7 @@ public class RegisProducto extends Fragment {
         String nom=RegisProductoArgs.fromBundle(getArguments()).getNomUsuario();
 
         //instancio mi boton floating
+
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,5 +168,4 @@ public class RegisProducto extends Fragment {
         });
 
     }
-
 }
