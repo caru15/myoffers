@@ -73,18 +73,7 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
        }else{
            prodViewHolder.cv.setCardElevation(vista.getResources().getDimension(R.dimen.cardView));
        }
-        //ProdxSuper ps=items.get(position);
-      /*  holder.contenedor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-                    holder.image.setTransitionName("imgTransition");
-                    Pair<View, String> pair=Pair.create((View) holder.image,"imgTransition");
-                    ActivityOptionsCompat options;
-                   // options = ActivityOptionsCompat.makeSceneTransitionAnimation(v.getContext(), pair);
-                }
-            }
-        });*/
+
     }
 public void add(ProdxSuper PS){
         items.add(PS);
