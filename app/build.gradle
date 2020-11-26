@@ -29,6 +29,7 @@ dependencies {
     implementation files('src\\main\\java\\com\\example\\myoffers_2\\additionnal.jar')
     implementation files('src\\main\\java\\com\\example\\myoffers_2\\activation.jar')
     implementation files('src\\main\\java\\com\\example\\myoffers_2\\mail.jar')
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     apply plugin: "androidx.navigation.safeargs"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def nav_version = "2.3.0"
