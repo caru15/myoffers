@@ -36,11 +36,11 @@
             app:argType="string"
             android:defaultValue="Sin Nombre" />
         <action
-            android:id="@+id/action_bienvenida_to_superCercanos"
-            app:destination="@id/superCercanos" />
-        <action
             android:id="@+id/action_bienvenida_to_ofertasCercas"
             app:destination="@id/ofertasCercas" />
+        <action
+            android:id="@+id/action_bienvenida_to_superCercanos"
+            app:destination="@id/superCercanos" />
     </fragment>
     <fragment
         android:id="@+id/listaMercaderia"
@@ -132,4 +132,9 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/super_Cercanos"
+        android:name="com.example.myoffers_2.Super_Cercanos"
+        android:label="fragment_super__cercanos"
+        tools:layout="@layout/fragment_super__cercanos" />
 </navigation>
