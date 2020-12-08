@@ -28,6 +28,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,8 @@ public class superCercanos extends Fragment implements LocationListener {
     private TextView tvLocation;
     private static final int STORAGE_REQUEST =100;
     private static final int LOCATION_REQUEST=101;
+    private MyLocationNewOverlay mLocationOverlay;
+
     public superCercanos() {
         // Required empty public constructor
     }
@@ -76,13 +80,14 @@ public class superCercanos extends Fragment implements LocationListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_super_cercanos, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.restart=false;
-        context=this.getContext();
+        context= getContext().getApplicationContext();
         Configuration.getInstance().load(context,PreferenceManager.getDefaultSharedPreferences(context));
         map=(MapView) view.findViewById(R.id.IdMap);
         btnLocaliza=(Button) view.findViewById(R.id.btnLocation);
@@ -97,10 +102,15 @@ public class superCercanos extends Fragment implements LocationListener {
         this.map.setTileSource(TileSourceFactory.MAPNIK);
         this.map.setBuiltInZoomControls(true);
         this.map.setMultiTouchControls(true);
-       this.newPoint = new GeoPoint(-24.740555,-65.447805);
+      // this.newPoint = new GeoPoint(-24.740555,-65.447805);
+
+        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context),map);
+        this.mLocationOverlay.enableMyLocation();
+        map.getOverlays().add(this.mLocationOverlay);
+       //aqui tenemos acceso al controlador del mapa
        this.mapController=this.map.getController();
-       this.mapController.setCenter(this.newPoint);
-       this.mapController.setZoom(18.0);
+        this.mapController.setZoom(16.0);
+        //this.mapController.setCenter(this.newPoint);
         requestPermissionsIfNecessary(new String[] {
            //esta linea es para mostrar la ubicacion actual//es necesario para mostrar el mapa
                 Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE});
@@ -139,9 +149,11 @@ public class superCercanos extends Fragment implements LocationListener {
         this.counter=this.counter+1;
         this.tvLocation.setText("Mi Localizacion actual "+this.counter +": Lat: "+location.getLatitude()+" Long: "+location.getLongitude());
         this.newPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+        this.mapController.setCenter(this.newPoint);
+        this.mapController.setZoom(15.0);
         startMarker = new Marker(map);
         if (this.restart){
-            startMarker.setIcon(getResources().getDrawable(R.drawable.marker));
+            startMarker.setIcon(getResources().getDrawable(R.drawable.marker_default));
             startMarker.setTitle("Inicio");
             restart= false;
         }else{
