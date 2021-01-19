@@ -2,14 +2,14 @@ package com.example.myoffers_2;
 
 public class supermercados {
     private int id;
-    private String nombre, direccion,localidad, provincia;
+    private String nombre, direccion,localidad;
     private Double lat, longitud;
 
-    public supermercados(String nombre, String direccion, String localidad, String provincia, Double Lat, Double longitud) {
+    public supermercados(String nombre, String direccion, String localidad, Double Lat, Double longitud) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.localidad = localidad;
-        this.provincia = provincia;
+       // this.provincia = provincia;
         this.lat=Lat;
         this.longitud=longitud;
     }
@@ -65,11 +65,4 @@ public class supermercados {
         this.localidad = localidad;
     }
 
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
-    }
 }

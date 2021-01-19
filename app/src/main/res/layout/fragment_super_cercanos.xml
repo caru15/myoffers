@@ -4,22 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".superCercanos">
-    <Button
-        android:id="@+id/btnLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Localizarme"/>
-    <TextView
-        android:id="@+id/tvLocation"
-        android:layout_marginTop="55dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="localizacion"/>
 
     <org.osmdroid.views.MapView
         android:id="@+id/IdMap"
-        android:layout_marginTop="90dp"
         android:layout_width="match_parent"
-        android:layout_height="707dp" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

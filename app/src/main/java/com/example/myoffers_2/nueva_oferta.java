@@ -204,7 +204,7 @@ public class nueva_oferta extends Fragment {
         conexion.post(uri, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                supermercados misuper = new supermercados("nada","nada","nada","nada",12.3,12.3);
+                supermercados misuper = new supermercados("nada","nada","nada",12.3,12.3);
                 lista.add(misuper);
                 Log.d("caru","no cargo"+statusCode);
             }

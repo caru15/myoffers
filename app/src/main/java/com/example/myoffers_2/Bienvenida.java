@@ -101,7 +101,7 @@ public class Bienvenida extends Fragment implements View.OnClickListener {
                 Navigation.findNavController(v).navigate(R.id.ofertasCercas);
                 break;
             case R.id.btnSuper:
-                Navigation.findNavController(v).navigate(R.id.superCercanos);
+                Navigation.findNavController(v).navigate(R.id.nearby_super);
                 break;
             case R.id.btnProductos:
                 BienvenidaDirections.ActionBienvenidaToRegisProducto action= BienvenidaDirections.actionBienvenidaToRegisProducto();
