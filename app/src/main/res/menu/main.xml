@@ -5,5 +5,5 @@
         android:id="@+id/idSalir"
         android:orderInCategory="100"
         android:title="Salir"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

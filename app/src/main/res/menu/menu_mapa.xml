@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".nearby_super">
+    <item
+        android:id="@+id/idSalir"
+        android:title="Salir"
+       ></item>
+    <item
+        android:id="@+id/idDistancia"
+        android:title="Distancia"
+       >
+        <!-- submenu -->
+            <menu
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+                <item
+                    android:id="@+id/id1"
+                    android:title="1 Km"></item>
+                <item
+                    android:id="@+id/id2"
+                    android:title="2 Km"></item>
+                <item
+                    android:id="@+id/id3"
+                    android:title="3 Km"></item>
+                <item
+                    android:id="@+id/id4"
+                    android:title="Mas de 3"></item>
+
+            </menu>
+            </item>
+    <item
+        android:id="@+id/idVistas"
+        android:title="Vistas">
+        <menu  xmlns:android="http://schemas.android.com/apk/res/android">
+            <item
+                android:id="@+id/idNormal"
+                android:title="Normal"></item>
+            <item
+                android:id="@+id/idSatelite"
+                android:title="Satelite"></item>
+            <item
+                android:id="@+id/idHibrido"
+                android:title="Hibrido"></item>
+        </menu>
+    </item>
+
+</menu>
