@@ -204,7 +204,6 @@ public class nueva_oferta extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String response) {
                 Log.d("caru","entramos "+response);
                 try {
-
                     JSONArray jsonArray= new JSONArray(response);
                     for (int i = 0;i < jsonArray.length();i++){
                         supermercados misuper = new supermercados();

@@ -94,7 +94,11 @@
         android:id="@+id/ofertasCercas"
         android:name="com.example.myoffers_2.ofertasCercas"
         android:label="fragment_ofertas_cercas"
-        tools:layout="@layout/fragment_ofertas_cercas" />
+        tools:layout="@layout/fragment_ofertas_cercas" >
+        <action
+            android:id="@+id/action_ofertasCercas_to_folletos"
+            app:destination="@id/folletos" />
+    </fragment>
     <fragment
         android:id="@+id/recupClave"
         android:name="com.example.myoffers_2.recupClave"
@@ -132,4 +136,9 @@
         android:name="com.example.myoffers_2.nearby_super"
         android:label="fragment_nearby_super"
         tools:layout="@layout/fragment_nearby_super" />
+    <fragment
+        android:id="@+id/folletos"
+        android:name="com.example.myoffers_2.Folletos"
+        android:label="fragment_folletos"
+        tools:layout="@layout/fragment_folletos" />
 </navigation>

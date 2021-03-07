@@ -41,6 +41,9 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -164,12 +167,32 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
         conexion.post(uri, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                Log.d("Error","no se conecto "+responseString);
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String respuesta) {
+                List<supermercados> lista= new ArrayList<supermercados>();
+                try {
+                    JSONArray jsonArray= new JSONArray(respuesta);
+                    for (int i = 0;i < jsonArray.length();i++){
+                        supermercados misuper = new supermercados();
+                        misuper.setId(jsonArray.getJSONObject(i).getInt("id_supermercado"));
+                        misuper.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+                        misuper.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
+                        misuper.setLat(jsonArray.getJSONObject(i).getDouble("latitud"));
+                        misuper.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
+                        lista.add(misuper);}
+                    for (int j=0; j<lista.size();j++){
+                        LatLng sp = new LatLng(lista.get(j).getLat(), lista.get(j).getLongitud());
+                        String titulo=lista.get(j).getNombre();
+                        map.addMarker(new MarkerOptions().position(sp).title(titulo));
+                    }
 
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d("ERROR","entramos por el catch "+e.toString());
+                }
             }
         });
    }
