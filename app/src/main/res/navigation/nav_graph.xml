@@ -140,5 +140,9 @@
         android:id="@+id/folletos"
         android:name="com.example.myoffers_2.Folletos"
         android:label="fragment_folletos"
-        tools:layout="@layout/fragment_folletos" />
+        tools:layout="@layout/fragment_folletos" >
+        <argument
+            android:name="imagenes"
+            app:argType="integer[]" />
+    </fragment>
 </navigation>

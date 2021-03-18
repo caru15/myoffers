@@ -5,14 +5,26 @@
     android:layout_height="match_parent"
     tools:context=".Folletos">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ViewFlipper
+        android:id="@+id/myflipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="600dp"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right">
+    </ViewFlipper>
+    <ImageButton
+        android:id="@+id/btnAnterior"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="260dp"
+        android:layout_gravity="center"
+        android:background="@android:drawable/ic_media_pause">
+    </ImageButton>
 
-    <WebView
+
+<!--  <WebView
+        android:id="@+id/wv1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" />-->
 
 </FrameLayout>
