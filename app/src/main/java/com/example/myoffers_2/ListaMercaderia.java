@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,12 +38,13 @@ public class ListaMercaderia extends Fragment {
 
     private ArrayList<String> productos;
     private listAdapter myAdapter;
+    private int kilometros;
     private List<Modelo> myLista = new ArrayList<>();
     private ListView lvprod;
     private EditText et1, et2;
     private Modelo modelo;
-   private PopupWindow popupWindow;
-
+    private PopupWindow popupWindow;
+    private String k;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -91,31 +91,51 @@ public class ListaMercaderia extends Fragment {
         Button btnBuscar = view.findViewById(id.btnbuscar);
         et1 = view.findViewById(id.idProd);
         et2 = view.findViewById(id.idMarca);
-
+        kilometros=0;
         final FrameLayout frameLayout=view.findViewById(id.fl);
-
 
         myAdapter = new listAdapter(view.getContext(), layout.item_row, myLista);
         lvprod.setAdapter(myAdapter);
-        ///
         btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View customView = layoutInflater.inflate(layout.popup,null);
                 Button btnok = customView.findViewById(id.btnOk);
+                RadioGroup radioGroup=(RadioGroup) customView.findViewById(id.rdioGr);
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        //la opcion elejida la guardo en entero en una variable y la guardo en string en otra
+                        switch (checkedId){
+                            case  id.rb1:
+                                kilometros=1;
+                                k=String.valueOf(kilometros);
+                                break;
+                            case id.rb2:
+                                kilometros=2;
+                                k=String.valueOf(kilometros);
+                                break;
+                            case id.rb3:
+                                kilometros=3;
+                                k=String.valueOf(kilometros);
+                                break;
+                            case id.rb4:
+                                kilometros=4;
+                                k=String.valueOf(kilometros);
+                                break;
+                        }
+                    }
+                });
                 popupWindow = new PopupWindow(customView, 700, 600);
                 popupWindow.showAtLocation(frameLayout , Gravity.CENTER, 0, 0);
                 btnok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
+                        popupWindow.dismiss(); }
                 });
             }
         });
-         ///
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,51 +180,12 @@ public class ListaMercaderia extends Fragment {
                 for (int i = 0; i < myLista.size(); i++) {
                     modelo = myLista.get(i);
                     miarray[i]=modelo.getNombre()+'-'+modelo.getMarca();}
-                /*
-                Toast toast1 = Toast.makeText(v.getContext(),miarray.toString(), Toast.LENGTH_SHORT);
-                toast1.show();*/
-               ListaMercaderiaDirections.ActionListaMercaderiaToResultBusqueda action= ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
+                ListaMercaderiaDirections.ActionListaMercaderiaToResultBusqueda action=
+                        ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
                action.setProductos(miarray);
               Navigation.findNavController(v).navigate(action);
-            }
-        });
-    }
-/*
- public void Filtrar(View view){
-        LayoutInflater layoutInflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = layoutInflater.inflate(R.layout.popup,null);
-        Button btnok = customView.findViewById(id.btnOk);
-        LinearLayout linearLayout1 = customView.findViewById(R.id.linearLayout1);
-
-        popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        popupWindow.showAtLocation(linearLayout1, Gravity.CENTER, 0, 0);
-        btnok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-
-           /*
-            TextView lblChecked = (TextView)v.findViewById(R.id.lblPulsado);
-            RadioGroup rdgGrupo = (RadioGroup)v.findViewById(id.rdioGr);
-             rdioGr.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
-
-                 @Override
-                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                     // TODO Auto-generated method stub
-                     if (checkedId == R.id.rdbOne){
-                         lblChecked.setText("Ha pulsado el botón 1");
-                     }else if (checkedId == R.id.rdbTwo){
-                         lblChecked.setText("Ha pulsado el botón 2");
-                     }else if (checkedId == R.id.rdbThree){
-                         lblChecked.setText("Ha pulsado el botón 3");
-                     }
-                 }
-             });*/
-
-    }
+            } });
+    }}
 
 
 

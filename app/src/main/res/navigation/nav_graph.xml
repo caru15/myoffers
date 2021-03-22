@@ -89,6 +89,10 @@
         <argument
             android:name="productos"
             app:argType="string[]" />
+        <argument
+            android:name="distancia"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/ofertasCercas"
