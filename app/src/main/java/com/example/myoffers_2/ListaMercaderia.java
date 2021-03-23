@@ -183,6 +183,7 @@ public class ListaMercaderia extends Fragment {
                 ListaMercaderiaDirections.ActionListaMercaderiaToResultBusqueda action=
                         ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
                action.setProductos(miarray);
+               action.setDistancia(kilometros);
               Navigation.findNavController(v).navigate(action);
             } });
     }}
