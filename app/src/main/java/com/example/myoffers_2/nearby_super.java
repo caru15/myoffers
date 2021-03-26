@@ -97,7 +97,6 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nearby_super, container, false);
     }
 

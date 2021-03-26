@@ -8,12 +8,14 @@ public class productos {
     private int cant_unidad;
     private int imagen;
 
-    public productos(String nombre, String descripcion, String marca, int cant_unidad, int imagen) {
+    public productos(int id,String nombre, String descripcion, String marca, int cant_unidad, int imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.marca = marca;
         this.cant_unidad = cant_unidad;
         this.imagen = imagen;
+        this.id=id; //ojo aqui que agregaste este campo fijate si no te causa problemas en la insercion de un producto
+       // lo agregue porque cuando leo un producto de la BD necesito recuperar tambien su id
     }
     public productos(){
 
@@ -66,4 +68,5 @@ public class productos {
     public void setImagen(int imagen) {
         this.imagen = imagen;
     }
+
 }
