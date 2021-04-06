@@ -29,11 +29,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link nueva_oferta#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class nueva_oferta extends Fragment {
 
     private Spinner spinner, spinner2;
@@ -187,7 +182,6 @@ public class nueva_oferta extends Fragment {
     }
 
     public void llenar_Spinner(List<supermercados> lista, View v){
-     //  direccion="http://192.168.0.22/myOffers/supermercados.php";
         uri=bd.dirSuper();
         params.put("type","listar");
         params.put("nom","nada");
@@ -202,7 +196,7 @@ public class nueva_oferta extends Fragment {
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, String response) {
-                Log.d("caru","entramos "+response);
+
                 try {
                     JSONArray jsonArray= new JSONArray(response);
                     for (int i = 0;i < jsonArray.length();i++){

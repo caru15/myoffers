@@ -4,14 +4,20 @@ public class ProdxSuper {
     private int id;
     private double precio;
     private String imagen;
-    private String nombre;
+    private String nombre;//es el nombre del producto
     private int cant;
     private String descripcion;
     private String superNom;
+    private String direccion;
+    private double latitud;
+    private double longitud;
+    private int id_prod;
+    private int id_super;
 
     public ProdxSuper() {
 
     }
+
     public ProdxSuper(int id,String nombre, int cant,String descripcion,String superNom, double precio, String imagen){
         this.id=id;
         this.nombre=nombre;
@@ -20,6 +26,11 @@ public class ProdxSuper {
         this.superNom=superNom;
         this.precio=precio;
         this.imagen=imagen;
+        this.direccion=direccion;
+        this.latitud=latitud;
+        this.longitud=longitud;
+        this.id_prod=id_prod;
+        this.id_super=id_super;
     }
 
     public String getImagen() {
@@ -57,6 +68,7 @@ public class ProdxSuper {
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -75,5 +87,45 @@ public class ProdxSuper {
 
     public void setSuperNom(String superNom) {
         this.superNom = superNom;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    public int getId_prod() {
+        return id_prod;
+    }
+
+    public void setId_prod(int id_prod) {
+        this.id_prod = id_prod;
+    }
+
+    public int getId_super() {
+        return id_super;
+    }
+
+    public void setId_super(int id_super) {
+        this.id_super = id_super;
     }
 }
