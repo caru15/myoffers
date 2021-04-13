@@ -26,11 +26,6 @@ public class ProdxSuper {
         this.superNom=superNom;
         this.precio=precio;
         this.imagen=imagen;
-        this.direccion=direccion;
-        this.latitud=latitud;
-        this.longitud=longitud;
-        this.id_prod=id_prod;
-        this.id_super=id_super;
     }
 
     public String getImagen() {

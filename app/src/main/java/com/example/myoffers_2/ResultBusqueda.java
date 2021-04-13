@@ -2,6 +2,7 @@ package com.example.myoffers_2;
 
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
-public class ResultBusqueda extends Fragment implements LocationListener {
+public class ResultBusqueda extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -37,12 +38,16 @@ public class ResultBusqueda extends Fragment implements LocationListener {
     private List<productos> listNew= new ArrayList<productos>();
     private int[] distancia;
     private int dist;
+   private List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
     private String mParam1;
     private String mParam2;
     private AdminBD bd=new AdminBD();
     private supermercados supermercado = new supermercados();
     private productos producto= new productos();
     private String uri;
+    private Distancia midistancia;
+    private Location mipos;
+    private LocationManager locManager;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
 
@@ -56,6 +61,12 @@ public class ResultBusqueda extends Fragment implements LocationListener {
         fragment.setArguments(args);
         return fragment;
     }
+/**
+ * lo que queda hacer es pone dos label uno que te muestre latitud y longitud
+ * del movil verifica que te muestre bien los datos
+ * y aqui nomas en esta clase en el metodo Buscar calculala distancia de tu pos al super
+ * asi vas guardando los supermercados que te sirven 
+ */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,50 +95,10 @@ public class ResultBusqueda extends Fragment implements LocationListener {
         textView2.setText(prod[0]);
         textView.setText(Integer.toString(dist));
         Compara(prod,ProdNo);
-        //fijate bien el tema de la localizacion que te tire bien porque faltan agregar
-        //lo permisos de geolocalizacion
-        BuscarSuperCerca(dist,prod);
+        Mostrar();
 
     }
-    //este metodo lo que hace es tomar la distancia que le pedi y todos los productos y voy buscando
-    //en la base de datos los productos en oferta tomando la direccion en donde estan
-    //y calculando la distancia hasta mi posicion actual
-    public void BuscarSuperCerca(int ki,String[] productos){
 
-    }
-    /**
-    Este metodo se ejecuta cuando el GPS recibe nuevas coordenadas
-     */
-    @Override
-    public void onLocationChanged(Location location) {
-   double latitud=location.getLatitude();
-   double longitud=location.getLongitude();
-    }
-
-    /** este metodo me avisa como se encuentra mi proveedor de internet*/
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        switch (status){
-            case LocationProvider.AVAILABLE:
-                Log.d("debug","Esta en servicio");
-                //esta en el servicio
-                break;
-            case LocationProvider.OUT_OF_SERVICE:
-                Log.d("debug","Esta fuera de servicio");
-                break;
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                Log.d("debug","ESTA TEMPORALMENTE FUERA DE SERVICIO");
-                break;
-        }
-    }
-    @Override
-    public void onProviderEnabled(String provider) {
-     //gps activado
-    }
-    @Override
-    public void onProviderDisabled(String provider) {
-  //gps desactivado
-    }
     public void Compara(String[] prod,String[] prodNo){
         l=0;
         uri=bd.dirProd();
@@ -169,7 +140,7 @@ public class ResultBusqueda extends Fragment implements LocationListener {
                                                 //aqui guardo este producto junto con su id
                                                 listNew.add(mypro);
                                                 Log.d("entrams por el true","entramos bien"+listNew.get(0).getId());
-                                               // Meter(mypro);
+
                                                 band=true;
                                             }else {
                                                 if (pm2.isEmpty()){
@@ -188,36 +159,27 @@ public class ResultBusqueda extends Fragment implements LocationListener {
 
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.d("ERROR","entramos por el catch "+e.toString());
+                    Log.d("ERROR","entramos por el catch 1"+e.toString());
                 }
             }
         });
     }
 
-
     //con los productos de la lista pro busco en la BD y traigo toda la info
     public void BuscarSuper(List<productos> pro){
-      //  for (int j=0;j<pro.size();j++){
-        //    Log.d("entro",pro.get(j).getNombre()+"-"+pro.get(j).getMarca());}
-        int i=0;
-        int[] vector=new int[3];
-        List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
+        int id=0;
+        //List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
         uri=bd.dirProdSuper();
-        while(i<pro.size()) {
-            vector= new int[]{0, 0, 0};
-            vector[0]=pro.get(i).getId();
-            i=i+1;
-            vector[1]=pro.get(i).getId();
-            i=i+1;
-            vector[2]=pro.get(i).getId();
-            i=i+1;
+       for (int j=0;j<pro.size();j++){
+            id=pro.get(j).getId();
+            Log.d("id del prod",String.valueOf(id));
             params.put("type","join");
             params.put("super","nada");
             params.put("prod","nada");
             params.put("usuario","nada");
             params.put("pre","nada");
             params.put("oferta","nada");
-            params.put("myarray",vector);
+            params.put("id",id);
             conexion.post(uri, params, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -226,28 +188,52 @@ public class ResultBusqueda extends Fragment implements LocationListener {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
                     try {
+                        ProdxSuper produc= new ProdxSuper();
                         JSONArray jsonArray= new JSONArray(responseString);
                         for (int i = 0;i < jsonArray.length();i++){
-                            ProdxSuper produc= new ProdxSuper();
                             produc.setId(jsonArray.getJSONObject(i).getInt("id_producto"));
-                            produc.setNombre(jsonArray.getJSONObject(i).getString("nombreProd"));
+                            produc.setNombre(jsonArray.getJSONObject(i).getString("nombreprod"));
                             produc.setDescripcion(jsonArray.getJSONObject(i).getString("descripcion"));
                             produc.setSuperNom(jsonArray.getJSONObject(i).getString("nombresuper"));
                             produc.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
                             produc.setLatitud(jsonArray.getJSONObject(i).getDouble("latitud"));
                             produc.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                             produc.setId_super(jsonArray.getJSONObject(i).getInt("super_id"));
-                            myList.add(produc);}
+                            //myList.add(produc);
+
+                            Guardar(produc);
+
+                    } jsonArray = new JSONArray(new ArrayList<String>());
                     }catch (Exception e){
                         e.printStackTrace();
-                        Log.d("ERROR","entramos por el catch "+e.toString());
+                        Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
                     }
 
                 }
             });
         }
-        //fijate porque no trae losdatos de la base de datos como q el array entra vacio sin datos
-        //fijate que el array pro traiga datos y los cargue bien
-         Log.d("mercaderia",myList.get(1).getNombre());
+    }
+
+    private void Guardar(ProdxSuper produc) {
+        //antes de guardar el producto me fijo si cumple con las condiciones de distancia
+        //si cumple la guarda sino la desecha
+        Log.d("adentro","-"+produc.getSuperNom());
+        midistancia=new Distancia(produc.getLatitud(),produc.getLongitud(),dist);
+        band=false;
+        band=midistancia.Buscar();
+        Log.d("bandera",String.valueOf(band));
+        if (band){
+        myList.add(produc);
+        Log.d("lo q paso",produc.getSuperNom()+"-"+myList.get(0).getDireccion());
+          //  String cadena=myList.get(0).getNombre()+"-"+myList.get(0).getDireccion()+"-";
+           // textView1.setText(cadena);
+        }
+    }
+    private void Mostrar(){
+       // String cadena="";
+        //for(int i=0;i<myList.size();i++){
+
+     //   }
+
     }
 }
