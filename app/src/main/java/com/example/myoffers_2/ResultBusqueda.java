@@ -1,5 +1,7 @@
 package com.example.myoffers_2;
 
+import android.Manifest;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -7,6 +9,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.loopj.android.http.AsyncHttpClient;
@@ -25,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
-public class ResultBusqueda extends Fragment {
+import static androidx.core.content.ContextCompat.getSystemService;
+
+public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -34,10 +41,13 @@ public class ResultBusqueda extends Fragment {
     private String[] ProdNo;
     private int l;
     private TextView textView1;
+    private TextView textView;
     private Boolean band;//esta bandera la pongo para saber si encontro o no el producto en la BD
     private List<productos> listNew= new ArrayList<productos>();
     private int[] distancia;
     private int dist;
+    private float midis;
+    private Location mipos = new Location("mipos");;
    private List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
     private String mParam1;
     private String mParam2;
@@ -45,9 +55,9 @@ public class ResultBusqueda extends Fragment {
     private supermercados supermercado = new supermercados();
     private productos producto= new productos();
     private String uri;
-    private Distancia midistancia;
-    private Location mipos;
+
     private LocationManager locManager;
+    private Location loc;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
 
@@ -62,12 +72,9 @@ public class ResultBusqueda extends Fragment {
         return fragment;
     }
 /**
- * lo que queda hacer es pone dos label uno que te muestre latitud y longitud
- * del movil verifica que te muestre bien los datos
  * y aqui nomas en esta clase en el metodo Buscar calculala distancia de tu pos al super
  * asi vas guardando los supermercados que te sirven 
  */
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,15 +94,26 @@ public class ResultBusqueda extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        textView= view.findViewById(R.id.text1);//aqui va latitud
+        textView1=view.findViewById(R.id.text2);//aqui va longitud
         TextView textView2=view.findViewById(R.id.textView2);
-        TextView textView= view.findViewById(R.id.text1);
-       textView1=view.findViewById(R.id.prueba);
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
+        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        try {
+            locManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
+            LocationProvider proveedor = locManager.getProvider(LocationManager.GPS_PROVIDER);
+            locManager.requestLocationUpdates(locManager.GPS_PROVIDER,4000,3,this);
+            onLocationChanged(mipos);
+
+        }catch (SecurityException e){
+            e.printStackTrace();}
+
         textView2.setText(prod[0]);
-        textView.setText(Integer.toString(dist));
+       // textView.setText(Integer.toString(dist));
         Compara(prod,ProdNo);
-        Mostrar();
+       // Mostrar();
 
     }
 
@@ -218,22 +236,57 @@ public class ResultBusqueda extends Fragment {
         //antes de guardar el producto me fijo si cumple con las condiciones de distancia
         //si cumple la guarda sino la desecha
         Log.d("adentro","-"+produc.getSuperNom());
-        midistancia=new Distancia(produc.getLatitud(),produc.getLongitud(),dist);
-        band=false;
-        band=midistancia.Buscar();
-        Log.d("bandera",String.valueOf(band));
-        if (band){
-        myList.add(produc);
-        Log.d("lo q paso",produc.getSuperNom()+"-"+myList.get(0).getDireccion());
-          //  String cadena=myList.get(0).getNombre()+"-"+myList.get(0).getDireccion()+"-";
-           // textView1.setText(cadena);
+        double l1=mipos.getLongitude();
+        double l0=mipos.getLatitude();
+       if(mipos!=null ){
+            if (l1!=l0){
+               Location OtraLocation= new Location("super");
+               OtraLocation.setLatitude(produc.getLatitud());
+               OtraLocation.setLongitude(produc.getLongitud());
+               //1 km=1000 mtrs
+               midis=(OtraLocation.distanceTo(mipos)/1000);
+               Log.d("la diferencia",String.valueOf(midis));
+               if (midis<=dist){
+                       myList.add(produc);
+                   Log.d("lo q paso",produc.getSuperNom()+"-"+myList.get(0).getDireccion());}
+                 }else{onLocationChanged(mipos);}
+                     }
+       else{
+            onLocationChanged(mipos);
+           }
+        }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double latitud=location.getLatitude();
+        double longitud=location.getLongitude();
+        textView1.setText("Latitud: " + String.valueOf(latitud));
+        textView.setText("Longitud: " + String.valueOf(longitud));
+        mipos.setLongitude(longitud);
+        mipos.setLatitude(latitud);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        switch (status){
+            case LocationProvider.AVAILABLE:
+                //esta en el servicio
+                break;
+            case LocationProvider.OUT_OF_SERVICE:
+                Log.d("debug","Esta fuera de servicio");
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                Log.d("debug","ESTA TEMPORALMENTE FUERA DE SERVICIO");
+                break;
         }
     }
-    private void Mostrar(){
-       // String cadena="";
-        //for(int i=0;i<myList.size();i++){
 
-     //   }
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }
