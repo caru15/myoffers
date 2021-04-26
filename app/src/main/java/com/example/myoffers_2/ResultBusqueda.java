@@ -11,13 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,9 +39,9 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String[] prod;
+    private String[] prod;//recibe los productos cargados en la pantalla anterior
     private int[] vector;
-    private String[] ProdNo;
+    private String[] ProdNo;//este vector tiene los productos que no se encontro en la BD
     private int l;
     private TextView textView1;
     private TextView textView;
@@ -49,13 +52,14 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
     private float midis;
     private Location mipos = new Location("mipos");;
    private List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
+   private List<ProdxSuper> myList2=new ArrayList<ProdxSuper>();//aqui se guardan los productos que no cumplen con la distancia pedida
     private String mParam1;
     private String mParam2;
     private AdminBD bd=new AdminBD();
     private supermercados supermercado = new supermercados();
     private productos producto= new productos();
     private String uri;
-
+    RecyclerView recycler;
     private LocationManager locManager;
     private Location loc;
     AsyncHttpClient conexion=new AsyncHttpClient();
@@ -96,9 +100,15 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
         super.onViewCreated(view, savedInstanceState);
         textView= view.findViewById(R.id.text1);//aqui va latitud
         textView1=view.findViewById(R.id.text2);//aqui va longitud
-        TextView textView2=view.findViewById(R.id.textView2);
+        TextView textView2=view.findViewById(R.id.text3);
+        recycler=(RecyclerView)view.findViewById(R.id.RecView);
+        recycler.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
+        recycler.setHasFixedSize(true);
+        AdapterProductos adapterProductos=new AdapterProductos(myList, view.getContext());
+        recycler.setAdapter(adapterProductos);
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
+        textView2.setText("Lista de Supermercados a "+dist+" de distancia");
         ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         try {
@@ -109,11 +119,13 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
 
         }catch (SecurityException e){
             e.printStackTrace();}
-
-        textView2.setText(prod[0]);
-       // textView.setText(Integer.toString(dist));
         Compara(prod,ProdNo);
-       // Mostrar();
+
+        Mostrar();
+
+    }
+
+    private void Mostrar() {
 
     }
 
@@ -158,7 +170,6 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
                                                 //aqui guardo este producto junto con su id
                                                 listNew.add(mypro);
                                                 Log.d("entrams por el true","entramos bien"+listNew.get(0).getId());
-
                                                 band=true;
                                             }else {
                                                 if (pm2.isEmpty()){
@@ -218,7 +229,6 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
                             produc.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                             produc.setId_super(jsonArray.getJSONObject(i).getInt("super_id"));
                             //myList.add(produc);
-
                             Guardar(produc);
 
                     } jsonArray = new JSONArray(new ArrayList<String>());
@@ -233,37 +243,49 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
     }
 
     private void Guardar(ProdxSuper produc) {
-        //antes de guardar el producto me fijo si cumple con las condiciones de distancia
-        //si cumple la guarda sino la desecha
+        AdapterProductos adapterProductos=new AdapterProductos(myList, this.getContext());
+        recycler.setAdapter(adapterProductos);
         Log.d("adentro","-"+produc.getSuperNom());
         double l1=mipos.getLongitude();
         double l0=mipos.getLatitude();
-       if(mipos!=null ){
-            if (l1!=l0){
+        boolean b=true;
+        while(mipos==null || l1==l0){
+            try {
+                locManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                LocationProvider proveedor = locManager.getProvider(LocationManager.GPS_PROVIDER);
+                locManager.requestLocationUpdates(locManager.GPS_PROVIDER,4000,3,this);
+                onLocationChanged(mipos);
+
+            }catch (SecurityException e){
+                e.printStackTrace();}
+            Log.d("fijate","entro por q latitud=long");
+        }
                Location OtraLocation= new Location("super");
                OtraLocation.setLatitude(produc.getLatitud());
+
                OtraLocation.setLongitude(produc.getLongitud());
                //1 km=1000 mtrs
                midis=(OtraLocation.distanceTo(mipos)/1000);
                Log.d("la diferencia",String.valueOf(midis));
                if (midis<=dist){
                        myList.add(produc);
+                   adapterProductos.notifyDataSetChanged();
                    Log.d("lo q paso",produc.getSuperNom()+"-"+myList.get(0).getDireccion());}
-                 }else{onLocationChanged(mipos);}
-                     }
-       else{
-            onLocationChanged(mipos);
-           }
+                 else{
+                     //guardo en una lista que no cumple con los requerimientos de la distancia
+                     myList2.add(produc);
+                    }
         }
 
     @Override
     public void onLocationChanged(Location location) {
         double latitud=location.getLatitude();
         double longitud=location.getLongitude();
-        textView1.setText("Latitud: " + String.valueOf(latitud));
-        textView.setText("Longitud: " + String.valueOf(longitud));
         mipos.setLongitude(longitud);
         mipos.setLatitude(latitud);
+        textView1.setText("Latitud: " + String.valueOf(latitud));
+        textView.setText("Longitud: " + String.valueOf(longitud));
+
     }
 
     @Override
@@ -283,10 +305,8 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
     @Override
     public void onProviderDisabled(String provider) {
-
     }
 }

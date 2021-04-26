@@ -8,7 +8,7 @@ public class ProdxSuper {
     private int cant;
     private String descripcion;
     private String superNom;
-    private String direccion;
+    private String direccion;//direccion del super
     private double latitud;
     private double longitud;
     private int id_prod;

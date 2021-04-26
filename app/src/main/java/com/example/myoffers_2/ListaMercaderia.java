@@ -127,7 +127,7 @@ public class ListaMercaderia extends Fragment {
                         }
                     }
                 });
-                popupWindow = new PopupWindow(customView, 700, 600);
+                popupWindow = new PopupWindow(customView, 700, 800);
                 popupWindow.showAtLocation(frameLayout , Gravity.CENTER, 0, 0);
                 btnok.setOnClickListener(new View.OnClickListener() {
                     @Override

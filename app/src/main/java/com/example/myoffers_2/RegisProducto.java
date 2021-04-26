@@ -96,7 +96,6 @@ public class RegisProducto extends Fragment {
         recyclerView.setLayoutManager(lm);
         dir=bd.dirProdSuper();
         uri=bd.dirProd();
-
         params.put("type","join");
         params.put("super","nada");
         params.put("prod","nada");
