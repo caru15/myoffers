@@ -47,8 +47,6 @@ public class RegisProducto extends Fragment {
     private String dirProducto;
     private String dirProdxSup;
     private String dir, uri;
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private AdminBD bd=new AdminBD();
@@ -57,8 +55,8 @@ public class RegisProducto extends Fragment {
     RequestParams params= new RequestParams();
     private ProdxSuper PS;
     List<ProdxSuper> items= new ArrayList<>();
+
     public RegisProducto() {
-        // Required empty public constructor
     }
 
     public static RegisProducto newInstance(String param1, String param2) {
@@ -82,7 +80,6 @@ public class RegisProducto extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_regis_producto, container, false);
         //setteo una escucha anonima con el set onclicklistener
     }
@@ -94,8 +91,9 @@ public class RegisProducto extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
-        dir=bd.dirProdSuper();
-        uri=bd.dirProd();
+        dir=bd.dirProdSuper();//"prodxsuper.php
+        uri=bd.dirProd();//productos.php
+        //aqui nos ela lista d emercaderia poruqe esta mal el adaptador yesta tirando otra coas la consulta join fijate
         params.put("type","join");
         params.put("super","nada");
         params.put("prod","nada");

@@ -44,7 +44,8 @@ public class Inicio extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private AdminBD bd=new AdminBD();
+    private String dir;
     public Inicio() {
         // Required empty public constructor
     }
@@ -87,6 +88,7 @@ public class Inicio extends Fragment {
         final String a ="admin";
         final String b= "admin";
 
+         dir=bd.dirLogin();
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -100,17 +102,15 @@ public class Inicio extends Fragment {
                 }else{
                 final AsyncHttpClient client = new AsyncHttpClient();
                 final RequestParams params = new RequestParams();
-                //params.put("type", "login");
+
                 final String user = usuario.getText().toString();
                 final String login=contraseña.getText().toString();
-
                 params.put("username", user);
                 params.put("password", login);
-                client.post("http://192.168.0.29/myOffers/login.php", params, new TextHttpResponseHandler() {
+                client.post(dir, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Snackbar.make(v, "algo salio mal",Snackbar.LENGTH_LONG).setAction("Action",null).show();
-
                     }
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
@@ -128,8 +128,7 @@ public class Inicio extends Fragment {
                               e.printStackTrace();
                               Snackbar.make(v, "json no lee",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                                                   } }
-                });
-            }}
+                }); }}
         });
 
         Register.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +144,5 @@ public class Inicio extends Fragment {
                 Olvide.setTextColor(colorAccent);
                 Navigation.findNavController(v).navigate(R.id.recupClave);
             }
-        });
-
-    }
+        }); }
 }

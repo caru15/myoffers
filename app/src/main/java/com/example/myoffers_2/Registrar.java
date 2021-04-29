@@ -17,6 +17,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -25,9 +27,10 @@ public class Registrar extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private String dir;
     private String mParam1;
     private String mParam2;
+    private AdminBD bd=new AdminBD();
 
     public Registrar() {
 
@@ -73,29 +76,31 @@ public class Registrar extends Fragment {
             public void onClick(final View v) {
                 final AsyncHttpClient client = new AsyncHttpClient();
                 final RequestParams params = new RequestParams();
-
+                 dir=bd.dirUsuarios();
                 String apellido = Apellido.getText().toString();
                 String nombre=Nombre.getText().toString();
                 String usuario = Usuario.getText().toString();
                 String email = Email.getText().toString();
                 String contraseña = Password.getText().toString();
-                params.put("ape", apellido);
-                params.put("nom", nombre);
-                params.put("usua", usuario);
-                params.put("ema",email);
-                params.put("pas", contraseña);
 
-                client.post("http://192.168.0.25/register.php", params, new TextHttpResponseHandler() {
+                params.put("type","alta");
+                params.put("ape", apellido);
+                params.put("name", nombre);
+                params.put("usua", usuario);
+                params.put("email",email);
+                params.put("password", contraseña);
+
+                client.post(dir, params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Toast.makeText(v.getContext() , "No se pudo Ingresar", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    public void onSuccess(int statusCode, Header[] headers, String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(responseString);
-                            String prueba=jsonObject.getString("message");
+                            JSONArray array = new JSONArray(response);
+                            String prueba=array.getJSONObject(0).getString("message");
                             Toast.makeText(v.getContext() ,prueba, Toast.LENGTH_LONG).show();
                             Snackbar.make(v, prueba,Snackbar.LENGTH_LONG).setAction("Action",null).show();
 
