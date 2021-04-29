@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
+public class ResultBusqueda extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -45,6 +44,8 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
     private int l;
     private TextView textView1;
     private TextView textView;
+    private String lati;
+    private String longi;
     private Boolean band;//esta bandera la pongo para saber si encontro o no el producto en la BD
     private List<productos> listNew= new ArrayList<productos>();
     private int[] distancia;
@@ -98,8 +99,7 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textView= view.findViewById(R.id.text1);//aqui va latitud
-        textView1=view.findViewById(R.id.text2);//aqui va longitud
+
         TextView textView2=view.findViewById(R.id.text3);
         recycler=(RecyclerView)view.findViewById(R.id.RecView);
         recycler.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
@@ -108,24 +108,13 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
         recycler.setAdapter(adapterProductos);
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
-        textView2.setText("Lista de Supermercados a "+dist+" de distancia");
-        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-        try {
-            locManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
-            LocationProvider proveedor = locManager.getProvider(LocationManager.GPS_PROVIDER);
-            locManager.requestLocationUpdates(locManager.GPS_PROVIDER,4000,3,this);
-            onLocationChanged(mipos);
-
-        }catch (SecurityException e){
-            e.printStackTrace();}
+        lati=ResultBusquedaArgs.fromBundle(getArguments()).getLatitud();
+        longi=ResultBusquedaArgs.fromBundle(getArguments()).getLongitud();
+        mipos.setLatitude(Double.parseDouble(lati));
+        mipos.setLongitude(Double.parseDouble(longi));
+       // textView2.setText("latitud: "+lati+" longitud: "+longi);
+        textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
         Compara(prod,ProdNo);
-
-        Mostrar();
-
-    }
-
-    private void Mostrar() {
 
     }
 
@@ -228,6 +217,7 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
                             produc.setLatitud(jsonArray.getJSONObject(i).getDouble("latitud"));
                             produc.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                             produc.setId_super(jsonArray.getJSONObject(i).getInt("super_id"));
+                            produc.setPrecio(jsonArray.getJSONObject(i).getDouble("precio"));
                             //myList.add(produc);
                             Guardar(produc);
 
@@ -246,24 +236,11 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
         AdapterProductos adapterProductos=new AdapterProductos(myList, this.getContext());
         recycler.setAdapter(adapterProductos);
         Log.d("adentro","-"+produc.getSuperNom());
-        double l1=mipos.getLongitude();
-        double l0=mipos.getLatitude();
-        boolean b=true;
-        while(mipos==null || l1==l0){
-            try {
-                locManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                LocationProvider proveedor = locManager.getProvider(LocationManager.GPS_PROVIDER);
-                locManager.requestLocationUpdates(locManager.GPS_PROVIDER,4000,3,this);
-                onLocationChanged(mipos);
 
-            }catch (SecurityException e){
-                e.printStackTrace();}
-            Log.d("fijate","entro por q latitud=long");
-        }
                Location OtraLocation= new Location("super");
                OtraLocation.setLatitude(produc.getLatitud());
-
                OtraLocation.setLongitude(produc.getLongitud());
+
                //1 km=1000 mtrs
                midis=(OtraLocation.distanceTo(mipos)/1000);
                Log.d("la diferencia",String.valueOf(midis));
@@ -276,37 +253,4 @@ public class ResultBusqueda extends Fragment implements ActivityCompat.OnRequest
                      myList2.add(produc);
                     }
         }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        double latitud=location.getLatitude();
-        double longitud=location.getLongitude();
-        mipos.setLongitude(longitud);
-        mipos.setLatitude(latitud);
-        textView1.setText("Latitud: " + String.valueOf(latitud));
-        textView.setText("Longitud: " + String.valueOf(longitud));
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        switch (status){
-            case LocationProvider.AVAILABLE:
-                //esta en el servicio
-                break;
-            case LocationProvider.OUT_OF_SERVICE:
-                Log.d("debug","Esta fuera de servicio");
-                break;
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                Log.d("debug","ESTA TEMPORALMENTE FUERA DE SERVICIO");
-                break;
-        }
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
 }

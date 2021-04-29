@@ -45,17 +45,23 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     }
 
     public class ViewHolderProd extends RecyclerView.ViewHolder {
+        TextView nombreSuper;
+        TextView direccion;
         TextView nombre;
         TextView desc;
         TextView precio;
         public ViewHolderProd(@NonNull View itemView) {
             super(itemView);
+            nombreSuper=itemView.findViewById(R.id.txtNombreSuper);
+            direccion=itemView.findViewById(R.id.txtDireccion);
             nombre=itemView.findViewById(R.id.txtNombre);
             desc=itemView.findViewById(R.id.txtDescripcion);
             precio=itemView.findViewById(R.id.txtPrecio);
         }
 
         public void AsignarProd(ProdxSuper prodxSuper) {
+            nombreSuper.setText(prodxSuper.getSuperNom());
+            direccion.setText(prodxSuper.getDireccion());
             nombre.setText(prodxSuper.getNombre());
             desc.setText(prodxSuper.getDescripcion());
             String pre=String.valueOf(prodxSuper.getPrecio());

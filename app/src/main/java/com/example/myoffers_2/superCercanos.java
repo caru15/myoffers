@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.osmdroid.api.IMapView;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -103,7 +102,7 @@ public class superCercanos extends Fragment implements LocationListener {
         map.setTileSource(TileSourceFactory.BASE_OVERLAY_NL);
         newPoint= new GeoPoint(-24.788319588401357, -65.41088780441387);
         this.mapController = this.map.getController();
-        this.mapController.setZoom(15.0);
+        this.mapController.setZoom(15);
         //aqui tenemos acceso al controlador del mapa
         requestPermissionsIfNecessary(new String[] {
                 //esta linea es para mostrar la ubicacion actual//es necesario para mostrar el mapa
@@ -116,7 +115,7 @@ public class superCercanos extends Fragment implements LocationListener {
             //aqui obtengo el proveedor del servicio
             locationManager=(LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             //este metodo notifico los cambio de posicion
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,8000,100,this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,100,this);
             map.getOverlays().clear();
             map.invalidate();
         }catch (SecurityException e){

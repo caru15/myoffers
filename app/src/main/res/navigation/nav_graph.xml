@@ -93,6 +93,14 @@
             android:name="distancia"
             app:argType="integer"
             android:defaultValue="0" />
+        <argument
+            android:name="Latitud"
+            app:argType="string"
+            android:defaultValue="nada" />
+        <argument
+            android:name="Longitud"
+            app:argType="string"
+            android:defaultValue="nada" />
     </fragment>
     <fragment
         android:id="@+id/ofertasCercas"

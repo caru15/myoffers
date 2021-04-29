@@ -1,15 +1,25 @@
 package com.example.myoffers_2;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +44,7 @@ import java.util.List;
 
 import static com.example.myoffers_2.R.*;
 
-public class ListaMercaderia extends Fragment {
+public class ListaMercaderia extends Fragment implements LocationListener {
 
     private ArrayList<String> productos;
     private listAdapter myAdapter;
@@ -45,7 +55,8 @@ public class ListaMercaderia extends Fragment {
     private Modelo modelo;
     private PopupWindow popupWindow;
     private String k;
-
+    private String latitud;
+    private String longitud;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -92,6 +103,15 @@ public class ListaMercaderia extends Fragment {
         et1 = view.findViewById(id.idProd);
         et2 = view.findViewById(id.idMarca);
         kilometros=0;
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
+
         final FrameLayout frameLayout=view.findViewById(id.fl);
 
         myAdapter = new listAdapter(view.getContext(), layout.item_row, myLista);
@@ -184,9 +204,67 @@ public class ListaMercaderia extends Fragment {
                         ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
                action.setProductos(miarray);
                action.setDistancia(kilometros);
+               action.setLatitud(latitud);
+               action.setLongitud(longitud);
               Navigation.findNavController(v).navigate(action);
             } });
+    }
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+       latitud=String.valueOf(location.getLatitude());
+       longitud=String.valueOf(location.getLongitude());
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        switch (status) {
+            case LocationProvider.AVAILABLE:
+                Log.d("debug", "LocationProvider.AVAILABLE");
+                break;
+            case LocationProvider.OUT_OF_SERVICE:
+                Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                break;
     }}
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+    }
+}
 
 
 
