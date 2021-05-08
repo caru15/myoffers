@@ -2,16 +2,14 @@ package com.example.myoffers_2;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-public class editar_oferta extends Fragment {
+//en este fragmento vas a poner para que ingrese nueva clave porque se va a cargar solo el usuario
+//consulta en la base de datos el dni carga el usuario y toma la nueva contraseña
+//ingresa ala base de datos y modifica la contrasela segun el id que encontro con ese dni
+public class Nueva_clave extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +20,13 @@ public class editar_oferta extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public editar_oferta() {
+    public Nueva_clave() {
         // Required empty public constructor
     }
 
-    public static editar_oferta newInstance(String param1, String param2) {
-        editar_oferta fragment = new editar_oferta();
+    // TODO: Rename and change types and number of parameters
+    public static Nueva_clave newInstance(String param1, String param2) {
+        Nueva_clave fragment = new Nueva_clave();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,15 +47,6 @@ public class editar_oferta extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_editar_oferta, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        String nom=editar_ofertaArgs.fromBundle(getArguments()).getNombre();
- int pos=editar_ofertaArgs.fromBundle(getArguments()).getPosicion();
-        Toast toast = Toast.makeText(view.getContext(),nom+" "+pos, Toast.LENGTH_SHORT);
-        toast.show();
+        return inflater.inflate(R.layout.fragment_nueva_clave, container, false);
     }
 }

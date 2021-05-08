@@ -115,7 +115,11 @@
         android:id="@+id/recupClave"
         android:name="com.example.myoffers_2.recupClave"
         android:label="fragment_recup_clave"
-        tools:layout="@layout/fragment_recup_clave" />
+        tools:layout="@layout/fragment_recup_clave" >
+        <action
+            android:id="@+id/action_recupClave_to_nueva_clave"
+            app:destination="@id/nueva_clave" />
+    </fragment>
     <fragment
         android:id="@+id/nueva_oferta"
         android:name="com.example.myoffers_2.nueva_oferta"
@@ -142,6 +146,9 @@
             android:name="Posicion"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_editar_oferta_to_regisProducto"
+            app:destination="@id/regisProducto" />
     </fragment>
     <fragment
         android:id="@+id/nearby_super"
@@ -156,5 +163,14 @@
         <argument
             android:name="imagenes"
             app:argType="integer[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/nueva_clave"
+        android:name="com.example.myoffers_2.Nueva_clave"
+        android:label="fragment_nueva_clave"
+        tools:layout="@layout/fragment_nueva_clave" >
+        <action
+            android:id="@+id/action_nueva_clave_to_inicio"
+            app:destination="@id/inicio" />
     </fragment>
 </navigation>

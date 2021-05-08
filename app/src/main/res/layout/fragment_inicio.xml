@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
-                    android:text="Recuperar contraseña"
+                    android:text="Olvide usuario y contraseña"
                     android:linksClickable="true"
                     android:clickable="true"
                     android:autoLink="all"

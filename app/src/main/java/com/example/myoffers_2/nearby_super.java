@@ -59,6 +59,10 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
     private boolean mLocationPermissionGrated= false;
     private LatLng myPlace;
     private View view;
+    private LatLng mipos;
+    private   List<supermercados> lista= new ArrayList<supermercados>();
+    private Location mipos1 = new Location("mipos");
+    private int distancia;
     private MarkerOptions markerOptions;
     private MenuInflater inflater;
     private Toolbar toolbar;
@@ -66,6 +70,7 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
     private AdminBD bd=new AdminBD();
     private supermercados supermercado = new supermercados();
     private String uri;
+    private boolean bandera;
     private int identificador;
     private String direccion;
     AsyncHttpClient conexion=new AsyncHttpClient();
@@ -105,6 +110,7 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
         super.onViewCreated(view, savedInstanceState);
         Toolbar myToolbar = (Toolbar) view.findViewById(R.id.idtoolbar);
         setToolbar(view);
+        distancia=20;
        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this::onMapReady);
 
@@ -123,7 +129,7 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
       //  map.addMarker(new MarkerOptions().position(Libertad).title("Libertad"));
         map.moveCamera(CameraUpdateFactory.newLatLng(Salta));
         // Asigno un nivel de zoom mas grande el numero se acerca mas la camara'
-        CameraUpdate ZoomCam = CameraUpdateFactory.zoomTo(9);
+        CameraUpdate ZoomCam = CameraUpdateFactory.zoomTo(12);
         map.animateCamera(ZoomCam);
         updateLocationUI();
     }
@@ -151,13 +157,16 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
         public void onLocationChanged(Location location) {
     //este me dice cuando la ubicacion ha cambiado y d aqui manda al otro metodo donde este
           // metodo te muestre lo que queres en el mapa
-          LatLng mipos= new LatLng(location.getLatitude(),location.getLongitude());
-          map.moveCamera(CameraUpdateFactory.newLatLngZoom(mipos,12));
-          mapa(location.getLatitude(),location.getLongitude());
+          mipos= new LatLng(location.getLatitude(),location.getLongitude());
+          map.moveCamera(CameraUpdateFactory.newLatLngZoom(mipos,10));
+          mapa(location.getLatitude(),location.getLongitude(),distancia);
     }
    //lo que hace este metodo segun la latitud y longitud mia me tira en el mapa los super mas cercanos
-    private void mapa(double latitude, double longitude) {
-        //debo traer todas las latitudes y longitudes de la base de datos y agregarlas al mapa
+    private void mapa(double latitude, double longitude, int distancia) {
+        //debo traer todas las latitudes y longitudes de la base de datos y agregarlas al lati
+        Location OtraLocation= new Location("super");
+        mipos1.setLatitude(latitude);
+        mipos1.setLongitude(longitude);
         uri=bd.dirSuper();
         params.put("type","listar");
         params.put("nom","nada");
@@ -172,6 +181,7 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respuesta) {
                 List<supermercados> lista= new ArrayList<supermercados>();
+                Boolean bandera=false;
                 try {
                     JSONArray jsonArray= new JSONArray(respuesta);
                     for (int i = 0;i < jsonArray.length();i++){
@@ -181,13 +191,19 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
                         misuper.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
                         misuper.setLat(jsonArray.getJSONObject(i).getDouble("latitud"));
                         misuper.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
-                        lista.add(misuper);}
-                    for (int j=0; j<lista.size();j++){
-                        LatLng sp = new LatLng(lista.get(j).getLat(), lista.get(j).getLongitud());
-                        String titulo=lista.get(j).getNombre();
-                        map.addMarker(new MarkerOptions().position(sp).title(titulo));
+                        lista.add(misuper);
                     }
+                   for (int j=0; j<lista.size();j++){
 
+                       OtraLocation.setLatitude((double)lista.get(j).getLat());
+                       OtraLocation.setLongitude((double)lista.get(j).getLongitud());
+                       float dis=OtraLocation.distanceTo(mipos1)/1000;
+                       Log.d("la diferencia",String.valueOf(dis));
+                       if (dis<=distancia){
+                        LatLng sp = new LatLng(lista.get(j).getLat(), lista.get(j).getLongitud());
+                            String titulo=lista.get(j).getNombre();
+                            map.addMarker(new MarkerOptions().position(sp).title(titulo));}
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                     Log.d("ERROR","entramos por el catch "+e.toString());
@@ -216,7 +232,6 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
     public void onProviderEnabled(String provider) {
         //gps activado
     }
-
     @Override
     public void onProviderDisabled(String provider) {
     //gps desactivado
@@ -231,14 +246,32 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.idDistancia:
-                Toast.makeText(getContext(), "Toast por defecto", Toast.LENGTH_SHORT).show();
-                break;
+                return true;
             case R.id.idVistas:
-
-                    break;
+                    return true;
+            case R.id.id1:
+                Toast.makeText(this.getContext(),"distancia 1",Toast.LENGTH_LONG).show();
+                map.clear();
+               mapa(mipos1.getLatitude(),mipos1.getLongitude(),1);
+                return true;
+            case R.id.id2:
+                Toast.makeText(this.getContext(),"distancia 2",Toast.LENGTH_LONG).show();
+                map.clear();
+                mapa(mipos1.getLatitude(),mipos1.getLongitude(),2);
+                return true;
+            case R.id.id3:
+                Toast.makeText(this.getContext(),"distancia 3",Toast.LENGTH_LONG).show();
+                map.clear();
+                mapa(mipos1.getLatitude(),mipos1.getLongitude(),3);
+                return true;
+            case R.id.id4:
+                Toast.makeText(this.getContext(),"distancia 4",Toast.LENGTH_LONG).show();
+                map.clear();
+                mapa(mipos1.getLatitude(),mipos1.getLongitude(),20);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }return false;
+        }
     }
 
     //Este método inicializa el toolbar y le da opciones de menú

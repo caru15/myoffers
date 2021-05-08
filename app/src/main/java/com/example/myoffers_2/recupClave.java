@@ -15,11 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link recupClave#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class recupClave extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -35,14 +30,7 @@ public class recupClave extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment recupClave.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static recupClave newInstance(String param1, String param2) {
         recupClave fragment = new recupClave();
@@ -72,7 +60,7 @@ public class recupClave extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button btnemail=view.findViewById(R.id.btnEmail);
+        Button btnemail=view.findViewById(R.id.btnOK1);
         btnemail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

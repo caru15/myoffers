@@ -92,9 +92,8 @@ public class RegisProducto extends Fragment {
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
         dir=bd.dirProdSuper();//"prodxsuper.php
-        uri=bd.dirProd();//productos.php
-        //aqui nos ela lista d emercaderia poruqe esta mal el adaptador yesta tirando otra coas la consulta join fijate
-        params.put("type","join");
+       // uri=bd.dirProd();//productos.php
+        params.put("type","join1");
         params.put("super","nada");
         params.put("prod","nada");
         params.put("usuario","nada");
@@ -105,12 +104,12 @@ public class RegisProducto extends Fragment {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d("Error","no se conecto "+responseString);
             }
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, String response) {
                 Log.d("caru", "entramos " + response);
                 try {
-                    RecyclerView.Adapter adapter= new prodSuperAdaptador(items, view.getContext());
+                    //estoy ocupando un adaptador generico
+                   prodSuperAdaptador adapter= new prodSuperAdaptador(items, view.getContext());
                     recyclerView.setAdapter(adapter);
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length();i++) {
@@ -121,12 +120,11 @@ public class RegisProducto extends Fragment {
                         String supNombre =jsonArray.getJSONObject(i).getString("super");
                         double pre=jsonArray.getJSONObject(i).getDouble("precio");
                         String imagen=jsonArray.getJSONObject(i).getString("imagen");
-                 PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
+                        PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
+                        Log.d("Notificacion","elemto"+i+" "+PS.getNombre());
                         items.add(PS);
                         adapter.notifyDataSetChanged();
                     }
-                    Log.d("esto tiene el producto",items.get(5).getNombre()+" "+items.get(5).getImagen());
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -140,7 +138,6 @@ public class RegisProducto extends Fragment {
         String nom=RegisProductoArgs.fromBundle(getArguments()).getNomUsuario();
 
         //instancio mi boton floating
-
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,11 +101,12 @@ public class Registrar extends Fragment {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String response) {
                         try {
-                            JSONArray array = new JSONArray(response);
-                            String prueba=array.getJSONObject(0).getString("message");
+                            JSONObject jsonjObject = new JSONObject(response);
+                           // JSONArray array = new JSONArray(response);
+                            String prueba=jsonjObject.getString("message");
                             Toast.makeText(v.getContext() ,prueba, Toast.LENGTH_LONG).show();
                             Snackbar.make(v, prueba,Snackbar.LENGTH_LONG).setAction("Action",null).show();
-
+                            Navigation.findNavController(v).navigate(R.id.inicio);
                             }catch (Exception e){
                             e.printStackTrace();
                             Snackbar.make(v, "json no lee",Snackbar.LENGTH_LONG).setAction("Action",null).show();

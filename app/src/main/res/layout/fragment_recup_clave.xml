@@ -4,12 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".recupClave">
-
-    <!-- TODO: Update blank fragment layout -->
-    <Button
-        android:id="@+id/btnEmail"
+    <LinearLayout
+        android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Mandar email" />
+        android:orientation="vertical"
+        android:paddingTop="200dp"
+        android:paddingLeft="50dp"
+        android:layout_marginRight="20dp">
+        <TextView
+            android:id="@+id/txtDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingrese su DNI:"
+            android:textSize="30dp"/>
+        <TextView
+            android:id="@+id/txtDni1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="30dp"/>
+        <Button
+            android:id="@+id/btnOK1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:text="Siguiente"
+            android:textColor="@color/colorPrimary"/>
 
+    </LinearLayout>
 </FrameLayout>

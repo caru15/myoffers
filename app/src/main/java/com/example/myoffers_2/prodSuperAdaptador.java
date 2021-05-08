@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -28,7 +30,7 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
     private Context micontext;
     private View vista;
     int PosicionMarcada=0;
-   // private ItemClickListener mClickListener;
+
 
     public prodSuperAdaptador(List<ProdxSuper> items, Context context){
         this.items=items;
@@ -42,7 +44,8 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
     @NonNull
     @Override
     public prodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_layout, parent, false);
+        //inicializa la interfaz de un item de la lista a partir del layaut utilizando para ello LayoutInflater
+        vista = LayoutInflater.from(micontext).inflate(R.layout.list_layout, parent, false);
         return new prodViewHolder(vista);
     }
 
@@ -50,7 +53,7 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
     public void onBindViewHolder( prodViewHolder holder,final int position) {
 
        // holder.image.setImageResource(R.mipmap.logo);
-        final ProdxSuper obj=items.get(position);
+         ProdxSuper obj=items.get(position);
         //aqui estoy cargando la imagen junto con los demas datos
         Glide.with(micontext).load(obj.getImagen()).into(holder.image);
         holder.titulo.setText(obj.getNombre());
@@ -64,7 +67,6 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
                                                     PosicionMarcada=pos;
                                                     Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+position, Toast.LENGTH_SHORT);
                                                     toast.show();
-                                                    
                                                     notifyDataSetChanged();
                                                 }
                                             });
@@ -73,7 +75,18 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
        }else{
            prodViewHolder.cv.setCardElevation(vista.getResources().getDimension(R.dimen.cardView));
        }
+       holder.itemView.setOnClickListener(new OnClickListener() {
 
+           @Override
+           public void onClick(View v) {
+               //pasa como parametros el id del producto y del usuario si es administrador
+               //puede sino no
+               RegisProductoDirections.ActionRegisProductoToEditarOferta action=RegisProductoDirections.actionRegisProductoToEditarOferta();
+               action.setNombre("pan");
+               action.setPosicion(pos);
+               Navigation.findNavController(v).navigate(action);
+           }
+       });
     }
 public void add(ProdxSuper PS){
         items.add(PS);
@@ -106,7 +119,5 @@ public void addAll(ArrayList<ProdxSuper> ps){
         cv = (CardView)v.findViewById(R.id.cardview);
         contenedor=v;
 
-    }
-
-    }
+    }}
 }
