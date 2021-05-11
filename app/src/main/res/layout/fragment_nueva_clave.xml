@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:apps="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Nueva_clave">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_conte"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_width="match_parent"
+        apps:cardBackgroundColor="#4C6570"
+        android:layout_margin="35dp"
+        apps:cardCornerRadius="30dp"
+        apps:cardElevation="5dp"
+        apps:contentPadding="10dp">
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/AppTheme">
+
+            <TextView
+                android:id="@+id/txtclave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_above="@id/clave1"
+                android:textStyle="bold"
+                android:typeface="sans"
+                android:textSize="20dp"
+                android:layout_marginBottom="80dp"
+                android:text="Ingrese nueva clave"
+                />
+
+            <EditText
+                android:id="@+id/clave1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:hint="nueva clave"
+                android:background="@drawable/border"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:ems="15"
+                android:inputType="textPassword"/>
+            <requestFocus />
+
+
+            <EditText
+                android:id="@+id/clave2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/clave1"
+                android:padding="10dp"
+                android:hint="nueva clave"
+                android:background="@drawable/border"
+                android:ems="15"
+                android:inputType="textPassword" >
+
+
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:layout_below="@id/clave2">
+
+                <Button
+                    android:id="@+id/btnRecuperar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Recuperar" />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </FrameLayout>

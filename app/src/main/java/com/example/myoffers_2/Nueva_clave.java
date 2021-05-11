@@ -2,23 +2,39 @@ package com.example.myoffers_2;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//en este fragmento vas a poner para que ingrese nueva clave porque se va a cargar solo el usuario
-//consulta en la base de datos el dni carga el usuario y toma la nueva contraseña
-//ingresa ala base de datos y modifica la contrasela segun el id que encontro con ese dni
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.material.snackbar.Snackbar;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+
 public class Nueva_clave extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    private String dir;
+    private AdminBD bd= new AdminBD();
     private String mParam1;
     private String mParam2;
+    final AsyncHttpClient client = new AsyncHttpClient();
+    final RequestParams params = new RequestParams();
 
     public Nueva_clave() {
         // Required empty public constructor
@@ -48,5 +64,56 @@ public class Nueva_clave extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nueva_clave, container, false);
+
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+     String doc=Nueva_claveArgs.fromBundle(getArguments()).getDocumento();
+        dir=bd.dirUsuarios();
+        TextView cla1=view.findViewById(R.id.clave1);
+        TextView cla2=view.findViewById(R.id.clave2);
+        Button btn=view.findViewById(R.id.btnRecuperar);
+
+        params.put("type", "listar");
+        params.put("ape","nada");
+        params.put("name","nada");
+        params.put("docu",doc);
+        params.put("usua","nada");
+        params.put("email","nada");
+        params.put("password","nada");
+        params.put("repu",0);
+
+        client.post(dir, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Snackbar.make(view, "algo salio mal",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Snackbar.make(view, "entrams",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                try {
+                    JSONArray jsonArray= new JSONArray(responseString);
+                    Usuarios usuarios=new Usuarios();
+                    for (int i = 0;i < jsonArray.length();i++) {
+                        usuarios.setId_usuario(jsonArray.getJSONObject(i).getInt("id_usuario"));
+                        usuarios.setUsuario(jsonArray.getJSONObject(i).getString("usuario"));
+                    }
+
+                   btn.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+
+                       }
+                   });
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Snackbar.make(view, "json no lee",Snackbar.LENGTH_LONG).setAction("Action",null).show();
+                } }
+        });
+
+
+                }
 }

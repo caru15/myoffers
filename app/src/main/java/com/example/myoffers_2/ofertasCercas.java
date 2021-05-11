@@ -84,10 +84,13 @@ public class ofertasCercas extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageButton2://changoMas
-
+                int i[]={R.drawable.chango1,R.drawable.chango2,R.drawable.chango3,R.drawable.chango4,R.drawable.chango5,R.drawable.chango6};
+                ofertasCercasDirections.ActionOfertasCercasToFolletos actio=ofertasCercasDirections.actionOfertasCercasToFolletos(i);
+                actio.setImagenes(i);
+                Navigation.findNavController(v).navigate(actio);
                 break;
             case R.id.imageButton://carrefour
-                int imagene[]={R.drawable.carrefour,R.drawable.carrefour1,R.drawable.carrefour2,R.drawable.carrefour3,R.drawable.carrefour4,R.drawable.carrefour5};
+                int imagene[]={R.drawable.carrefour1,R.drawable.carrefour2,R.drawable.carrefour3,R.drawable.carrefour4};
                 ofertasCercasDirections.ActionOfertasCercasToFolletos action=ofertasCercasDirections.actionOfertasCercasToFolletos(imagene);
                 action.setImagenes(imagene);
                 Navigation.findNavController(v).navigate(action);
@@ -96,13 +99,13 @@ public class ofertasCercas extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.imageButton4://dia
-                 int ima[]={R.drawable.dia1,R.drawable.dia2};
+                 int ima[]={R.drawable.dia1,R.drawable.dia2,R.drawable.dia3,R.drawable.dia4,R.drawable.dia5,R.drawable.dia6,R.drawable.dia7};
                  ofertasCercasDirections.ActionOfertasCercasToFolletos action4 = ofertasCercasDirections.actionOfertasCercasToFolletos(ima);
                  action4.setImagenes(ima);
                  Navigation.findNavController(v).navigate(action4);
                 break;
             case R.id.imageButton5://vea
-                int imagenes[]={R.drawable.vea1,R.drawable.vea2,R.drawable.vea3,R.drawable.vea4,R.drawable.vea5};
+                int imagenes[]={R.drawable.vea1,R.drawable.vea2,R.drawable.vea3,R.drawable.vea4,R.drawable.vea5,R.drawable.vea6};
                 ofertasCercasDirections.ActionOfertasCercasToFolletos action2=ofertasCercasDirections.actionOfertasCercasToFolletos(imagenes);
                 action2.setImagenes(imagenes);
                 Navigation.findNavController(v).navigate(action2);

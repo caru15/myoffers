@@ -44,6 +44,17 @@
         android:background="@drawable/border"
         android:ems="10"
         android:hint="Nombre" />
+    <EditText
+        android:id="@+id/idDNI"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:textColorHint="@color/cardview_light_background"
+        android:padding="10dp"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:background="@drawable/border"
+        android:ems="10"
+        android:hint="Documento" />
 
     <EditText
         android:id="@+id/idUsuario"

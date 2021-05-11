@@ -3,9 +3,18 @@ package com.example.myoffers_2;
 public class Usuarios {
     private int id_usuario, password, reputacion;
     private String apellido, nombre;
+    private String dni;
     private String usuario, email;
 
-    private Usuarios (){
+   public Usuarios (){
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public int getId_usuario() {

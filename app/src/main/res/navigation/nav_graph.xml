@@ -172,5 +172,9 @@
         <action
             android:id="@+id/action_nueva_clave_to_inicio"
             app:destination="@id/inicio" />
+        <argument
+            android:name="documento"
+            app:argType="string"
+            android:defaultValue="sin documento" />
     </fragment>
 </navigation>

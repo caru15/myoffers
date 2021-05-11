@@ -18,12 +18,13 @@
             android:layout_height="wrap_content"
             android:text="Ingrese su DNI:"
             android:textSize="30dp"/>
+
         <TextView
             android:id="@+id/txtDni1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:textSize="30dp"/>
+            android:textSize="25dp"/>
         <Button
             android:id="@+id/btnOK1"
             android:layout_width="wrap_content"

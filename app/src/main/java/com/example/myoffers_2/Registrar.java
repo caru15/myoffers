@@ -68,6 +68,7 @@ public class Registrar extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final EditText Apellido=view.findViewById(R.id.idApellido);
         final EditText Nombre= view.findViewById(R.id.idNombre);
+        final EditText Doc= view.findViewById(R.id.idDNI);
         final EditText Usuario = view.findViewById(R.id.idUsuario);
         final EditText Email = view.findViewById(R.id.idEmail);
         final EditText Password = view.findViewById(R.id.idPassword);
@@ -81,6 +82,7 @@ public class Registrar extends Fragment {
                  dir=bd.dirUsuarios();
                 String apellido = Apellido.getText().toString();
                 String nombre=Nombre.getText().toString();
+                String documento=Doc.getText().toString();
                 String usuario = Usuario.getText().toString();
                 String email = Email.getText().toString();
                 String contraseña = Password.getText().toString();
@@ -88,6 +90,7 @@ public class Registrar extends Fragment {
                 params.put("type","alta");
                 params.put("ape", apellido);
                 params.put("name", nombre);
+                params.put("docu",documento);
                 params.put("usua", usuario);
                 params.put("email",email);
                 params.put("password", contraseña);

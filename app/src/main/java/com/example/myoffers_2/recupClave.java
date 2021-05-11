@@ -7,12 +7,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class recupClave extends Fragment {
@@ -60,19 +62,16 @@ public class recupClave extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button btnemail=view.findViewById(R.id.btnOK1);
-        btnemail.setOnClickListener(new View.OnClickListener() {
+        TextView dni=view.findViewById(R.id.txtDni1);
+        Button btn=view.findViewById(R.id.btnOK1);
+
+        String doc= dni.getText().toString();
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                try {
-                    new MailJob("caru19785@gmail.com","31733424")
-                            .execute(new MailJob.Mail("caru19785@gmail.com", "Asunto_del_correo", "paso contraseña","contraseña"));
-                    Toast.makeText(v.getContext(), "Correo enviado!", Toast.LENGTH_LONG).show();
-                } catch(Exception e) {
-                    Log.e("MailApp", "Could not send email", e);
-                    Toast.makeText(v.getContext(), "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-                }
+                recupClaveDirections.ActionRecupClaveToNuevaClave action=recupClaveDirections.actionRecupClaveToNuevaClave();
+                action.setDocumento(doc);
+                Navigation.findNavController(view).navigate(action);
             }
         });
     }
