@@ -101,6 +101,9 @@
             android:name="Longitud"
             app:argType="string"
             android:defaultValue="nada" />
+        <action
+            android:id="@+id/action_resultBusqueda_to_ruta"
+            app:destination="@id/ruta" />
     </fragment>
     <fragment
         android:id="@+id/ofertasCercas"
@@ -176,5 +179,19 @@
             android:name="documento"
             app:argType="string"
             android:defaultValue="sin documento" />
+    </fragment>
+    <fragment
+        android:id="@+id/ruta"
+        android:name="com.example.myoffers_2.ruta"
+        android:label="fragment_ruta"
+        tools:layout="@layout/fragment_ruta" >
+        <argument
+            android:name="latitud"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="longitud"
+            app:argType="string"
+            android:defaultValue="null" />
     </fragment>
 </navigation>

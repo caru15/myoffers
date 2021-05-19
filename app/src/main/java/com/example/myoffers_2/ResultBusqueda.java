@@ -76,10 +76,7 @@ public class ResultBusqueda extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-/**
- * y aqui nomas en esta clase en el metodo Buscar calculala distancia de tu pos al super
- * asi vas guardando los supermercados que te sirven 
- */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

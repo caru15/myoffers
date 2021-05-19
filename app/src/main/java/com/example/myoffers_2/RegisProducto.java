@@ -108,7 +108,7 @@ public class RegisProducto extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String response) {
                 Log.d("caru", "entramos " + response);
                 try {
-                    //estoy ocupando un adaptador generico
+
                    prodSuperAdaptador adapter= new prodSuperAdaptador(items, view.getContext());
                     recyclerView.setAdapter(adapter);
                     JSONArray jsonArray = new JSONArray(response);

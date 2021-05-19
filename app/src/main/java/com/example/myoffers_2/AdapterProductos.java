@@ -1,3 +1,4 @@
+
 package com.example.myoffers_2;
 
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     List<ProdxSuper> listProd=new ArrayList<ProdxSuper>();
     private Context context;
     private View vista;
+    int PosicionMarcada=0;
     //generar constructor
 
     public AdapterProductos(List<ProdxSuper> listProd, Context context) {
@@ -37,6 +40,17 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolderProd holder, int position) {
   holder.AsignarProd(listProd.get(position));
+  holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+          String latitud=String.valueOf(listProd.get(position).getLatitud());
+          String longitud=String.valueOf(listProd.get(position).getLongitud());
+          ResultBusquedaDirections.ActionResultBusquedaToRuta action=ResultBusquedaDirections.actionResultBusquedaToRuta();
+          action.setLatitud(latitud);
+          action.setLongitud(longitud);
+          Navigation.findNavController(v).navigate(action);
+      }
+  });
     }
 
     @Override
