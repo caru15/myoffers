@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -34,9 +35,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class ruta extends Fragment implements LocationListener {
     GoogleMap map;
@@ -44,6 +50,7 @@ public class ruta extends Fragment implements LocationListener {
     JSONObject jso;
     Double latitudOrigen, longitudOrigen;
     Double latitudDest, longitudDest;
+    LatLng dest;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -79,6 +86,7 @@ public class ruta extends Fragment implements LocationListener {
         latitudDest=Double.parseDouble(lat);
         String longi=rutaArgs.fromBundle(getArguments()).getLongitud();
         longitudDest=Double.parseDouble(longi);
+       dest= new LatLng(latitudDest,longitudDest);
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -101,12 +109,14 @@ public class ruta extends Fragment implements LocationListener {
         latitudOrigen=location.getLatitude();
         longitudOrigen=location.getLongitude();
         map.addMarker(new MarkerOptions().position(mipos).title("Estas Aqui"));
+        map.addMarker(new MarkerOptions().position(dest).title("Super"));
         CameraPosition cameraPosition= new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(),location.getLongitude()))
-                .zoom(14)
+                .zoom(16)
                 .build();
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        String url="https://maps.googleapis.com/maps/api/directions/json?origin="+latitudOrigen+","+longitudOrigen +"&destination=-24.843869490649503,%20-65.43590439628254&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
+
+        String url="https://maps.googleapis.com/maps/api/directions/json?origin="+latitudOrigen+","+longitudOrigen +"&destination="+latitudDest+",%20"+longitudDest+"&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
         RequestQueue requestQueue= Volley.newRequestQueue(getContext());
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -128,7 +138,26 @@ public class ruta extends Fragment implements LocationListener {
     }
 
     private void dibujarRuta(JSONObject jso) {
+        JSONArray JsonRoutes;
+        JSONArray JsonLegs;
+        JSONArray JsonSteps;
+        try {
+            JsonRoutes=jso.getJSONArray("routes");
+            for (int i=0;i<JsonRoutes.length();i++){
+                JsonLegs=((JSONObject) (JsonRoutes.get(i))).getJSONArray("legs");
+                 for (int j=0;j<JsonLegs.length();j++){
+                     JsonSteps=((JSONObject)JsonLegs.get(j)).getJSONArray("steps");
+                     for (int k=0;k<JsonSteps.length();k++){
+                         String polyline=""+((JSONObject)((JSONObject) JsonSteps.get(k)).get("polyline")).get("points");
+                         Log.d("end"," "+polyline);
+                         List<LatLng> list= PolyUtil.decode(polyline);
+                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.colorAccent).width(9));
+                     }
+                 }
+            }
+        }catch (JSONException e){
 
+        }
     }
 
     @Override
