@@ -74,7 +74,6 @@ public class Inicio extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_inicio, container, false);
-
     }
 
     @Override

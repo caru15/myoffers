@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,9 +63,8 @@ public class recupClave extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView dni=view.findViewById(R.id.txtDni1);
+        EditText dni=view.findViewById(R.id.txtDni1);
         Button btn=view.findViewById(R.id.btnOK1);
-
         String doc= dni.getText().toString();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

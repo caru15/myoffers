@@ -97,14 +97,18 @@ public class Nueva_clave extends Fragment {
                     JSONArray jsonArray= new JSONArray(responseString);
                     Usuarios usuarios=new Usuarios();
                     for (int i = 0;i < jsonArray.length();i++) {
-                        usuarios.setId_usuario(jsonArray.getJSONObject(i).getInt("id_usuario"));
+                       // usuarios.setId_usuario(jsonArray.getJSONObject(i).getInt("id_usuario"));
                         usuarios.setUsuario(jsonArray.getJSONObject(i).getString("usuario"));
+                        usuarios.setEmail(jsonArray.getJSONObject(i).getString("email"));
+                        usuarios.setPassword(jsonArray.getJSONObject(i).getInt("clave"));
+                        usuarios.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+                        //mnada un cartel que diga se envio un mensaje a su correo con sus ususario y contraseña
                     }
 
                    btn.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
-
+                           Navigation.findNavController(v).navigate(R.id.inicio);
                        }
                    });
 

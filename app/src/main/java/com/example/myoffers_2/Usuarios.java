@@ -5,7 +5,7 @@ public class Usuarios {
     private String apellido, nombre;
     private String dni;
     private String usuario, email;
-
+//correji el password es mejor que sea string y no int
    public Usuarios (){
     }
 
