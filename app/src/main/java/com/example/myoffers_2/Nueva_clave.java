@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,26 +66,26 @@ public class Nueva_clave extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_nueva_clave, container, false);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-     String doc=Nueva_claveArgs.fromBundle(getArguments()).getDocumento();
-        dir=bd.dirUsuarios();
-        TextView cla1=view.findViewById(R.id.clave1);
-        TextView cla2=view.findViewById(R.id.clave2);
+
+        dir=bd.correo();
+        TextView txt1=view.findViewById(R.id.txtTitulo);
+        TextView txt2=view.findViewById(R.id.txtMensaje);
         Button btn=view.findViewById(R.id.btnRecuperar);
 
-        params.put("type", "listar");
-        params.put("ape","nada");
-        params.put("name","nada");
-        params.put("docu",doc);
-        params.put("usua","nada");
-        params.put("email","nada");
-        params.put("password","nada");
-        params.put("repu",0);
+        String nombre=Nueva_claveArgs.fromBundle(getArguments()).getNombre();
+        String Usuario=Nueva_claveArgs.fromBundle(getArguments()).getUsuario();
+        String correo=Nueva_claveArgs.fromBundle(getArguments()).getCorreo();
+        int contrase=Nueva_claveArgs.fromBundle(getArguments()).getPassword();
+        txt1.setText("Hola "+nombre);
+        params.put("usua",Usuario);
+        params.put("clave",contrase);
+        params.put("nom",nombre);
+        params.put("correo",correo);
 
         client.post(dir, params, new TextHttpResponseHandler() {
             @Override
@@ -94,17 +96,8 @@ public class Nueva_clave extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Snackbar.make(view, "entrams",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                 try {
-                    JSONArray jsonArray= new JSONArray(responseString);
-                    Usuarios usuarios=new Usuarios();
-                    for (int i = 0;i < jsonArray.length();i++) {
-                       // usuarios.setId_usuario(jsonArray.getJSONObject(i).getInt("id_usuario"));
-                        usuarios.setUsuario(jsonArray.getJSONObject(i).getString("usuario"));
-                        usuarios.setEmail(jsonArray.getJSONObject(i).getString("email"));
-                        usuarios.setPassword(jsonArray.getJSONObject(i).getInt("clave"));
-                        usuarios.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
-                        //mnada un cartel que diga se envio un mensaje a su correo con sus ususario y contraseña
-                    }
-
+                    txt2.setText("Verifique su correo");
+                    Log.d("error",responseString);
                    btn.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {

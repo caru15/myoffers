@@ -176,9 +176,21 @@
             android:id="@+id/action_nueva_clave_to_inicio"
             app:destination="@id/inicio" />
         <argument
-            android:name="documento"
+            android:name="nombre"
             app:argType="string"
-            android:defaultValue="sin documento" />
+            android:defaultValue="nada" />
+        <argument
+            android:name="correo"
+            app:argType="string"
+            android:defaultValue="nada" />
+        <argument
+            android:name="password"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="usuario"
+            app:argType="string"
+            android:defaultValue="nada" />
     </fragment>
     <fragment
         android:id="@+id/ruta"

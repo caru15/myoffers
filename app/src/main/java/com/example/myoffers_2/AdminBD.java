@@ -31,6 +31,10 @@ public class AdminBD {
        String dir=this.Uri+"productos.php";
         return dir;
     }
+  public String correo(){
+        String dir=this.Uri+"correo.php";
+        return dir;
+  }
 public String dirLogin(){
         String dir=this.Uri+"login.php";
         return dir;
