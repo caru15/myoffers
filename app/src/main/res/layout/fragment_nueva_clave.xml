@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".Nueva_clave">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_conte"
         android:layout_height="match_parent"
@@ -17,9 +16,7 @@
         apps:cardCornerRadius="30dp"
         apps:cardElevation="5dp"
         apps:contentPadding="10dp">
-
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/AppTheme">
@@ -32,24 +29,18 @@
                 android:layout_above="@id/txtMensaje"
                 android:textStyle="bold"
                 android:typeface="sans"
-                android:textSize="20dp"
-                android:layout_marginBottom="80dp"
-                android:text="Ingrese usuario y contraseña"
-/>
-
-
-
+                android:textSize="25dp"
+                android:layout_marginBottom="40dp" />
             <TextView
                 android:id="@+id/txtMensaje"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_margin="20dp"
+                android:layout_height="100dp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                android:textSize="20dp"
                 android:layout_centerInParent="true"
-                android:padding="10dp"
-                android:background="@drawable/border"
-                android:ems="15"
-                >
-
+                android:padding="10dp">
+                //android:ems="15"
 
             </TextView>
 
@@ -59,18 +50,12 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_below="@id/txtMensaje">
-
                 <Button
                     android:id="@+id/btnRecuperar"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:text="Inicio" />
-
-
             </LinearLayout>
-
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
-
 </FrameLayout>

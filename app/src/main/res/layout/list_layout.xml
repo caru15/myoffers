@@ -21,11 +21,12 @@
        <ImageView
            android:id="@+id/rv_imagen"
            android:layout_width="wrap_content"
-           android:layout_height="125dp"
+            android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+           android:scaleType="fitXY"
            android:layout_weight="1"
            android:adjustViewBounds="true"
-           android:maxWidth="150dp"
-           android:scaleType="centerCrop"
+           android:maxWidth="140dp"
            app:srcCompat="@mipmap/logo"></ImageView>
 
        <LinearLayout

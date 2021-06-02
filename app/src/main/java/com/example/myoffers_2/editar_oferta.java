@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class editar_oferta extends Fragment {
@@ -54,9 +57,17 @@ public class editar_oferta extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ImageView Imagen=(ImageView) view.findViewById(R.id.cabecera);
+        TextView tit=(TextView)view.findViewById(R.id.Titulo);
+        TextView supermercado=(TextView)view.findViewById(R.id.NombreLabel);
+        TextView marca=(TextView)view.findViewById(R.id.MarcaLabel);
+        TextView desc=(TextView)view.findViewById(R.id.DescLabel);
+        TextView precio=(TextView)view.findViewById(R.id.PrecioLabel);
+
         String nom=editar_ofertaArgs.fromBundle(getArguments()).getNombre();
- int pos=editar_ofertaArgs.fromBundle(getArguments()).getPosicion();
-        Toast toast = Toast.makeText(view.getContext(),nom+" "+pos, Toast.LENGTH_SHORT);
-        toast.show();
+        int pos=editar_ofertaArgs.fromBundle(getArguments()).getPosicion();
+        Log.d("este es el producto:",String.valueOf(pos));
+        tit.setText(nom);
+      //aqui falta ingresar ala base de datos obtener la imagen y los demas datos para mostarr en los text
     }
 }

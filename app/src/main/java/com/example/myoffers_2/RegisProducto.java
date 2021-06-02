@@ -92,7 +92,6 @@ public class RegisProducto extends Fragment {
         RecyclerView.LayoutManager lm= new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(lm);
         dir=bd.dirProdSuper();//"prodxsuper.php
-       // uri=bd.dirProd();//productos.php
         params.put("type","join1");
         params.put("super","nada");
         params.put("prod","nada");
@@ -106,9 +105,8 @@ public class RegisProducto extends Fragment {
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, String response) {
-                Log.d("caru", "entramos " + response);
-                try {
 
+                try {
                    prodSuperAdaptador adapter= new prodSuperAdaptador(items, view.getContext());
                     recyclerView.setAdapter(adapter);
                     JSONArray jsonArray = new JSONArray(response);
@@ -121,7 +119,7 @@ public class RegisProducto extends Fragment {
                         double pre=jsonArray.getJSONObject(i).getDouble("precio");
                         String imagen=jsonArray.getJSONObject(i).getString("imagen");
                         PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
-                        Log.d("Notificacion","elemto"+i+" "+PS.getNombre());
+                        PS.setId_prod(jsonArray.getJSONObject(i).getInt("idprod"));
                         items.add(PS);
                         adapter.notifyDataSetChanged();
                     }

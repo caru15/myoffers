@@ -96,8 +96,8 @@ public class Nueva_clave extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Snackbar.make(view, "entrams",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                 try {
-                    txt2.setText("Verifique su correo");
-                    Log.d("error",responseString);
+                    txt2.setText("Verifique su correo se le envio su Usuario y Contraseña");
+                    Log.d("see envio",responseString);
                    btn.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -107,6 +107,7 @@ public class Nueva_clave extends Fragment {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    txt2.setText("Error, vaya para atras e intente nuevamente");
                     Snackbar.make(view, "json no lee",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                 } }
         });

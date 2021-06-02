@@ -62,13 +62,12 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
         //este es el evento onClickk
         final int pos=position;
        prodViewHolder.cv.setOnClickListener(new OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    PosicionMarcada=pos;
-                                                    Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+position, Toast.LENGTH_SHORT);
-                                                    toast.show();
-                                                    notifyDataSetChanged();
-                                                }
+           @Override
+           public void onClick(View v) {
+               PosicionMarcada=pos;
+               Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+position, Toast.LENGTH_SHORT);
+               toast.show();
+               notifyDataSetChanged(); }
                                             });
        if (PosicionMarcada==position){
            prodViewHolder.cv.setCardElevation(vista.getResources().getDimension(R.dimen.cardView1));
@@ -82,8 +81,8 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
                //pasa como parametros el id del producto y del usuario si es administrador
                //puede sino no
                RegisProductoDirections.ActionRegisProductoToEditarOferta action=RegisProductoDirections.actionRegisProductoToEditarOferta();
-               action.setNombre("pan");
-               action.setPosicion(pos);
+               action.setNombre(obj.getNombre());
+               action.setPosicion(obj.getId_prod());
                Navigation.findNavController(v).navigate(action);
            }
        });
