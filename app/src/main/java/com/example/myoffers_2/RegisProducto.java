@@ -46,6 +46,7 @@ public class RegisProducto extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String dirProducto;
     private String dirProdxSup;
+    private String marca;
     private String dir, uri;
     private String mParam1;
     private String mParam2;
@@ -120,6 +121,7 @@ public class RegisProducto extends Fragment {
                         String imagen=jsonArray.getJSONObject(i).getString("imagen");
                         PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
                         PS.setId_prod(jsonArray.getJSONObject(i).getInt("idprod"));
+                        marca=jsonArray.getJSONObject(i).getString("marca");
                         items.add(PS);
                         adapter.notifyDataSetChanged();
                     }
@@ -144,7 +146,7 @@ public class RegisProducto extends Fragment {
                         .setAction("Action", null).show();
                 //inicia Actividad de Insercion y mando el parametro
                 RegisProductoDirections.ActionRegisProductoToNuevaOferta action=RegisProductoDirections.actionRegisProductoToNuevaOferta();
-             action.setNombre(nom);
+             action.setNombre(marca);
                 Navigation.findNavController(view).navigate(action);
             }
         });

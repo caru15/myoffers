@@ -97,11 +97,13 @@ public class ListaMercaderia extends Fragment implements LocationListener {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lvprod = view.findViewById(id.idlistView);
+
         Button btn = view.findViewById(id.btnAgregar);
         Button btnfiltrar = view.findViewById(id.btnFiltrar);
         Button btnBuscar = view.findViewById(id.btnbuscar);
         et1 = view.findViewById(id.idProd);
         et2 = view.findViewById(id.idMarca);
+
         kilometros=0;
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
@@ -111,11 +113,10 @@ public class ListaMercaderia extends Fragment implements LocationListener {
         } else {
             locationStart();
         }
-
         final FrameLayout frameLayout=view.findViewById(id.fl);
-
         myAdapter = new listAdapter(view.getContext(), layout.item_row, myLista);
         lvprod.setAdapter(myAdapter);
+
         btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +145,7 @@ public class ListaMercaderia extends Fragment implements LocationListener {
                                 kilometros=4;
                                 k=String.valueOf(kilometros);
                                 break;
-                        }
-                    }
+                        } }
                 });
                 popupWindow = new PopupWindow(customView, 700, 800);
                 popupWindow.showAtLocation(frameLayout , Gravity.CENTER, 0, 0);

@@ -231,7 +231,6 @@ public class nueva_oferta extends Fragment {
 
     }
     public void llenar_Spinner2(List<productos> list, View view){
-     //   uri="http://192.168.0.22/myOffers/producto.php";
         direccion=bd.dirProd();
         params.put("type","listar");
        params.put("nom","nada");

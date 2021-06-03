@@ -23,6 +23,10 @@
         android:layout_width="250dp"
         android:layout_height="35dp"
         android:id="@+id/idMarca" />
+        <TextView
+            android:id="@+id/txtDescrip"
+            android:layout_width="250dp"
+            android:layout_height="35dp" />
     </LinearLayout>
 
 </RelativeLayout>
