@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1EDCF"
+    android:background="#8EA1A3"
     android:id="@+id/fl"
     tools:context=".ListaMercaderia">
 
@@ -30,53 +30,29 @@
         android:id="@+id/btnAgregar"
         android:layout_width="50dp"
         android:layout_height="55dp"
-        android:layout_marginLeft="340dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="110dp"
         android:background="@drawable/ic_baseline_search_24"
         android:cursorVisible="true"></Button>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="170dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="100dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/idProd"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:background="@drawable/border"
-            android:hint="Buscar producto"
-            android:inputType="text"
-            android:padding="10dp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+       <androidx.appcompat.widget.SearchView
+           android:id="@+id/sv1"
+           android:layout_width="280dp"
+           android:layout_height="50dp"
+           android:layout_marginTop="115dp"
+           android:background="@drawable/border">
+       </androidx.appcompat.widget.SearchView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="190dp"
-        android:textColorHint="@color/cardview_shadow_start_color"
-        android:outlineAmbientShadowColor="@color/cardview_shadow_start_color">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/idMarca"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:background="@drawable/border"
-            android:hint="Marca"
-            android:inputType="text"
-            android:padding="10dp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-<ListView
+<androidx.recyclerview.widget.RecyclerView
       android:id="@+id/idlistView"
       android:layout_width="match_parent"
       android:layout_height="300dp"
       android:footerDividersEnabled="true"
     android:layout_marginTop="200dp">
-</ListView>
+</androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/btnFiltrar"

@@ -110,14 +110,12 @@ public class nueva_oferta extends Fragment {
         });
     }
     public int Devuelve_id(Spinner sp){
-
         String sup=sp.getSelectedItem().toString();
         String [] vect = sup.split("-");
         int id=Integer.valueOf(vect[0].trim());
         return id;
     }
     public void DevolverIdUsuario(View v,String usuario, int id_super, int id_prod,double precio,int cantidad){
-
         uri=bd.dirUsuarios();
         params.put("type","buscar");
         params.put("ape","nada");

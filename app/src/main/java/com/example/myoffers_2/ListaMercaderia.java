@@ -13,11 +13,15 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,33 +43,42 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
 import static com.example.myoffers_2.R.*;
 
-public class ListaMercaderia extends Fragment implements LocationListener {
+public class ListaMercaderia extends Fragment implements LocationListener, SearchView.OnQueryTextListener,
+listAdapter.RecycleritemClick{
 
-    private ArrayList<String> productos;
     private listAdapter myAdapter;
     private int kilometros;
-    private List<Modelo> myLista = new ArrayList<>();
-    private ListView lvprod;
-    private EditText et1, et2;
+   public List<Modelo> myLista=new ArrayList<>();
+   // private ListView lvprod;
+    private SearchView searchView;
+    private RecyclerView recyclerView;
     private Modelo modelo;
     private PopupWindow popupWindow;
     private String k;
     private String latitud;
     private String longitud;
+   private ListaProductos misProd;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    private  String dir;
     private String mParam1;
     private String mParam2;
 
     public ListaMercaderia() {
-        // Required empty public constructor
+
     }
 
     public static ListaMercaderia newInstance(String param1, String param2) {
@@ -96,15 +109,22 @@ public class ListaMercaderia extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lvprod = view.findViewById(id.idlistView);
 
+        recyclerView=view.findViewById(id.idlistView);
         Button btn = view.findViewById(id.btnAgregar);
         Button btnfiltrar = view.findViewById(id.btnFiltrar);
         Button btnBuscar = view.findViewById(id.btnbuscar);
-        et1 = view.findViewById(id.idProd);
-        et2 = view.findViewById(id.idMarca);
-
+        searchView=view.findViewById(id.sv1);
         kilometros=0;
+        LinearLayoutManager manager=new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(manager);
+        misProd=new ListaProductos();
+        myLista=misProd.getProductos();
+        //llenar();
+        myAdapter=new listAdapter(this.getContext(),myLista);
+        recyclerView.setAdapter(myAdapter);
+        initListener();
+
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
@@ -114,8 +134,7 @@ public class ListaMercaderia extends Fragment implements LocationListener {
             locationStart();
         }
         final FrameLayout frameLayout=view.findViewById(id.fl);
-        myAdapter = new listAdapter(view.getContext(), layout.item_row, myLista);
-        lvprod.setAdapter(myAdapter);
+
 
         btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,25 +172,21 @@ public class ListaMercaderia extends Fragment implements LocationListener {
                     @Override
                     public void onClick(View v) {
                         popupWindow.dismiss(); }
-                });
-            }
+                }); }
         });
+/**
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 modelo = new Modelo();
-                String prod = et1.getText().toString();
-                modelo.setNombre(prod);
-                String mar = et2.getText().toString();
-                modelo.setMarca(mar);
                 modelo.setImagen(mipmap.ic_launcher_round);
                 myLista.add(modelo);
                 myAdapter.notifyDataSetChanged();
-                et1.setText("");
-                et2.setText("");
+
             }
         });
-        lvprod.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        recyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final int posicion = position;
@@ -192,7 +207,7 @@ public class ListaMercaderia extends Fragment implements LocationListener {
                 dialogo1.show();
                 return false;
             }
-        });
+        });*/
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,6 +224,16 @@ public class ListaMercaderia extends Fragment implements LocationListener {
               Navigation.findNavController(v).navigate(action);
             } });
     }
+
+    private void llenar() {
+        myLista.add(new Modelo("pañales","pampers","","xxg"));
+        myLista.add(new Modelo("leche","nido","","xxg"));
+        myLista.add(new Modelo("mermerlada","pampers","","xxg"));
+        myLista.add(new Modelo("dulce de Leche","pampers","","xxg"));
+        myLista.add(new Modelo("Algodon","pampers","","xxg"));
+        myLista.add(new Modelo("Agua","pampers","","xxg"));
+    }
+
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
         final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -226,6 +251,9 @@ public class ListaMercaderia extends Fragment implements LocationListener {
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
+    }
+    private void initListener(){
+        searchView.setOnQueryTextListener(this);
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -249,12 +277,9 @@ public class ListaMercaderia extends Fragment implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
-
     @Override
     public void onProviderDisabled(String provider) {
-
     }
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1000) {
@@ -264,7 +289,18 @@ public class ListaMercaderia extends Fragment implements LocationListener {
             }
         }
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        myAdapter.filter(newText);
+        return false;
+    }
+
+    @Override
+    public void itemClick(Modelo modelo) {
+    }
 }
-
-
-

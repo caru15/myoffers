@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="100dp"
+    android:layout_width="match_parent"
+    card_view:cardElevation="5dp"
+    card_view:cardUseCompatPadding="true">
+
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme">
@@ -9,7 +16,8 @@
     <ImageView
         android:id="@+id/idImagen"
         android:layout_width="50dp"
-        android:layout_height="60dp"/>
+        android:layout_height="60dp"
+        android:src="@android:drawable/btn_star"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,15 +26,16 @@
     <TextView
         android:id="@+id/txtNombre"
         android:layout_width="250dp"
-        android:layout_height="35dp" />
+        android:layout_height="30dp" />
     <TextView
         android:layout_width="250dp"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:id="@+id/idMarca" />
         <TextView
             android:id="@+id/txtDescrip"
             android:layout_width="250dp"
-            android:layout_height="35dp" />
+            android:layout_height="30dp" />
     </LinearLayout>
 
 </RelativeLayout>
+</androidx.cardview.widget.CardView>
