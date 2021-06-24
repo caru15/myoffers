@@ -33,14 +33,6 @@
            android:background="@drawable/border">
        </androidx.appcompat.widget.SearchView>
 
-    <Button
-        android:id="@+id/Lista"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="250dp"
-        android:layout_marginTop="120dp"
-        android:background="@android:drawable/btn_star"></Button>
-
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/idlistView"
       android:layout_width="match_parent"

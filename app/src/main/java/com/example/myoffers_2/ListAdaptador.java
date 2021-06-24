@@ -1,6 +1,8 @@
 package com.example.myoffers_2;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +45,27 @@ public class ListAdaptador extends RecyclerView.Adapter<ListAdaptador.Holder> {
         holder.Nombre.setText(modelo.getNombre());
         holder.Marca.setText(modelo.getMarca());
         holder.Descri.setText(modelo.getDescripcion());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int posicion = position;
+                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(miContext);
+                dialogo1.setTitle("Importante");
+                dialogo1.setMessage("¿Desea Eliminar este producto?");
+                dialogo1.setCancelable(false);
+                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        Lista.remove(posicion);
+                        notifyDataSetChanged();
+                    }
+                });
+                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                    }
+                });
+                dialogo1.show();
+            }
+        });
     }
 
     @Override
@@ -50,6 +74,8 @@ public class ListAdaptador extends RecyclerView.Adapter<ListAdaptador.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder {
+
+        CardView cardView;
         ImageView imagen;
         TextView Nombre;
         TextView Marca;
@@ -57,6 +83,7 @@ public class ListAdaptador extends RecyclerView.Adapter<ListAdaptador.Holder> {
 
         public Holder(@NonNull View itemView) {
             super(itemView);
+            cardView=itemView.findViewById(R.id.idcard);
             imagen= (ImageView) itemView.findViewById(R.id.idImagen);
             Nombre=(TextView) itemView.findViewById(R.id.txtNombre);
             Marca=(TextView) itemView.findViewById(R.id.idMarca);

@@ -1,3 +1,4 @@
+
 package com.example.myoffers_2;
 
 import android.Manifest;
@@ -163,30 +164,8 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
                         popupWindow.dismiss(); }
                 }); }
         });
-/**
-        recyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final int posicion = position;
-                AlertDialog.Builder dialogo1 = new AlertDialog.Builder(view.getContext());
-                dialogo1.setTitle("Importante");
-                dialogo1.setMessage("¿Desea Eliminar este producto?");
-                dialogo1.setCancelable(false);
-                dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                        myLista.remove(posicion);
-                        myAdapter.notifyDataSetChanged();
-                    }
-                });
-                dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                    }
-                });
-                dialogo1.show();
-                return false;
-            }
-        });*/
-        btnBuscar.setOnClickListener(new View.OnClickListener() {
+ 
+    btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                String[] miarray = new String[myLista.size()];
@@ -236,12 +215,8 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
                 catch (Exception e){
                     Log.d("se entro por el catch",responseString);
                     e.printStackTrace();
-                }
-            }
-
-        });
-
-    }
+                } }
+        }); }
 
     private void llenarAdapter() {
         lm=new LinearLayoutManager(getContext());
@@ -309,7 +284,6 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
     public boolean onQueryTextChange(String newText) {
         recyclerView.setAdapter(myAdapter);
         myAdapter.filter(newText);
-        //aqui fijate de hacer el filtrado
         return false;
     }
 
@@ -320,6 +294,5 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
     otraLista.add(item);
         adapter= new ListAdaptador(otraLista,getContext());
         recyclerView.setAdapter(adapter);
-
     }
 }
