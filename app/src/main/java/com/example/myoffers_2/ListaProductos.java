@@ -25,7 +25,6 @@ public class ListaProductos {
 
     public ListaProductos() {
         dir=bd.dirProd();
-
         params.put("type","listar");
         params.put("nom","nada");
         params.put("desc","nada");
@@ -38,18 +37,18 @@ public class ListaProductos {
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
                 try {
                     JSONArray jsonArray=new JSONArray(responseString);
+
                     for (int i = 0;i < jsonArray.length();i++) {
+                        int id=jsonArray.getJSONObject(i).getInt("id_producto");
                         String nom=jsonArray.getJSONObject(i).getString("nombre").trim();
                         String mar=jsonArray.getJSONObject(i).getString("marca").trim();
                         String ima=jsonArray.getJSONObject(i).getString("imagen").trim();
                         String des=jsonArray.getJSONObject(i).getString("descripcion").trim();
-                        mod=new Modelo(nom,mar,ima,des);
+                        mod=new Modelo(nom,mar,ima,des,id);
                        Guardar(mod);
                     }
-
                 }
                 catch (Exception e){
                     Log.d("se entro por el catch",responseString);
@@ -59,15 +58,24 @@ public class ListaProductos {
 
         });
     }
-    public void Guardar(Modelo m){
+    public void Guardar(Modelo m) {
         Productos.add(m);
     }
-
     public List<Modelo> getProductos() {
         return Productos;
     }
 
     public void setProductos(List<Modelo> productos) {
         Productos = productos;
+    }
+
+    public Modelo BuscarId(int i){
+        Modelo mod=new Modelo();
+        for (int j=0; j<Productos.size();j++){
+            if (Productos.get(j).getId()==i){
+                mod=Productos.get(j);
+            }
+        }
+        return mod;
     }
 }

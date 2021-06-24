@@ -25,18 +25,6 @@
         android:background="@color/cardview_dark_background">
     </View>
 
-
-    <Button
-        android:id="@+id/btnAgregar"
-        android:layout_width="50dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="110dp"
-        android:background="@drawable/ic_baseline_search_24"
-        android:cursorVisible="true"></Button>
-
-
-
        <androidx.appcompat.widget.SearchView
            android:id="@+id/sv1"
            android:layout_width="280dp"
@@ -45,21 +33,30 @@
            android:background="@drawable/border">
        </androidx.appcompat.widget.SearchView>
 
+    <Button
+        android:id="@+id/Lista"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="250dp"
+        android:layout_marginTop="120dp"
+        android:background="@android:drawable/btn_star"></Button>
 
-<androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/idlistView"
       android:layout_width="match_parent"
-      android:layout_height="300dp"
+      android:layout_height="400dp"
       android:footerDividersEnabled="true"
+    android:clickable="true"
     android:layout_marginTop="200dp">
 </androidx.recyclerview.widget.RecyclerView>
+
 
     <Button
         android:id="@+id/btnFiltrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="630dp"
         android:text="Filtrar"></Button>
 
     <Button
@@ -68,7 +65,7 @@
         android:layout_height="wrap_content"
         android:text="Buscar"
         android:layout_marginStart="200dp"
-        android:layout_marginTop="600dp">
+        android:layout_marginTop="630dp">
     </Button>
 
 

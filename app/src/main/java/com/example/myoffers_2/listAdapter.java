@@ -13,12 +13,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +28,22 @@ import java.util.stream.Collectors;
 
 public class listAdapter extends RecyclerView.Adapter<listAdapter.modeloViewHolder> {
 
-    private List<Modelo> miLista;
-    private List<Modelo> Lista;
-    private RecycleritemClick itemClick;
+    private List<Modelo> items;
+    private List<Modelo> originalItems;
+    private RecycleItemClick itemClick;
     private Context miContext;
-    private int resourceLay;
-    private static LayoutInflater inflater = null;
 
-    public listAdapter(@NonNull Context context, List<Modelo> modelo) {
-        this.miLista = modelo;
+
+    public listAdapter(@NonNull Context context, List<Modelo> modelo,RecycleItemClick click) {
+        this.items = modelo;
         this.miContext= context;
-      //  this.itemClick=itemClick;
-        this.Lista= new ArrayList<>();
-      Lista.addAll(modelo);
+        this.itemClick=click;
+        this.originalItems= new ArrayList<>();
+        originalItems.addAll(modelo);
+    }
+
+    public void setItemClick(RecycleItemClick itemClick) {
+        this.itemClick = itemClick;
     }
 
     @NonNull
@@ -50,12 +55,11 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.modeloViewHold
 
     @Override
     public void onBindViewHolder(@NonNull modeloViewHolder holder, int position) {
-     Modelo modelo=miLista.get(position);
+     final Modelo modelo=items.get(position);
      Glide.with(this.miContext).load(modelo.getImagen()).into(holder.imagen);
      holder.Nombre.setText(modelo.getNombre());
      holder.Marca.setText(modelo.getMarca());
      holder.Descri.setText(modelo.getDescripcion());
-
      holder.itemView.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
@@ -66,29 +70,27 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.modeloViewHold
 
     @Override
     public int getItemCount() {
-        return miLista.size();
+        return items.size();
     }
-    public void filter(String search){
-        if (search.length()==0){
-            miLista.clear();
-            miLista.addAll(Lista);
+
+    public void filter(String txtsearch){
+        if (txtsearch.length()==0){
+            items.clear();
+            items.addAll(originalItems);
         }else{
             if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
-                miLista.clear();
-                List<Modelo> collect=Lista.stream().filter(i->i.getNombre().toLowerCase().contains(search)).collect(Collectors.toList());
-                miLista.addAll(collect);
+                List<Modelo> collect=originalItems.stream().filter(i ->i.getNombre().toLowerCase().contains(txtsearch)).collect(Collectors.toList());
+                items.clear();
+                items.addAll(collect);
             }else {
-                miLista.clear();
-                for (Modelo i:Lista){
-                    if (i.getNombre().toLowerCase().contains(search)){
-                        miLista.add(i);
+                items.clear();
+                for (Modelo i:originalItems){
+                    if (i.getNombre().toLowerCase().contains(txtsearch)){
+                        items.add(i);
                     }
                 }
             }
         }notifyDataSetChanged();
-    }
-    public interface RecycleritemClick {
-        void itemClick(Modelo modelo);
     }
 
     public class modeloViewHolder extends RecyclerView.ViewHolder {
@@ -105,7 +107,9 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.modeloViewHold
             Descri=(TextView) itemView.findViewById(R.id.txtDescrip);
         }
     }
-
+    public interface RecycleItemClick{
+        void itemClick(Modelo item);
+    }
 }
 
 

@@ -42,13 +42,10 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-
 import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,27 +53,30 @@ import cz.msebera.android.httpclient.Header;
 
 import static com.example.myoffers_2.R.*;
 
-public class ListaMercaderia extends Fragment implements LocationListener, SearchView.OnQueryTextListener,
-listAdapter.RecycleritemClick{
+public class ListaMercaderia extends Fragment implements LocationListener,listAdapter.RecycleItemClick, SearchView.OnQueryTextListener{
 
     private listAdapter myAdapter;
-    private int kilometros;
-   public List<Modelo> myLista=new ArrayList<>();
-   // private ListView lvprod;
+    private ListAdaptador adapter;
+   private List<Modelo> myLista;
+   private List<Modelo> otraLista=new ArrayList<>();
     private SearchView searchView;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerView1;
     private Modelo modelo;
+    private AdminBD bd=new AdminBD();
+    private AsyncHttpClient conexion=new AsyncHttpClient();
+    private  RequestParams params= new RequestParams();
     private PopupWindow popupWindow;
     private String k;
+    private int kilometros;
+    private LinearLayoutManager lm;
     private String latitud;
     private String longitud;
-   private ListaProductos misProd;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private  String dir;
     private String mParam1;
     private String mParam2;
-
     public ListaMercaderia() {
 
     }
@@ -96,34 +96,25 @@ listAdapter.RecycleritemClick{
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        } }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(layout.fragment_lista_mercaderia, container, false);
-    }
+        return inflater.inflate(layout.fragment_lista_mercaderia, container, false); }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView=view.findViewById(id.idlistView);
-        Button btn = view.findViewById(id.btnAgregar);
         Button btnfiltrar = view.findViewById(id.btnFiltrar);
         Button btnBuscar = view.findViewById(id.btnbuscar);
         searchView=view.findViewById(id.sv1);
         kilometros=0;
-        LinearLayoutManager manager=new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(manager);
-        misProd=new ListaProductos();
-        myLista=misProd.getProductos();
-        //llenar();
-        myAdapter=new listAdapter(this.getContext(),myLista);
-        recyclerView.setAdapter(myAdapter);
-        initListener();
+        llenaLista();
+        searchView.setOnQueryTextListener(this);
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
@@ -131,12 +122,10 @@ listAdapter.RecycleritemClick{
                         PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
         } else {
-            locationStart();
-        }
+            locationStart(); }
         final FrameLayout frameLayout=view.findViewById(id.fl);
 
-
-        btnfiltrar.setOnClickListener(new View.OnClickListener() {
+ btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -175,17 +164,6 @@ listAdapter.RecycleritemClick{
                 }); }
         });
 /**
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                modelo = new Modelo();
-                modelo.setImagen(mipmap.ic_launcher_round);
-                myLista.add(modelo);
-                myAdapter.notifyDataSetChanged();
-
-            }
-        });
-
         recyclerView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -225,13 +203,51 @@ listAdapter.RecycleritemClick{
             } });
     }
 
-    private void llenar() {
-        myLista.add(new Modelo("pañales","pampers","","xxg"));
-        myLista.add(new Modelo("leche","nido","","xxg"));
-        myLista.add(new Modelo("mermerlada","pampers","","xxg"));
-        myLista.add(new Modelo("dulce de Leche","pampers","","xxg"));
-        myLista.add(new Modelo("Algodon","pampers","","xxg"));
-        myLista.add(new Modelo("Agua","pampers","","xxg"));
+    private void llenaLista() {
+        dir=bd.dirProd();
+        params.put("type","listar");
+        params.put("nom","nada");
+        params.put("desc","nada");
+        params.put("marca","nada");
+        params.put("cant","nada");
+        conexion.post(dir, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("Error","no se conecto "+responseString);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                myLista=new ArrayList<>();
+                try {
+                    JSONArray jsonArray=new JSONArray(responseString);
+                    Modelo mod;
+                    for (int i = 0;i < jsonArray.length();i++) {
+                        int id=jsonArray.getJSONObject(i).getInt("id_producto");
+                        String nom=jsonArray.getJSONObject(i).getString("nombre").trim();
+                        String mar=jsonArray.getJSONObject(i).getString("marca").trim();
+                        String ima=jsonArray.getJSONObject(i).getString("imagen").trim();
+                        String des=jsonArray.getJSONObject(i).getString("descripcion").trim();
+                        mod=new Modelo(nom,mar,ima,des,id);
+                        myLista.add(mod);
+                    }
+                 //myAdapter.notifyDataSetChanged();
+                    llenarAdapter();
+                }
+                catch (Exception e){
+                    Log.d("se entro por el catch",responseString);
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
+    }
+
+    private void llenarAdapter() {
+        lm=new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(lm);
+        myAdapter=new listAdapter(getContext(),myLista, this);
+        recyclerView.setAdapter(myAdapter);
     }
 
     private void locationStart() {
@@ -251,9 +267,6 @@ listAdapter.RecycleritemClick{
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-    }
-    private void initListener(){
-        searchView.setOnQueryTextListener(this);
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -286,9 +299,7 @@ listAdapter.RecycleritemClick{
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationStart();
                 return;
-            }
-        }
-    }
+            } } }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -296,11 +307,19 @@ listAdapter.RecycleritemClick{
     }
     @Override
     public boolean onQueryTextChange(String newText) {
+        recyclerView.setAdapter(myAdapter);
         myAdapter.filter(newText);
+        //aqui fijate de hacer el filtrado
         return false;
     }
 
     @Override
-    public void itemClick(Modelo modelo) {
+    public void itemClick(Modelo item) {
+    Toast toast=Toast.makeText(getContext(),item.getNombre(),Toast.LENGTH_SHORT);
+    toast.show();
+    otraLista.add(item);
+        adapter= new ListAdaptador(otraLista,getContext());
+        recyclerView.setAdapter(adapter);
+
     }
 }
