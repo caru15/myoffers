@@ -88,7 +88,7 @@
         tools:layout="@layout/fragment_result_busqueda" >
         <argument
             android:name="productos"
-            app:argType="string[]" />
+            app:argType="integer[]" />
         <argument
             android:name="distancia"
             app:argType="integer"

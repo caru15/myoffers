@@ -17,17 +17,16 @@ import java.util.List;
 
 public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProd> {
     //aqui creo una referencia a la lista que va  a mostrar
-    List<ProdxSuper> listProd=new ArrayList<ProdxSuper>();
+    private List<ProdxSuper> listProd=new ArrayList<>();
     private Context context;
     private View vista;
     int PosicionMarcada=0;
-    //generar constructor
 
+    //generar constructor
     public AdapterProductos(List<ProdxSuper> listProd, Context context) {
         this.listProd = listProd;
         this.context=context;
     }
-
     @NonNull
     @Override
     //este metodo enlaza el item con el adaptador es por ello que genero un view
@@ -73,9 +72,9 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         }
 
         public void AsignarProd(ProdxSuper prodxSuper) {
-            nombreSuper.setText(prodxSuper.getSuperNom());
+            nombreSuper.setText(prodxSuper.getNombre());
             direccion.setText(prodxSuper.getDireccion());
-            nombre.setText(prodxSuper.getNombre());
+            nombre.setText(prodxSuper.getSuperNom());
             desc.setText(prodxSuper.getDescripcion());
             String pre=String.valueOf(prodxSuper.getPrecio());
             precio.setText(pre);

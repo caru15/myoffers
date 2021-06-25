@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -38,9 +39,8 @@ public class ResultBusqueda extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String[] prod;//recibe los productos cargados en la pantalla anterior
+    private int[] prod;//recibe los id de los prod cargados en la pantalla anterior
     private int[] vector;
-    private String[] ProdNo;//este vector tiene los productos que no se encontro en la BD
     private int l;
     private TextView textView1;
     private TextView textView;
@@ -52,7 +52,7 @@ public class ResultBusqueda extends Fragment {
     private int dist;
     private float midis;
     private Location mipos = new Location("mipos");;
-   private List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
+   private List<ProdxSuper> myList = new ArrayList<>();
    private List<ProdxSuper> myList2=new ArrayList<ProdxSuper>();//aqui se guardan los productos que no cumplen con la distancia pedida
     private String mParam1;
     private String mParam2;
@@ -61,6 +61,7 @@ public class ResultBusqueda extends Fragment {
     private productos producto= new productos();
     private String uri;
     RecyclerView recycler;
+    private RecyclerView.LayoutManager layoutManager;
     private LocationManager locManager;
     private Location loc;
     AsyncHttpClient conexion=new AsyncHttpClient();
@@ -76,20 +77,17 @@ public class ResultBusqueda extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        } }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_result_busqueda, container, false);
     }
 
@@ -99,22 +97,19 @@ public class ResultBusqueda extends Fragment {
 
         TextView textView2=view.findViewById(R.id.text3);
         recycler=(RecyclerView)view.findViewById(R.id.RecView);
-        recycler.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false));
-        recycler.setHasFixedSize(true);
-        AdapterProductos adapterProductos=new AdapterProductos(myList, view.getContext());
-        recycler.setAdapter(adapterProductos);
+        //esta parte quizas te convieneponerlo en donde muestre la lista de los super
+
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
         lati=ResultBusquedaArgs.fromBundle(getArguments()).getLatitud();
         longi=ResultBusquedaArgs.fromBundle(getArguments()).getLongitud();
         mipos.setLatitude(Double.parseDouble(lati));
         mipos.setLongitude(Double.parseDouble(longi));
-       // textView2.setText("latitud: "+lati+" longitud: "+longi);
+
         textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
-        Compara(prod,ProdNo);
-
+        BuscarSuper(prod);
     }
-
+/**
     public void Compara(String[] prod,String[] prodNo){
         l=0;
         uri=bd.dirProd();
@@ -178,16 +173,13 @@ public class ResultBusqueda extends Fragment {
                 }
             }
         });
-    }
-
+    }**/
     //con los productos de la lista pro busco en la BD y traigo toda la info
-    public void BuscarSuper(List<productos> pro){
+    public void BuscarSuper(int[] pro){
         int id=0;
-        //List<ProdxSuper> myList = new ArrayList<ProdxSuper>();
         uri=bd.dirProdSuper();
-       for (int j=0;j<pro.size();j++){
-            id=pro.get(j).getId();
-            Log.d("id del prod",String.valueOf(id));
+       for (int j=0;j<pro.length;j++){
+            id=pro[j];
             params.put("type","join");
             params.put("super","nada");
             params.put("prod","nada");
@@ -203,9 +195,10 @@ public class ResultBusqueda extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
                     try {
-                        ProdxSuper produc= new ProdxSuper();
+
                         JSONArray jsonArray= new JSONArray(responseString);
                         for (int i = 0;i < jsonArray.length();i++){
+                            ProdxSuper produc=new ProdxSuper();
                             produc.setId(jsonArray.getJSONObject(i).getInt("id_producto"));
                             produc.setNombre(jsonArray.getJSONObject(i).getString("nombreprod"));
                             produc.setDescripcion(jsonArray.getJSONObject(i).getString("descripcion"));
@@ -215,39 +208,43 @@ public class ResultBusqueda extends Fragment {
                             produc.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                             produc.setId_super(jsonArray.getJSONObject(i).getInt("super_id"));
                             produc.setPrecio(jsonArray.getJSONObject(i).getDouble("precio"));
-                            //myList.add(produc);
-                            Guardar(produc);
-
-                    } jsonArray = new JSONArray(new ArrayList<String>());
-                    }catch (Exception e){
+                           if (Guardar(produc)){
+                               myList.add(produc);
+                           }else{
+                               myList2.add(produc);
+                           }
+                    }
+                        Mostrar(myList);
+                    }
+                    catch (Exception e){
                         e.printStackTrace();
                         Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
-                    }
+                    } }
+            }); } }
 
-                }
-            });
-        }
-    }
-
-    private void Guardar(ProdxSuper produc) {
-        AdapterProductos adapterProductos=new AdapterProductos(myList, this.getContext());
-        recycler.setAdapter(adapterProductos);
+    public Boolean Guardar(ProdxSuper produc) {
         Log.d("adentro","-"+produc.getSuperNom());
-
                Location OtraLocation= new Location("super");
                OtraLocation.setLatitude(produc.getLatitud());
                OtraLocation.setLongitude(produc.getLongitud());
-
                //1 km=1000 mtrs
                midis=(OtraLocation.distanceTo(mipos)/1000);
                Log.d("la diferencia",String.valueOf(midis));
                if (midis<=dist){
-                       myList.add(produc);
-                   adapterProductos.notifyDataSetChanged();
-                   Log.d("lo q paso",produc.getSuperNom()+"-"+myList.get(0).getDireccion());}
+                  // adapterProductos.notifyDataSetChanged();
+                   Log.d("lo q paso",produc.getSuperNom()+"-"+produc.getDireccion());
+                   return true;
+               }
                  else{
-                     //guardo en una lista que no cumple con los requerimientos de la distancia
-                     myList2.add(produc);
+                   return false;
                     }
+
         }
+   public void Mostrar(List<ProdxSuper> result){
+       layoutManager=new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false);
+       recycler.setLayoutManager(layoutManager);
+       recycler.setHasFixedSize(true);
+       AdapterProductos adapterProductos=new AdapterProductos(result, this.getContext());
+       recycler.setAdapter(adapterProductos);
+    }
 }

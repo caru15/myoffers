@@ -151,7 +151,7 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
                                 k=String.valueOf(kilometros);
                                 break;
                             case id.rb4:
-                                kilometros=4;
+                                kilometros=15;
                                 k=String.valueOf(kilometros);
                                 break;
                         } }
@@ -168,12 +168,14 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
     btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String[] miarray = new String[myLista.size()];
-                for (int i = 0; i < myLista.size(); i++) {
-                    modelo = myLista.get(i);
-                    miarray[i]=modelo.getNombre()+'-'+modelo.getMarca();}
-                ListaMercaderiaDirections.ActionListaMercaderiaToResultBusqueda action=
-                        ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
+                String cadena = "";
+               int[] miarray = new int[otraLista.size()];
+                for (int i = 0; i < otraLista.size(); i++) {
+                    modelo = otraLista.get(i);
+                    miarray[i]=modelo.getId();
+                cadena=cadena+miarray[i]+"-";}
+                Log.d("lo q pasa",cadena+"-"+kilometros+"-"+latitud+"-"+longitud);
+                ListaMercaderiaDirections.ActionListaMercaderiaToResultBusqueda action= ListaMercaderiaDirections.actionListaMercaderiaToResultBusqueda(miarray);
                action.setProductos(miarray);
                action.setDistancia(kilometros);
                action.setLatitud(latitud);
