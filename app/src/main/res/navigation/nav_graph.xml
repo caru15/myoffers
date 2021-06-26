@@ -205,5 +205,9 @@
             android:name="longitud"
             app:argType="string"
             android:defaultValue="null" />
+        <action
+            android:id="@+id/action_ruta_to_resultBusqueda"
+            app:destination="@id/resultBusqueda"
+            app:popUpTo="@id/listaMercaderia" />
     </fragment>
 </navigation>

@@ -1,9 +1,11 @@
 package com.example.myoffers_2;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.Manifest;
 import android.content.Context;
@@ -81,6 +83,12 @@ public class ruta extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        OnBackPressedCallback onBackPressedCallback= new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(view).navigate(R.id.resultBusqueda);
+            }
+        };
 
         String lat=rutaArgs.fromBundle(getArguments()).getLatitud();
         latitudDest=Double.parseDouble(lat);
@@ -151,7 +159,7 @@ public class ruta extends Fragment implements LocationListener {
                          String polyline=""+((JSONObject)((JSONObject) JsonSteps.get(k)).get("polyline")).get("points");
                          Log.d("end"," "+polyline);
                          List<LatLng> list= PolyUtil.decode(polyline);
-                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.colorAccent).width(9));
+                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.Rojo).width(9));
                      }
                  }
             }

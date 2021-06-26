@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,6 +60,7 @@ public class ResultBusqueda extends Fragment {
     private AdminBD bd=new AdminBD();
     private supermercados supermercado = new supermercados();
     private productos producto= new productos();
+    private AdapterProductos adapterProductos;
     private String uri;
     RecyclerView recycler;
     private RecyclerView.LayoutManager layoutManager;
@@ -97,83 +99,20 @@ public class ResultBusqueda extends Fragment {
 
         TextView textView2=view.findViewById(R.id.text3);
         recycler=(RecyclerView)view.findViewById(R.id.RecView);
-        //esta parte quizas te convieneponerlo en donde muestre la lista de los super
+        layoutManager=new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false);
+        recycler.setLayoutManager(layoutManager);
 
+        //recycler.setAdapter(adapterProductos);
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
         lati=ResultBusquedaArgs.fromBundle(getArguments()).getLatitud();
         longi=ResultBusquedaArgs.fromBundle(getArguments()).getLongitud();
         mipos.setLatitude(Double.parseDouble(lati));
         mipos.setLongitude(Double.parseDouble(longi));
-
         textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
         BuscarSuper(prod);
     }
-/**
-    public void Compara(String[] prod,String[] prodNo){
-        l=0;
-        uri=bd.dirProd();
-        params.put("type","listar");
-        params.put("nom","nada");
-        params.put("desc","nada");
-        params.put("marca","nada");
-        params.put("cant","nada");
-        conexion.post(uri, params, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("Error","no se conecto "+responseString);
-            }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String respuesta) {
-                List<productos> lista= new ArrayList<productos>();
-                List<productos> listNew= new ArrayList<productos>();
-                try {
-                    JSONArray jsonArray= new JSONArray(respuesta);
-                    for (int i = 0;i < jsonArray.length();i++){
-                        productos produc= new productos();
-                        produc.setId(jsonArray.getJSONObject(i).getInt("id_producto"));
-                        produc.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
-                        produc.setDescripcion(jsonArray.getJSONObject(i).getString("descripcion"));
-                        produc.setMarca(jsonArray.getJSONObject(i).getString("marca"));
-                        lista.add(produc);}
-                      for (int j=0;j<prod.length;j++){
-                          String[] pm=prod[j].split("-");
-                          String pm1=pm[0].toLowerCase().trim();
-                          String pm2=pm[1].toLowerCase().trim();
-                          band=false;
-                             for (int k=0;k<lista.size();k++){
-                                       String p=lista.get(k).getNombre().toLowerCase().trim();
-                                       String m=lista.get(k).getMarca().toLowerCase().trim();
-                                       productos mypro=lista.get(k);
-                                        if (pm1.equalsIgnoreCase(p)){
-                                            if (m.equalsIgnoreCase(pm2)){
-                                                //aqui guardo este producto junto con su id
-                                                listNew.add(mypro);
-                                                Log.d("entrams por el true","entramos bien"+listNew.get(0).getId());
-                                                band=true;
-                                            }else {
-                                                if (pm2.isEmpty()){
-                                                    //guardo este producto me sirve el id
-                                                    listNew.add(mypro);
-                                                    band=true;
-                                                }
-                                            }
-                                        } }
-                             if (!band){//productos no encontrados guardado en array
-                                                       prodNo[l]=prod[j];
-                                                       Log.d("dio todo false", "se guardo un producto no encontrado");
-                                                            l++;}
-                                                        }
-                      BuscarSuper(listNew);
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                    Log.d("ERROR","entramos por el catch 1"+e.toString());
-                }
-            }
-        });
-    }**/
     //con los productos de la lista pro busco en la BD y traigo toda la info
     public void BuscarSuper(int[] pro){
         int id=0;
@@ -231,7 +170,6 @@ public class ResultBusqueda extends Fragment {
                midis=(OtraLocation.distanceTo(mipos)/1000);
                Log.d("la diferencia",String.valueOf(midis));
                if (midis<=dist){
-                  // adapterProductos.notifyDataSetChanged();
                    Log.d("lo q paso",produc.getSuperNom()+"-"+produc.getDireccion());
                    return true;
                }
@@ -241,10 +179,12 @@ public class ResultBusqueda extends Fragment {
 
         }
    public void Mostrar(List<ProdxSuper> result){
-       layoutManager=new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false);
-       recycler.setLayoutManager(layoutManager);
-       recycler.setHasFixedSize(true);
-       AdapterProductos adapterProductos=new AdapterProductos(result, this.getContext());
+      adapterProductos = new AdapterProductos(result, this.getContext());
        recycler.setAdapter(adapterProductos);
+       //recycler.setHasFixedSize(true);
+       DividerItemDecoration myDivider = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+       myDivider.setDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.cutm_dvdr));
+       recycler.addItemDecoration(myDivider );
+
     }
 }
