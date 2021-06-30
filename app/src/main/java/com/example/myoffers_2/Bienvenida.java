@@ -38,6 +38,7 @@ public class Bienvenida extends Fragment implements View.OnClickListener {
     private String mParam2;
     private Button btnLista,btnofertas,btnSuper,btnProduc;
     private String nom;
+    int id=0;
 
     public Bienvenida() {
         // Required empty public constructor
@@ -76,6 +77,7 @@ public class Bienvenida extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         final TextView tv= view.findViewById(R.id.IdUsua);
        nom=BienvenidaArgs.fromBundle(getArguments()).getNomUsuario();
+      id=BienvenidaArgs.fromBundle(getArguments()).getIdCliente();
         tv.setText("Bienvenido: "+nom+ " que desea hacer:");
       btnLista=view.findViewById(R.id.bntLista);
       btnofertas= view.findViewById(R.id.btnOfertas);
@@ -104,6 +106,7 @@ public class Bienvenida extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnProductos:
                 BienvenidaDirections.ActionBienvenidaToRegisProducto action= BienvenidaDirections.actionBienvenidaToRegisProducto();
+                action.setIdUsuario(id);
                 action.setNomUsuario(nom);
                 Navigation.findNavController(v).navigate(action);
                 break;

@@ -94,6 +94,7 @@ public class Inicio extends Fragment {
                 if ((usuario.getText().toString().equals(a)) && (contraseña.getText().toString().equals(b))){
                     InicioDirections.ActionInicioToBienvenida action= InicioDirections.actionInicioToBienvenida();
                     action.setNomUsuario(a);
+                    action.setIdCliente(0);
                     Navigation.findNavController(view).navigate(action);
                 }
                 if ((usuario.getText().toString().length() == 0) || (contraseña.getText().toString().length() == 0)) {
@@ -117,10 +118,12 @@ public class Inicio extends Fragment {
                         try {
                             JSONObject jsonObject= new JSONObject(responseString);
                             String prueba=jsonObject.getString("usuario");
+                            int id=jsonObject.getInt("id_usua");
                             Snackbar.make(v, prueba,Snackbar.LENGTH_LONG).setAction("Action",null).show();
 
                             InicioDirections.ActionInicioToBienvenida action= InicioDirections.actionInicioToBienvenida();
                             action.setNomUsuario(prueba);
+                            action.setIdCliente(id);
                             Navigation.findNavController(view).navigate(action);
 
                              }catch (Exception e){

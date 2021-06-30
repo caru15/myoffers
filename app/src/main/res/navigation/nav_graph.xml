@@ -41,6 +41,10 @@
         <action
             android:id="@+id/action_bienvenida_to_nearby_super"
             app:destination="@id/nearby_super" />
+        <argument
+            android:name="id_cliente"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/listaMercaderia"
@@ -71,6 +75,10 @@
             android:id="@+id/action_regisProducto_to_editar_oferta"
             app:destination="@id/editar_oferta"
             app:popUpTo="@id/regisProducto" />
+        <argument
+            android:name="id_usuario"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/registrar"
@@ -134,7 +142,12 @@
             android:defaultValue="sin nombre" />
         <action
             android:id="@+id/action_nueva_oferta_to_regisProducto"
-            app:destination="@id/regisProducto" />
+            app:destination="@id/regisProducto"
+            app:popUpTo="@id/nueva_oferta" />
+        <argument
+            android:name="id_usuario"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/editar_oferta"

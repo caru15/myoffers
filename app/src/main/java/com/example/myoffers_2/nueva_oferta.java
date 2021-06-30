@@ -87,6 +87,8 @@ public class nueva_oferta extends Fragment {
         spinner2=view.findViewById(R.id.spinner_prod);
 
         String usuario=nueva_ofertaArgs.fromBundle(getArguments()).getNombre();
+        int identi=nueva_ofertaArgs.fromBundle(getArguments()).getIdUsuario();
+       // Toast.makeText(view.getContext(),String.valueOf(identi),Toast.LENGTH_LONG).show();
         List<supermercados> ListaSuper= new ArrayList<supermercados>();
         List<productos> ListPro =new ArrayList<productos>();
         llenar_Spinner(ListaSuper, view);
@@ -104,7 +106,7 @@ public class nueva_oferta extends Fragment {
                 int id_prod=Devuelve_id(spinner2);
                 double precio = Double.parseDouble(pre);
                 int cantidad = Integer.parseInt(can);
-                DevolverIdUsuario(v,usuario,id_super,id_prod,precio,cantidad);
+                GuardarProd(v,usuario,identi,id_super,id_prod,precio,cantidad);
                 Navigation.findNavController(v).navigate(R.id.regisProducto);
             }
         });
@@ -115,67 +117,34 @@ public class nueva_oferta extends Fragment {
         int id=Integer.valueOf(vect[0].trim());
         return id;
     }
-    public void DevolverIdUsuario(View v,String usuario, int id_super, int id_prod,double precio,int cantidad){
-        uri=bd.dirUsuarios();
-        params.put("type","buscar");
-        params.put("ape","nada");
-        params.put("name","nada");
-        params.put("usua",usuario);
-        params.put("email","nada");
-        params.put("password","nada");
-        params.put("repu",1);
-        conexion.post(uri, params, new TextHttpResponseHandler() {
+    public void GuardarProd(View v,String usuario,int identificador, int id_super, int id_prod,double precio,int cantidad){
+        String dir=bd.dirProdSuper();
+        params.put("type","alta");
+        params.put("super",id_super);
+        params.put("prod",id_prod);
+        params.put("usuario",identificador);
+        Log.d("este es el id",String.valueOf(identificador));
+        params.put("pre",precio);
+        params.put("oferta",cantidad);
+        conexion.post(dir, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("Error","no se conecto "+responseString);
-                 int id  =0;
+                Toast toast = Toast.makeText(v.getContext(), "no se conecto", Toast.LENGTH_SHORT);
+                toast.show();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-             try {
-                JSONArray jsonArray=new JSONArray(responseString);
-                int id=jsonArray.getJSONObject(0).getInt("id_usuario");
-                identificador=id;
-                 String dir=bd.dirProdSuper();
-                 params.put("type","alta");
-                 params.put("super",id_super);
-                 params.put("prod",id_prod);
-                 params.put("usuario",identificador);
-                 Log.d("este es el id",String.valueOf(identificador));
-                 params.put("pre",precio);
-                 params.put("oferta",cantidad);
-                 conexion.post(dir, params, new TextHttpResponseHandler() {
-                     @Override
-                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                         Toast toast = Toast.makeText(v.getContext(), "no se conecto", Toast.LENGTH_SHORT);
-                         toast.show();
-                     }
+                try {
+                    JSONObject jsonObject= new JSONObject(responseString);
+                    String info=jsonObject.getString("message");
+                    Toast toast = Toast.makeText(v.getContext(),info, Toast.LENGTH_SHORT);
+                    toast.show();
 
-                     @Override
-                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                         try {
-                             JSONObject jsonObject= new JSONObject(responseString);
-                             String info=jsonObject.getString("message");
-                             Toast toast = Toast.makeText(v.getContext(),info, Toast.LENGTH_SHORT);
-                             toast.show();
-
-                         }catch (Exception e){
-                             Log.d("aquiii esta el error",responseString);
-                             Toast toast = Toast.makeText(v.getContext(), "entro por el catch no se guardo", Toast.LENGTH_SHORT);
-                             toast.show();
-                         }
-                     }
-                 });
-                 }
-
-             catch (Exception e){
-                 e.printStackTrace();
-                 Log.d("ERROR","entramos por el catch "+e.toString());
-                 int id=0;
-             }
-            }
-
+                }catch (Exception e){
+                    Log.d("aquiii esta el error",responseString);
+                    Toast toast = Toast.makeText(v.getContext(), "entro por el catch no se guardo", Toast.LENGTH_SHORT);
+                    toast.show(); } }
         });
     }
 
@@ -203,7 +172,7 @@ public class nueva_oferta extends Fragment {
                         misuper.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
                         misuper.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
                         misuper.setLocalidad(jsonArray.getJSONObject(i).getString("localidad"));
-                        Log.d("Super",misuper.getNombre());
+
                         lista.add(misuper);
                     }
                     int pos;
@@ -257,7 +226,7 @@ public class nueva_oferta extends Fragment {
                         pro.setMarca(jsonA.getJSONObject(i).getString("marca"));
                         Log.d("producto",pro.getNombre());
 
-                        pro.setCant_unidad(jsonA.getJSONObject(i).getInt("cant_unidad"));
+                        //pro.setCant_unidad(jsonA.getJSONObject(i).getInt("cant_unidad"));
                         //pro.setImagen(jsonA.getJSONObject(i).getInt("imagen"));
                         //aqui falta settear la imagen
                         list.add(pro);

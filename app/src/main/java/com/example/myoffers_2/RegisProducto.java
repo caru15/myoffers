@@ -110,6 +110,7 @@ public class RegisProducto extends Fragment {
                 try {
                    prodSuperAdaptador adapter= new prodSuperAdaptador(items, view.getContext());
                     recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length();i++) {
                         int id= jsonArray.getJSONObject(i).getInt("id");
@@ -136,6 +137,7 @@ public class RegisProducto extends Fragment {
 
         //Recibo parametro del fragment anterior
         String nom=RegisProductoArgs.fromBundle(getArguments()).getNomUsuario();
+        int identificador=RegisProductoArgs.fromBundle(getArguments()).getIdUsuario();
 
         //instancio mi boton floating
         FloatingActionButton fab = view.findViewById(R.id.fab);
@@ -146,7 +148,8 @@ public class RegisProducto extends Fragment {
                         .setAction("Action", null).show();
                 //inicia Actividad de Insercion y mando el parametro
                 RegisProductoDirections.ActionRegisProductoToNuevaOferta action=RegisProductoDirections.actionRegisProductoToNuevaOferta();
-             action.setNombre(marca);
+             action.setNombre(nom);
+             action.setIdUsuario(identificador);
                 Navigation.findNavController(view).navigate(action);
             }
         });
