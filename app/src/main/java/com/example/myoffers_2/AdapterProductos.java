@@ -21,11 +21,13 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     private Context context;
     private View vista;
     int PosicionMarcada=0;
+    private int[] miarray=new int[1];
 
     //generar constructor
     public AdapterProductos(List<ProdxSuper> listProd, Context context) {
         this.listProd = listProd;
         this.context=context;
+        miarray[0]=0;
     }
     @NonNull
     @Override
@@ -41,10 +43,12 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
   holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+
           String latitud=String.valueOf(listProd.get(position).getLatitud());
           String longitud=String.valueOf(listProd.get(position).getLongitud());
-          ResultBusquedaDirections.ActionResultBusquedaToRuta action=ResultBusquedaDirections.actionResultBusquedaToRuta();
+          ResultBusquedaDirections.ActionResultBusquedaToRuta action=ResultBusquedaDirections.actionResultBusquedaToRuta(miarray);
           action.setLatitud(latitud);
+          action.setMisSuper(miarray);
           action.setLongitud(longitud);
           Navigation.findNavController(v).navigate(action);
       }

@@ -23,11 +23,21 @@
         android:id="@+id/RecView"
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
         android:padding="10dp"
         android:scrollbars="vertical"
         android:divider="@android:color/background_dark">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+     <Button
+         android:id="@+id/btnRuta"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:text="Ver Ruta Completa"
+         style="@style/amu_Bubble.TextAppearance.Light"
+         android:background="@color/common_google_signin_btn_text_light_focused">
+
+     </Button>
  </LinearLayout>
 </FrameLayout>

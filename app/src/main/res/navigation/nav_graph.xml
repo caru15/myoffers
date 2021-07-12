@@ -222,5 +222,8 @@
             android:id="@+id/action_ruta_to_resultBusqueda"
             app:destination="@id/resultBusqueda"
             app:popUpTo="@id/listaMercaderia" />
+        <argument
+            android:name="mis_super"
+            app:argType="integer[]" />
     </fragment>
 </navigation>

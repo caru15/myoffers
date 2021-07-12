@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +68,7 @@ public class ResultBusqueda extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private LocationManager locManager;
     private Location loc;
+    private Button btn;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
 
@@ -99,6 +102,7 @@ public class ResultBusqueda extends Fragment {
 
         TextView textView2=view.findViewById(R.id.text3);
         recycler=(RecyclerView)view.findViewById(R.id.RecView);
+         btn=view.findViewById(R.id.btnRuta);
         layoutManager=new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false);
         recycler.setLayoutManager(layoutManager);
 
@@ -111,6 +115,17 @@ public class ResultBusqueda extends Fragment {
         mipos.setLongitude(Double.parseDouble(longi));
         textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
         BuscarSuper(prod);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResultBusquedaDirections.ActionResultBusquedaToRuta action=ResultBusquedaDirections.actionResultBusquedaToRuta(vector);
+                action.setLatitud("0");
+                action.setMisSuper(vector);
+                action.setLongitud("0");
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
     }
 
     //con los productos de la lista pro busco en la BD y traigo toda la info
@@ -134,7 +149,6 @@ public class ResultBusqueda extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
                     try {
-
                         JSONArray jsonArray= new JSONArray(responseString);
                         for (int i = 0;i < jsonArray.length();i++){
                             ProdxSuper produc=new ProdxSuper();
@@ -154,6 +168,8 @@ public class ResultBusqueda extends Fragment {
                            }
                     }
                         Mostrar(myList);
+                        OrdenarPorDistancia(myList);
+                    //    CrearArray(myList);
                     }
                     catch (Exception e){
                         e.printStackTrace();
@@ -169,6 +185,7 @@ public class ResultBusqueda extends Fragment {
                //1 km=1000 mtrs
                midis=(OtraLocation.distanceTo(mipos)/1000);
                Log.d("la diferencia",String.valueOf(midis));
+               produc.setDistancia(midis);
                if (midis<=dist){
                    Log.d("lo q paso",produc.getSuperNom()+"-"+produc.getDireccion());
                    return true;
@@ -176,15 +193,42 @@ public class ResultBusqueda extends Fragment {
                  else{
                    return false;
                     }
-
         }
    public void Mostrar(List<ProdxSuper> result){
       adapterProductos = new AdapterProductos(result, this.getContext());
        recycler.setAdapter(adapterProductos);
-       //recycler.setHasFixedSize(true);
+       recycler.setHasFixedSize(true);
        DividerItemDecoration myDivider = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
        myDivider.setDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.cutm_dvdr));
        recycler.addItemDecoration(myDivider );
-
     }
+
+    private void OrdenarPorDistancia(List<ProdxSuper> myList) {
+        int tam=myList.size();
+        vector=new int[tam];
+        float[][] aux=new float[2][1];
+
+        float[][] matriz=new float[2][tam];
+        for(int j=0;j<tam;j++){
+            matriz[0][j]=myList.get(j).getDistancia();
+            matriz[1][j]=myList.get(j).getId_super();
+        }
+     for (int l=1;l<tam;l++){
+         for (int k=0;k<tam-l;k++){
+                if (matriz[0][k]>matriz[0][k+1]){
+                      aux[0][0]=matriz[0][k];
+                      aux[1][0]=matriz[1][k];
+                    matriz[0][k]=matriz[0][k+1];
+                    matriz[1][k]=matriz[1][k+1];
+                    matriz[0][k+1]=aux[0][0];
+                    matriz[1][k+1]=aux[1][0];
+                }
+         }
+     }
+        for (int j=0;j<tam;j++){
+            vector[j]=(int) matriz[1][j];
+        }
+    }
+
+
 }

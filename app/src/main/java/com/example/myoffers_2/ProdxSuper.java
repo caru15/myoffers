@@ -8,6 +8,7 @@ public class ProdxSuper {
     private int cant;
     private String descripcion;
     private String superNom;
+    private float distancia;
     private String direccion;//direccion del super
     private double latitud;
     private double longitud;
@@ -26,6 +27,14 @@ public class ProdxSuper {
         this.superNom=superNom;
         this.precio=precio;
         this.imagen=imagen;
+    }
+
+    public float getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(float distancia) {
+        this.distancia = distancia;
     }
 
     public String getImagen() {

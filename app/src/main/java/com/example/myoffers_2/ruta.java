@@ -45,21 +45,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class ruta extends Fragment implements LocationListener {
     GoogleMap map;
     Boolean actualposition = true;
     JSONObject jso;
+    private ArrayList<supermercados> misSuper=new ArrayList<>();
     Double latitudOrigen, longitudOrigen;
     Double latitudDest, longitudDest;
     LatLng dest;
     Toolbar toolbar;
+    LatLng mipos;
+    AsyncHttpClient conexion=new AsyncHttpClient();
+    RequestParams params= new RequestParams();
+    private String uri;
+    private AdminBD bd=new AdminBD();
     private int[] prod=new int[2];
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -79,7 +91,6 @@ public class ruta extends Fragment implements LocationListener {
     };
     private LocationManager locationManager;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -91,17 +102,14 @@ public class ruta extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-/**
-      toolbar =(Toolbar) view.findViewById(R.id.idtool);
-        setHasOptionsMenu(true);
-        toolbar.inflateMenu(R.menu.main);
-        ((AppCompatActivity)getContext()).setSupportActionBar(toolbar);*/
 
         String lat=rutaArgs.fromBundle(getArguments()).getLatitud();
         latitudDest=Double.parseDouble(lat);
         String longi=rutaArgs.fromBundle(getArguments()).getLongitud();
         longitudDest=Double.parseDouble(longi);
        dest= new LatLng(latitudDest,longitudDest);
+       //recibo aqui la lista de los super ordenados por distancia
+       int[] Super=rutaArgs.fromBundle(getArguments()).getMisSuper();
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -114,9 +122,79 @@ public class ruta extends Fragment implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,4, (android.location.LocationListener) this);
         }catch (SecurityException e){
             e.printStackTrace();}
-
+ if (longi=="0"){
+     BuscarSupermercados(Super);
+ }
     }
 
+    private void BuscarSupermercados(int[] supermer) {
+        int id=0;
+        ArrayList<supermercados> misSuper=new ArrayList<>();
+        uri=bd.dirSuper();
+        for (int j=0;j<supermer.length;j++){
+            id=supermer[j];
+            params.put("type","listar_a");
+            params.put("nom","nada");
+            params.put("dir","nada");
+            params.put("localidad","nada");
+            params.put("id",id);
+            conexion.post(uri, params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d("Error","no se conecto "+responseString);
+                }
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    try {
+                        JSONArray jsonArray= new JSONArray(responseString);
+                        for (int i = 0;i < jsonArray.length();i++){
+                            supermercados super1=new supermercados();
+                            super1.setId(jsonArray.getJSONObject(i).getInt("id_supermercado"));
+                            super1.setNombre(jsonArray.getJSONObject(i).getString("nombre"));
+                            super1.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
+                            super1.setLat(jsonArray.getJSONObject(i).getDouble("latitud"));
+                            super1.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
+                            misSuper.add(super1);
+                        }
+                        MandarRuta(misSuper);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
+                    } }
+            }); }
+    }
+
+    private void MandarRuta(ArrayList<supermercados> misSuper) {
+       // map.addMarker(new MarkerOptions().position(mipos).title("Estas Aqui"));
+        for (int k=0;k<misSuper.size();k++) {
+            latitudDest=misSuper.get(k).getLat();
+            longitudDest=misSuper.get(k).getLongitud();
+            dest= new LatLng(latitudDest,longitudDest);
+            map.addMarker(new MarkerOptions().position(dest).title(misSuper.get(k).getNombre()));
+            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latitudOrigen + "," + longitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            latitudOrigen=latitudDest;
+            longitudOrigen=longitudDest;
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        jso = new JSONObject(response);
+                        dibujarRuta(jso);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            requestQueue.add(stringRequest);
+        }
+    }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -124,23 +202,6 @@ public class ruta extends Fragment implements LocationListener {
             inflater.inflate(R.menu.main, menu);
         }
     }
- /**   @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        prod[0]=0;
-        prod[1]=0;
-        int i=item.getItemId();
-        if (i==R.id.idExit){
-        rutaDirections.ActionRutaToResultBusqueda action=rutaDirections.actionRutaToResultBusqueda(prod);
-        action.setLongitud("0");
-        action.setLatitud("0");
-        action.setDistancia(0);
-        action.setProductos(prod);
-        Navigation.findNavController(getView()).navigate(action);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public void onLocationChanged(@NonNull Location location) {
         LatLng mipos = new LatLng(location.getLatitude(), location.getLongitude());
@@ -151,29 +212,30 @@ public class ruta extends Fragment implements LocationListener {
         map.addMarker(new MarkerOptions().position(dest).title("Super"));
         CameraPosition cameraPosition= new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(),location.getLongitude()))
-                .zoom(17)
+                .zoom(16)
                 .build();
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        String url="https://maps.googleapis.com/maps/api/directions/json?origin="+latitudOrigen+","+longitudOrigen +"&destination="+latitudDest+",%20"+longitudDest+"&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
-        RequestQueue requestQueue= Volley.newRequestQueue(getContext());
-        StringRequest stringRequest=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    jso=new JSONObject(response);
-                    dibujarRuta(jso);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+if (longitudDest!=0.0) {
+    String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latitudOrigen + "," + longitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
+    RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+    StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            try {
+                jso = new JSONObject(response);
+                dibujarRuta(jso);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
 
-            }
-        });
-        requestQueue.add(stringRequest);
+        }
+    });
+    requestQueue.add(stringRequest);
+}
     }
 
     private void dibujarRuta(JSONObject jso) {
@@ -190,12 +252,11 @@ public class ruta extends Fragment implements LocationListener {
                          String polyline=""+((JSONObject)((JSONObject) JsonSteps.get(k)).get("polyline")).get("points");
                          Log.d("end"," "+polyline);
                          List<LatLng> list= PolyUtil.decode(polyline);
-                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.Rojo).width(10));
+                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.Rojo).width(14));
                      }
                  }
             }
         }catch (JSONException e){
-
         }
     }
 
@@ -214,13 +275,10 @@ public class ruta extends Fragment implements LocationListener {
                 break;
         }
     }
-
     @Override
     public void onProviderEnabled(String provider) {
-
     }
     @Override
     public void onProviderDisabled(String provider) {
-
     }
 }
