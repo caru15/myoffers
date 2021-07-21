@@ -21,27 +21,35 @@
             android:id="@+id/spinner_super"
             android:layout_width="match_parent"
             android:layout_height="54dp"></Spinner>
-
-        <Spinner
-            android:id="@+id/spinner_prod"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="30dp"></Spinner>
-
-        <TextView
-            android:id="@+id/Idusuario"
-            android:layout_width="match_parent"
-            android:layout_height="41dp"
-            android:layout_marginTop="30dp"
-            android:text="usuario"></TextView>
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/IdProducto"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="45dp"
+            android:hint="Producto"
+            android:background="@drawable/border_negro"  ></EditText>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnBuscar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/buscar">
+
+            </androidx.appcompat.widget.AppCompatImageButton>
+        </LinearLayout>
+        <EditText
             android:id="@+id/Id_precio"
-            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Precio del producto">
-        </EditText>
+            android:layout_marginTop="30dp"
+            android:hint="Precio del producto"></EditText>
+
         <EditText
             android:id="@+id/Id_cant"
             android:layout_width="wrap_content"
@@ -58,5 +66,13 @@
             android:text="Guardar"></Button>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/Idusuario"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:text="usuario"
+        android:textSize="20dp"></TextView>
 
 </FrameLayout>

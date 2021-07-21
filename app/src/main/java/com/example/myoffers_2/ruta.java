@@ -167,15 +167,16 @@ public class ruta extends Fragment implements LocationListener {
 
     private void MandarRuta(ArrayList<supermercados> misSuper) {
        // map.addMarker(new MarkerOptions().position(mipos).title("Estas Aqui"));
+        Double LatitudOrigen=latitudOrigen;
+        Double LongitudOrigen=longitudOrigen;
         for (int k=0;k<misSuper.size();k++) {
             latitudDest=misSuper.get(k).getLat();
             longitudDest=misSuper.get(k).getLongitud();
             dest= new LatLng(latitudDest,longitudDest);
             map.addMarker(new MarkerOptions().position(dest).title(misSuper.get(k).getNombre()));
-            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latitudOrigen + "," + longitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
+            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + LatitudOrigen + "," + LongitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-            latitudOrigen=latitudDest;
-            longitudOrigen=longitudDest;
+
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -193,6 +194,8 @@ public class ruta extends Fragment implements LocationListener {
                 }
             });
             requestQueue.add(stringRequest);
+            LatitudOrigen=latitudDest;
+            LongitudOrigen=longitudDest;
         }
     }
     @Override

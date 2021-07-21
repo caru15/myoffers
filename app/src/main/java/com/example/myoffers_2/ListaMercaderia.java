@@ -62,7 +62,6 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
    private List<Modelo> otraLista=new ArrayList<>();
     private SearchView searchView;
     private RecyclerView recyclerView;
-    private RecyclerView recyclerView1;
     private Modelo modelo;
     private AdminBD bd=new AdminBD();
     private AsyncHttpClient conexion=new AsyncHttpClient();

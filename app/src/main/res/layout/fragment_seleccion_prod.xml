@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SeleccionProd">
+
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:text="Elije el Producto"
+        />
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="65dp"
+        android:background="@color/cardview_dark_background">
+    </View>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/idSV"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="115dp"
+        android:background="@drawable/border">
+    </androidx.appcompat.widget.SearchView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idViewList"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:footerDividersEnabled="true"
+        android:clickable="true"
+        android:layout_marginTop="200dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <Button
+        android:id="@+id/btnAgregar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="600dp"
+        android:text="Agregar Producto Nuevo"></Button>
+    
+</FrameLayout>
