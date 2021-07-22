@@ -150,8 +150,8 @@
             android:defaultValue="0" />
         <argument
             android:name="id_prod"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="string"
+            android:defaultValue="nada" />
         <action
             android:id="@+id/action_nueva_oferta_to_seleccionProd"
             app:destination="@id/seleccionProd" />
@@ -251,5 +251,22 @@
             android:name="identificador"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_seleccionProd_to_alta_prod"
+            app:destination="@id/alta_prod" />
+    </fragment>
+    <fragment
+        android:id="@+id/alta_prod"
+        android:name="com.example.myoffers_2.alta_prod"
+        android:label="fragment_alta_prod"
+        tools:layout="@layout/fragment_alta_prod" >
+        <action
+            android:id="@+id/action_alta_prod_to_nueva_oferta"
+            app:destination="@id/nueva_oferta"
+            app:popUpTo="@id/alta_prod" />
+        <argument
+            android:name="id_nombre"
+            app:argType="string"
+            android:defaultValue="nada" />
     </fragment>
 </navigation>

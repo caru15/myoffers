@@ -39,6 +39,7 @@ public class nueva_oferta extends Fragment {
     private String usuario;
     private int identificador;
     private String direccion;
+    private int id_prod;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
     private static final String ARG_PARAM1 = "param1";
@@ -90,16 +91,17 @@ public class nueva_oferta extends Fragment {
         Bundle bundle=new Bundle();
         usuario=nueva_ofertaArgs.fromBundle(getArguments()).getNombre();
          identi=nueva_ofertaArgs.fromBundle(getArguments()).getIdUsuario();
-
-        int prod=nueva_ofertaArgs.fromBundle(getArguments()).getIdProd();
-        if (prod!=0){
-            producto.setText(String.valueOf(prod));
+        String prod=nueva_ofertaArgs.fromBundle(getArguments()).getIdProd();
+        if (!prod.equals("nada")){
+            String[] pro=prod.split("-");
+            id_prod=Integer.valueOf(pro[0]);
+            producto.setText(pro[1]+"-"+pro[2]);
         }
 
         List<supermercados> ListaSuper= new ArrayList<supermercados>();
         List<productos> ListPro =new ArrayList<productos>();
         llenar_Spinner(ListaSuper, view);
-       // llenar_Spinner2(ListPro, view);
+
         tv.setText(usuario+", estas Ingresando Nueva Oferta");
       buscar.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -118,8 +120,6 @@ public class nueva_oferta extends Fragment {
                 String can=tvCantidad.getText().toString();
 
                 int id_super=Devuelve_id(spinner);
-                //aqui traigo el id y nombre del otro fragment
-                int id_prod=Devuelve_id(spinner2);
                 double precio = Double.parseDouble(pre);
                 int cantidad = Integer.parseInt(can);
                 GuardarProd(v,usuario,identi,id_super,id_prod,precio,cantidad);

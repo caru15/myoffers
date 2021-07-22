@@ -81,10 +81,20 @@ public class SeleccionProd extends Fragment implements listAdapter.RecycleItemCl
         Button Agregar = view.findViewById(R.id.btnAgregar);
         searchView=view.findViewById(R.id.idSV);
          identificador=SeleccionProdArgs.fromBundle(getArguments()).getIdentificador();
-                 nom=SeleccionProdArgs.fromBundle(getArguments()).getUsuario();
+         nom=SeleccionProdArgs.fromBundle(getArguments()).getUsuario();
+         String todo=String.valueOf(identificador)+"-"+nom;
         Lista();
         searchView.setOnQueryTextListener(this);
+        Agregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              SeleccionProdDirections.ActionSeleccionProdToAltaProd ac=SeleccionProdDirections.actionSeleccionProdToAltaProd();
+              ac.setIdNombre(todo);
+              Navigation.findNavController(view).navigate(ac);
+            }
+        });
     }
+
     private void Lista(){
         dir=bd.dirProd();
         params.put("type","listar");
@@ -143,9 +153,9 @@ public class SeleccionProd extends Fragment implements listAdapter.RecycleItemCl
     @Override
     public void itemClick(Modelo item) {
        int id=item.getId();
-       String nombre=item.getNombre()+"-"+item.getMarca();
+       String nombre=String.valueOf(item.getId())+"-"+item.getNombre()+"-"+item.getMarca();
         SeleccionProdDirections.ActionSeleccionProdToNuevaOferta accion=SeleccionProdDirections.actionSeleccionProdToNuevaOferta();
-        accion.setIdProd(id);
+        accion.setIdProd(nombre);
         accion.setIdUsuario(identificador);
         accion.setNombre(nom);
         Navigation.findNavController(getView()).navigate(accion);

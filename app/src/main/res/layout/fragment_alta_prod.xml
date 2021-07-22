@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5E3A09EC"
+    tools:context=".alta_prod">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Producto Nuevo"
+        android:textSize="30dp"
+        android:textColor="#120D0D"/>
+    <LinearLayout
+        android:id="@+id/LinearLa"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/Idnom"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:textColorHint="#120D0D"
+            android:ems="10"
+            android:textColor="#000000"
+            android:hint="Nombre" />
+
+
+        <EditText
+            android:id="@+id/Idescr"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:textColorHint="#120D0D"
+            android:padding="10dp"
+            android:textColor="#120D0D"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:hint="Descripcion" />
+        <EditText
+            android:id="@+id/Idmarca"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:textColorHint="#120D0D"
+            android:padding="10dp"
+            android:textColor="#120D0D"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:hint="Marca" />
+
+        <EditText
+            android:id="@+id/Idunid"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:textColorHint="#120D0D"
+            android:textColor="#120D0D"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:ems="10"
+            android:hint="Unidades en Paquete" />
+
+        <EditText
+            android:id="@+id/Idimag"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:textColorHint="#120D0D"
+            android:textColor="#120D0D"
+            android:padding="10dp"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:hint="Imagen" />
+
+        <Button
+            android:id="@+id/Idguardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/border_negro"
+            android:text="Guardar"
+            android:textColor="#120D0D"></Button>
+
+    </LinearLayout>
+
+</FrameLayout>

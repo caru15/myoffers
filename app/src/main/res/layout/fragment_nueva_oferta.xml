@@ -16,23 +16,18 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="80dp"
         android:orientation="vertical">
-
-        <Spinner
-            android:id="@+id/spinner_super"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"></Spinner>
         <LinearLayout
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/IdProducto"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="45dp"
-            android:hint="Producto"
-            android:background="@drawable/border_negro"  ></EditText>
+            <EditText
+                android:id="@+id/IdProducto"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="45dp"
+                android:hint="Producto"
+                android:background="@drawable/border_negro"  ></EditText>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnBuscar"
@@ -43,6 +38,12 @@
 
             </androidx.appcompat.widget.AppCompatImageButton>
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinner_super"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"></Spinner>
+
         <EditText
             android:id="@+id/Id_precio"
             android:layout_width="wrap_content"
