@@ -1,25 +1,56 @@
+
 package com.example.myoffers_2;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import androidx.cursoradapter.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-public class alta_prod extends Fragment {
+import java.io.File;
+import java.io.InputStream;
+
+public class alta_prod extends Fragment{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    //directorio donde voy a  guardar la foto
+    private String CARPETA_RAIZ="misImagenes/";
+    private  String nombre="";
+    //ruta q el sistema va a cargar la imagen desde el celular
+    private String CARPETA_IMAGE=CARPETA_RAIZ+"misFotos";
+    private ImageView imagen;
     private String mParam1;
     private String mParam2;
+    private int CODE_SELECCIONE=10;
+    private int CODE_FOTO=20;
+    private String path;
+    private String path_1;
+    private Bitmap bitmap;
 
     public alta_prod() {
         // Required empty public constructor
@@ -60,10 +91,18 @@ public class alta_prod extends Fragment {
         EditText descrip=view.findViewById(R.id.Idescr);
         EditText marca=view.findViewById(R.id.Idmarca);
         EditText canti=view.findViewById(R.id.Idunid);
-        EditText imagen=view.findViewById(R.id.Idimag);
+         imagen=view.findViewById(R.id.Idimag);
+        Button Ima=view.findViewById(R.id.Idfoto);
         Button Guarda=view.findViewById(R.id.Idguardar);
-        //verificarPro()-este metodo buscaria si el producto que esta por cargarse
+
+        //verificarPro()-este metodo es para futuro buscaria si el producto que esta por cargarse
         //ya existe en la BD
+        Ima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MostrarDialogoOpciones();
+            }
+        });
         Guarda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,5 +113,89 @@ public class alta_prod extends Fragment {
                 Navigation.findNavController(view).navigate(accio);
             }
         });
+    }
+
+    private void MostrarDialogoOpciones() {
+        final CharSequence[] opciones={"Tomar Foto","Elejir de Galeria","Cancelar"};
+        final AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        builder.setTitle("Elije una opcion");
+        builder.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (opciones[i].equals("Tomar Foto")){
+                  TomarFoto();
+                }else{
+                    if (opciones[i].equals("Elejir de Galeria")){
+                        Intent intent=new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/*");
+                        startActivityForResult(intent.createChooser(intent,"Seleccione"),CODE_SELECCIONE);
+                    }else{
+                        dialog.dismiss();
+                    }
+                }
+            }
+        });builder.show();
+    }
+
+    private void TomarFoto() {
+        String nombre="";
+        File file=new File(Environment.getExternalStorageDirectory(),CARPETA_IMAGE);
+        boolean isCreate=file.exists();
+        if (isCreate==false){
+            isCreate=file.mkdirs();
+        }if (isCreate==true){
+            nombre=(String.valueOf(System.currentTimeMillis()/100))+"jpg";
+        }
+        //esta variable path tiene la ruta para guardar la imagen
+
+        path=Environment.getExternalStorageDirectory()+File.separator+CARPETA_IMAGE+File.separator+nombre;
+        //ahora creamos un archivo
+
+        //
+        File myfile= new File(path);
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",myfile);
+        Log.d("se guardo",String.valueOf(photo));
+        path_1=myfile.getAbsolutePath();
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,20);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 10:
+                Uri mypath=data.getData();
+                imagen.setImageURI(mypath);
+                break;
+            case 20:
+
+                Bitmap ima=BitmapFactory.decodeFile(path_1);
+                imagen.setImageBitmap(ima);
+                /**
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContext().getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+
+                cursor.close();
+                imagen.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                //
+                MediaScannerConnection.scanFile(getContext(), new String[]{path_1}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("Path",""+path); }
+                });
+               // bitmap= BitmapFactory.decodeFile(path_1);
+               // imagen.setImageBitmap(bitmap);**/
+                break;
+        }
     }
 }
