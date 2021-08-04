@@ -1,10 +1,14 @@
 
 package com.example.myoffers_2;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+
+import androidx.core.content.ContextCompat;
 import androidx.cursoradapter.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +36,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class alta_prod extends Fragment{
 
@@ -42,12 +49,12 @@ public class alta_prod extends Fragment{
     private String CARPETA_RAIZ="misImagenes/";
     private  String nombre="";
     //ruta q el sistema va a cargar la imagen desde el celular
-    private String CARPETA_IMAGE=CARPETA_RAIZ+"misFotos";
+    private String Ruta_Imagen;
     private ImageView imagen;
     private String mParam1;
     private String mParam2;
-    private int CODE_SELECCIONE=10;
-    private int CODE_FOTO=20;
+    private final int CODE_SELECCIONE=10;
+    private final int CODE_FOTO=20;
     private String path;
     private String path_1;
     private Bitmap bitmap;
@@ -55,7 +62,6 @@ public class alta_prod extends Fragment{
     public alta_prod() {
         // Required empty public constructor
     }
-
 
     public static alta_prod newInstance(String param1, String param2) {
         alta_prod fragment = new alta_prod();
@@ -130,15 +136,13 @@ public class alta_prod extends Fragment{
                         intent.setType("image/*");
                         startActivityForResult(intent.createChooser(intent,"Seleccione"),CODE_SELECCIONE);
                     }else{
-                        dialog.dismiss();
-                    }
-                }
+                        dialog.dismiss(); } }
             }
         });builder.show();
     }
 
     private void TomarFoto() {
-        String nombre="";
+       /** String nombre="";
         File file=new File(Environment.getExternalStorageDirectory(),CARPETA_IMAGE);
         boolean isCreate=file.exists();
         if (isCreate==false){
@@ -147,20 +151,31 @@ public class alta_prod extends Fragment{
             nombre=(String.valueOf(System.currentTimeMillis()/100))+"jpg";
         }
         //esta variable path tiene la ruta para guardar la imagen
-
         path=Environment.getExternalStorageDirectory()+File.separator+CARPETA_IMAGE+File.separator+nombre;
-        //ahora creamos un archivo
-
-        //
         File myfile= new File(path);
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",myfile);
         Log.d("se guardo",String.valueOf(photo));
         path_1=myfile.getAbsolutePath();
-
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent,20);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);**/
+
+       Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+       if (intent.resolveActivity(getContext().getPackageManager())!=null){
+                File photoFile=null;
+
+                try {
+
+                    photoFile=createImageFile();
+                }catch (IOException ex){
+                    Log.d("error",ex.toString());
+                }
+                if (photoFile!=null){
+                  Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",photoFile);
+                  intent.putExtra(MediaStore.EXTRA_OUTPUT,photo);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivityForResult(intent,20);
+                } }
     }
 
     @Override
@@ -172,30 +187,16 @@ public class alta_prod extends Fragment{
                 imagen.setImageURI(mypath);
                 break;
             case 20:
-
-                Bitmap ima=BitmapFactory.decodeFile(path_1);
+                Bitmap ima=BitmapFactory.decodeFile(Ruta_Imagen);
                 imagen.setImageBitmap(ima);
-                /**
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContext().getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-
-                cursor.close();
-                imagen.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                //
-                MediaScannerConnection.scanFile(getContext(), new String[]{path_1}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-                        Log.i("Path",""+path); }
-                });
-               // bitmap= BitmapFactory.decodeFile(path_1);
-               // imagen.setImageBitmap(bitmap);**/
                 break;
         }
+    }
+    private File createImageFile() throws IOException{
+        String imageFileName=(String.valueOf(System.currentTimeMillis()/100));
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);;
+        File image=File.createTempFile(imageFileName,".jpg",storageDir);
+        Ruta_Imagen=image.getAbsolutePath();
+        return image;
     }
 }
