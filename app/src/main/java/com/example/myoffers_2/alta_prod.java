@@ -2,6 +2,7 @@
 package com.example.myoffers_2;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,9 +36,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.Base64;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -47,18 +60,28 @@ public class alta_prod extends Fragment{
     private static final String ARG_PARAM2 = "param2";
     //directorio donde voy a  guardar la foto
     private String CARPETA_RAIZ="misImagenes/";
-    private  String nombre="";
     //ruta q el sistema va a cargar la imagen desde el celular
     private String Ruta_Imagen;
     private ImageView imagen;
     private String mParam1;
+    private AsyncHttpClient conexion=new AsyncHttpClient();
+    private RequestParams params= new RequestParams();
     private String mParam2;
+   private EditText nombre;
+   private EditText descrip;
+   private EditText marca;
+   private EditText canti;
     private final int CODE_SELECCIONE=10;
     private final int CODE_FOTO=20;
     private String path;
     private String path_1;
-    private Bitmap bitmap;
+    Bitmap bitmap;
+    ProgressDialog progressDialog;
+    ByteArrayOutputStream byteArrayOutputStream;
+    byte[] byteArray;
 
+    private String dir;
+    AdminBD bd=new AdminBD();
     public alta_prod() {
         // Required empty public constructor
     }
@@ -93,14 +116,14 @@ public class alta_prod extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         String idmasNombre=alta_prodArgs.fromBundle(getArguments()).getIdNombre();
         String[] Nom=idmasNombre.split("-");
-        EditText nombre=view.findViewById(R.id.Idnom);
-        EditText descrip=view.findViewById(R.id.Idescr);
-        EditText marca=view.findViewById(R.id.Idmarca);
-        EditText canti=view.findViewById(R.id.Idunid);
+         nombre=(EditText)view.findViewById(R.id.Idnom);
+         descrip=view.findViewById(R.id.Idescr);
+         marca=view.findViewById(R.id.Idmarca);
+         canti=view.findViewById(R.id.Idunid);
          imagen=view.findViewById(R.id.Idimag);
         Button Ima=view.findViewById(R.id.Idfoto);
         Button Guarda=view.findViewById(R.id.Idguardar);
-
+       byteArrayOutputStream = new ByteArrayOutputStream();
         //verificarPro()-este metodo es para futuro buscaria si el producto que esta por cargarse
         //ya existe en la BD
         Ima.setOnClickListener(new View.OnClickListener() {
@@ -112,15 +135,16 @@ public class alta_prod extends Fragment{
         Guarda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Ingresar ala data base
+                SubirImagen();
                 alta_prodDirections.ActionAltaProdToNuevaOferta accio=alta_prodDirections.actionAltaProdToNuevaOferta();
                 accio.setIdUsuario(Integer.valueOf(Nom[0]));
                 accio.setNombre(Nom[1]);
                 Navigation.findNavController(view).navigate(accio);
             }
         });
-    }
+    }//FIN DEL ONVIEWCREATE
 
+    //AQUI COMIENZAN LOS METODOS
     private void MostrarDialogoOpciones() {
         final CharSequence[] opciones={"Tomar Foto","Elejir de Galeria","Cancelar"};
         final AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
@@ -129,7 +153,7 @@ public class alta_prod extends Fragment{
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 if (opciones[i].equals("Tomar Foto")){
-                  TomarFoto();
+                    TomarFoto();
                 }else{
                     if (opciones[i].equals("Elejir de Galeria")){
                         Intent intent=new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -141,31 +165,19 @@ public class alta_prod extends Fragment{
         });builder.show();
     }
 
+    /**
+ instancias que invocan el metodo
+     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+     String imagen = getStringImagen(bitmap);
+     desp de hacer esto lo manda a guardar ala base de datos como parametro
+     //fijate esto va en el php
+     file_put_contents($path, base64_decode($imagen));
+     * */
     private void TomarFoto() {
-       /** String nombre="";
-        File file=new File(Environment.getExternalStorageDirectory(),CARPETA_IMAGE);
-        boolean isCreate=file.exists();
-        if (isCreate==false){
-            isCreate=file.mkdirs();
-        }if (isCreate==true){
-            nombre=(String.valueOf(System.currentTimeMillis()/100))+"jpg";
-        }
-        //esta variable path tiene la ruta para guardar la imagen
-        path=Environment.getExternalStorageDirectory()+File.separator+CARPETA_IMAGE+File.separator+nombre;
-        File myfile= new File(path);
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",myfile);
-        Log.d("se guardo",String.valueOf(photo));
-        path_1=myfile.getAbsolutePath();
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);**/
-
-       Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
        if (intent.resolveActivity(getContext().getPackageManager())!=null){
                 File photoFile=null;
-
                 try {
-
                     photoFile=createImageFile();
                 }catch (IOException ex){
                     Log.d("error",ex.toString());
@@ -174,7 +186,7 @@ public class alta_prod extends Fragment{
                   Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",photoFile);
                   intent.putExtra(MediaStore.EXTRA_OUTPUT,photo);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent,20);
+                    startActivityForResult(intent,CODE_FOTO);
                 } }
     }
 
@@ -184,14 +196,61 @@ public class alta_prod extends Fragment{
         switch (requestCode){
             case 10:
                 Uri mypath=data.getData();
-                imagen.setImageURI(mypath);
+                try {
+                    bitmap=android.provider.MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),mypath);
+                    imagen.setImageBitmap(bitmap);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
                 break;
             case 20:
-                Bitmap ima=BitmapFactory.decodeFile(Ruta_Imagen);
-                imagen.setImageBitmap(ima);
+                bitmap=BitmapFactory.decodeFile(Ruta_Imagen);
+                imagen.setImageBitmap(bitmap);
+              //  bitmap=(Bitmap) data.getExtras().get("data");
+              //  imagen.setImageBitmap(bitmap);
                 break;
         }
     }
+
+    public void SubirImagen() {
+     bitmap.compress(Bitmap.CompressFormat.JPEG,10,byteArrayOutputStream);
+      byteArray=byteArrayOutputStream.toByteArray();
+       String Convertimagen=Base64.encodeToString(byteArray,Base64.DEFAULT);
+        //----------AQUI SUBIMOS AL SERVIDOR TODOS LOS DATOS------//
+        dir=bd.dirProd();
+        String nombre_pro=nombre.getText().toString();
+        String descrip_pro=descrip.getText().toString();
+        String marca_pro=marca.getText().toString();
+        String canti_pro=canti.getText().toString();
+        params.put("type","alta");
+        params.put("nom",nombre_pro);
+        params.put("desc",descrip_pro);
+        params.put("marca",marca_pro);
+        params.put("cant",canti_pro);
+        params.put("imagen",Convertimagen);
+        conexion.post(dir, params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("Error","no se conecto "+responseString);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                   Log.d("entro 1",responseString);
+                try {
+                    Log.d("entro 2",responseString);
+                    JSONObject JO=new JSONObject(responseString);
+                    String respuesta=JO.getString("message");
+                    Log.d("entro 3",respuesta);
+                    Toast toast=Toast.makeText(getContext(),respuesta,Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                catch (Exception e){
+                    Log.d("se entro por el catch",responseString);
+                    e.printStackTrace();
+                } }
+        });
+    }
+
     private File createImageFile() throws IOException{
         String imageFileName=(String.valueOf(System.currentTimeMillis()/100));
         File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);;
@@ -199,4 +258,5 @@ public class alta_prod extends Fragment{
         Ruta_Imagen=image.getAbsolutePath();
         return image;
     }
+
 }

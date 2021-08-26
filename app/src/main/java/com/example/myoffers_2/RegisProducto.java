@@ -118,10 +118,12 @@ public class RegisProducto extends Fragment {
                         int cant= jsonArray.getJSONObject(i).getInt("cantidad");
                         String descripcion =jsonArray.getJSONObject(i).getString("des");
                         String supNombre =jsonArray.getJSONObject(i).getString("super");
+
                         double pre=jsonArray.getJSONObject(i).getDouble("precio");
                         String imagen=jsonArray.getJSONObject(i).getString("imagen");
                         PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
                         PS.setId_prod(jsonArray.getJSONObject(i).getInt("idprod"));
+
                         marca=jsonArray.getJSONObject(i).getString("marca");
                         items.add(PS);
                         adapter.notifyDataSetChanged();
@@ -144,8 +146,6 @@ public class RegisProducto extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Crear nueva Oferta", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 //inicia Actividad de Insercion y mando el parametro
                 RegisProductoDirections.ActionRegisProductoToNuevaOferta action=RegisProductoDirections.actionRegisProductoToNuevaOferta();
              action.setNombre(nom);

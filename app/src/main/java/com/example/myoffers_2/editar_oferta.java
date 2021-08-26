@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,15 +24,15 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.json.JSONArray;
 
 import cz.msebera.android.httpclient.Header;
+import android.view.View.OnClickListener;
 
-public class editar_oferta extends Fragment {
+public class editar_oferta extends Fragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+ProdxSuper element;
     private String mParam1;
     private String mParam2;
 
@@ -78,6 +79,7 @@ public class editar_oferta extends Fragment {
         TextView marca=(TextView)view.findViewById(R.id.MarcaLabel);
         TextView desc=(TextView)view.findViewById(R.id.DescLabel);
         TextView precio=(TextView)view.findViewById(R.id.PrecioLabel);
+        ImageButton boton=(ImageButton)view.findViewById(R.id.btnMapa);
         //aqui en vex de pasarle el nombre pasale la marca del producto
         String nom=editar_ofertaArgs.fromBundle(getArguments()).getNombre();
         int pos=editar_ofertaArgs.fromBundle(getArguments()).getPosicion();
@@ -105,6 +107,9 @@ public class editar_oferta extends Fragment {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length();i++) {
                         element.setSuperNom(jsonArray.getJSONObject(i).getString("nombresuper"));
+                        element.setDireccion(jsonArray.getJSONObject(i).getString("direccion"));
+                        element.setLatitud(jsonArray.getJSONObject(i).getDouble("latitud"));
+                        element.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                         element.setNombre(jsonArray.getJSONObject(i).getString("nombreprod"));
                         element.setDescripcion(jsonArray.getJSONObject(i).getString("descripcion"));
                         element.setPrecio(jsonArray.getJSONObject(i).getDouble("precio"));
@@ -115,7 +120,23 @@ public class editar_oferta extends Fragment {
                         tit.setText(element.getNombre());
                         desc.setText(element.getDescripcion());
                         precio.setText(String.valueOf(element.getPrecio()));
+                        boton.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v) {
+                                //aqui manda al mapa los datos y demas 
+                                Toast.makeText(getContext(), String.valueOf(element.getDireccion()), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
                     }
+                    supermercado.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getContext(), String.valueOf(element.getDireccion()), Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -125,4 +146,5 @@ public class editar_oferta extends Fragment {
 
         });
     }
+
 }

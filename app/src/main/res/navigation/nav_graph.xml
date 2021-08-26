@@ -172,6 +172,9 @@
         <action
             android:id="@+id/action_editar_oferta_to_regisProducto"
             app:destination="@id/regisProducto" />
+        <action
+            android:id="@+id/action_editar_oferta_to_locationSuper"
+            app:destination="@id/locationSuper" />
     </fragment>
     <fragment
         android:id="@+id/nearby_super"
@@ -266,6 +269,24 @@
             app:popUpTo="@id/alta_prod" />
         <argument
             android:name="id_nombre"
+            app:argType="string"
+            android:defaultValue="nada" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationSuper"
+        android:name="com.example.myoffers_2.locationSuper"
+        android:label="fragment_location_super"
+        tools:layout="@layout/fragment_location_super" >
+        <argument
+            android:name="latitud1"
+            app:argType="string"
+            android:defaultValue="nada" />
+        <argument
+            android:name="longitud1"
+            app:argType="string"
+            android:defaultValue="nada" />
+        <argument
+            android:name="nombreSup"
             app:argType="string"
             android:defaultValue="nada" />
     </fragment>
