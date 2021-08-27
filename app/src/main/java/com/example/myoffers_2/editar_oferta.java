@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -124,8 +125,11 @@ ProdxSuper element;
                             @Override
                             public void onClick(View v) {
                                 //aqui manda al mapa los datos y demas
-                                Toast.makeText(getContext(), String.valueOf(element.getDireccion()), Toast.LENGTH_LONG)
-                                        .show();
+                                editar_ofertaDirections.ActionEditarOfertaToLocationSuper accion= editar_ofertaDirections.actionEditarOfertaToLocationSuper();
+                                accion.setNombreSup(element.getDireccion());
+                                accion.setLatitud1(String.valueOf(element.getLatitud()));
+                                accion.setLongitud1(String.valueOf(element.getLongitud()));
+                                Navigation.findNavController(v).navigate(accion);
                             }
                         });
                     }

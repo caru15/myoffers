@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
     tools:context=".Inicio">
 
 
@@ -12,33 +13,31 @@
         android:id="@+id/cv_contenedora"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        apps:cardBackgroundColor="@color/cardview_shadow_start_color"
+        apps:cardBackgroundColor="#C8AFE4"
         android:layout_margin="20dp"
         apps:cardCornerRadius="30dp"
         apps:cardElevation="5dp"
         apps:contentPadding="10dp">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/AppTheme">
+          >
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_above="@id/username"
-                android:textStyle="bold"
-                android:typeface="sans"
-                android:textSize="20dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginBottom="90dp"
+                android:gravity="center"
                 android:text="Ingrese usuario y contraseña"
-
-                />
-
-
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+               
+                android:textSize="30dp"
+                android:textColor="#060B0C"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <EditText
                 android:id="@+id/username"
@@ -67,7 +66,6 @@
                 android:ems="15"
                 android:inputType="textPassword" >
 
-
             </EditText>
 
             <LinearLayout
@@ -81,12 +79,17 @@
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="Ingresar" />
+                    android:background="@android:drawable/button_onoff_indicator_off"
+                    android:text="Ingresar"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btnRegister"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:background="@android:drawable/button_onoff_indicator_off"
                     android:text="Soy Nuevo" />
 
 
