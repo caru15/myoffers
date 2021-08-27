@@ -123,7 +123,7 @@ ProdxSuper element;
                         boton.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v) {
-                                //aqui manda al mapa los datos y demas 
+                                //aqui manda al mapa los datos y demas
                                 Toast.makeText(getContext(), String.valueOf(element.getDireccion()), Toast.LENGTH_LONG)
                                         .show();
                             }
