@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_light"
+    android:background="#EFEDEF"
     tools:context=".Inicio">
 
 
@@ -13,7 +13,7 @@
         android:id="@+id/cv_contenedora"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        apps:cardBackgroundColor="#C8AFE4"
+        apps:cardBackgroundColor="#C28FDC"
         android:layout_margin="20dp"
         apps:cardCornerRadius="30dp"
         apps:cardElevation="5dp"
@@ -31,12 +31,11 @@
                 android:layout_above="@id/username"
                 android:layout_marginBottom="90dp"
                 android:gravity="center"
+                android:fontFamily="@font/mustardo"
                 android:text="Ingrese usuario y contraseña"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-               
-                android:textSize="30dp"
-                android:textColor="#060B0C"
-                android:textStyle="bold"
+                android:textSize="40dp"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textStyle="italic"
                 android:typeface="normal" />
 
             <EditText
@@ -81,6 +80,7 @@
                     android:layout_height="40dp"
                     android:background="@android:drawable/button_onoff_indicator_off"
                     android:text="Ingresar"
+                    android:textSize="20dp"
                     android:textStyle="bold"/>
 
                 <Button
@@ -89,6 +89,7 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:textStyle="bold"
+                    android:textSize="20dp"
                     android:background="@android:drawable/button_onoff_indicator_off"
                     android:text="Soy Nuevo" />
 

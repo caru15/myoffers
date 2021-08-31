@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8EA1A3"
+    android:background="@drawable/fondo4"
     android:id="@+id/fl"
     tools:context=".ListaMercaderia">
 
@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:textSize="25dp"
+        android:textSize="35dp"
+        android:fontFamily="@font/mustardo"
         android:textStyle="bold"
         android:text="Lista de Mercaderia"
         />
@@ -30,7 +31,7 @@
            android:layout_width="280dp"
            android:layout_height="50dp"
            android:layout_marginTop="115dp"
-           android:background="@drawable/border">
+           android:background="@drawable/border_negro">
        </androidx.appcompat.widget.SearchView>
 
     <androidx.recyclerview.widget.RecyclerView
