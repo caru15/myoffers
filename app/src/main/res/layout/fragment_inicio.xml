@@ -8,47 +8,47 @@
     android:background="#EFEDEF"
     tools:context=".Inicio">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/username"
+        android:layout_marginBottom="90dp"
+        android:gravity="center"
+        android:text="Ingrese usuario y contraseña"
+        android:textSize="40dp"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textStyle="italic"
+        android:typeface="serif" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_contenedora"
-        android:layout_height="match_parent"
+        android:layout_height="350dp"
         android:layout_width="match_parent"
-        apps:cardBackgroundColor="#C28FDC"
-        android:layout_margin="20dp"
-        apps:cardCornerRadius="30dp"
+        apps:cardBackgroundColor="#2D736D"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="200dp"
+        apps:cardCornerRadius="35dp"
         apps:cardElevation="5dp"
-        apps:contentPadding="10dp">
+        apps:contentPadding="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
           >
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/username"
-                android:layout_marginBottom="90dp"
-                android:gravity="center"
-                android:fontFamily="@font/mustardo"
-                android:text="Ingrese usuario y contraseña"
-                android:textSize="40dp"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textStyle="italic"
-                android:typeface="normal" />
-
             <EditText
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_margin="20dp"
-                android:hint="Usuario"
+                android:layout_marginLeft="25dp"
+               android:layout_marginTop="25dp"
                 android:background="@drawable/border"
-                android:padding="10dp"
-                android:layout_gravity="center"
-                android:layout_centerInParent="true"
-                android:ems="15" />
+                android:ems="15"
+                android:hint="Usuario"
+                android:padding="10dp" />
+
             <requestFocus />
 
 
@@ -56,15 +56,15 @@
                 android:id="@+id/password"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-               android:layout_margin="20dp"
-                android:layout_centerInParent="true"
                 android:layout_below="@id/username"
-                android:padding="10dp"
-                android:hint="Contraseña"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="29dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/border"
                 android:ems="15"
-                android:inputType="textPassword" >
-
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:padding="10dp">
             </EditText>
 
             <LinearLayout
@@ -94,21 +94,22 @@
                     android:text="Soy Nuevo" />
 
 
-                <Button
-                    android:id="@+id/btnRecup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="70dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
-                    android:text="Olvide usuario y contraseña"
-                    android:linksClickable="true"
-                    android:clickable="true"
-                    android:autoLink="all"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:background="#00000000"/>
             </LinearLayout>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
+    <Button
+        android:id="@+id/btnRecup"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+        android:text="Olvide usuario y contraseña"
+        android:linksClickable="true"
+        android:clickable="true"
+        android:layout_marginTop="650dp"
+        android:autoLink="all"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="#00000000"/>
 
 </FrameLayout>

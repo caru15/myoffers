@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B692BC"
+    android:background="#656363"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ofertasCercas">
 
@@ -18,7 +18,7 @@
             android:layout_width="140dp"
             android:layout_height="130dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/border"
+            android:background="@drawable/border_negro"
             android:backgroundTint="@color/cardview_light_background"
             android:onClick="ChangoMas"
             app:srcCompat="@mipmap/changomas" />
@@ -28,10 +28,11 @@
         android:layout_width="140dp"
         android:layout_height="130dp"
         android:layout_marginLeft="40dp"
-        android:backgroundTint="@color/cardview_light_background"
         android:background="@drawable/border_negro"
+        android:backgroundTint="@color/cardview_light_background"
         android:onClick="Libertad"
-        app:srcCompat="@mipmap/libertad" /></LinearLayout>
+        app:srcCompat="@mipmap/libertad"
+        tools:ignore="OnClick" /></LinearLayout>
 
     <LinearLayout
         android:layout_marginTop="300dp"
@@ -44,8 +45,8 @@
             android:layout_width="140dp"
             android:layout_height="130dp"
             android:layout_marginLeft="30dp"
-            android:backgroundTint="@color/cardview_light_background"
             android:background="@drawable/border_negro"
+            android:backgroundTint="@color/cardview_light_background"
             android:onClick="Vea"
             app:srcCompat="@mipmap/vea" />
 
@@ -57,7 +58,8 @@
             android:background="@drawable/border_negro"
             android:backgroundTint="@color/cardview_light_background"
             android:onClick="Dia"
-            app:srcCompat="@mipmap/dia" />
+            app:srcCompat="@mipmap/dia"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -71,10 +73,11 @@
         android:layout_width="140dp"
         android:layout_height="130dp"
         android:layout_marginLeft="30dp"
+        android:background="@drawable/border_negro"
         android:backgroundTint="@color/cardview_light_background"
-        android:background="@drawable/fondo4"
         android:onClick="Carrefour"
-        app:srcCompat="@mipmap/carrefour" />
+        app:srcCompat="@mipmap/carrefour"
+        />
 
     <ImageButton
         android:id="@+id/imageButton6"

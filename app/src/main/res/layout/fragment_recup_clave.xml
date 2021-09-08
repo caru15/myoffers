@@ -3,7 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:apps="http://schemas.android.com/apk/res-auto"
+    android:background="#253E3C"
     tools:context=".recupClave">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_conte"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        apps:cardBackgroundColor="#FFFFFF"
+        android:layout_margin="30dp"
+        apps:cardCornerRadius="20dp"
+        apps:cardElevation="5dp"
+        apps:contentPadding="10dp">
     <LinearLayout
         android:id="@+id/linear1"
         android:layout_width="match_parent"
@@ -17,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ingrese su DNI:"
+            android:fontFamily="sans-serif-black"
             android:textSize="30dp"/>
 
         <EditText
@@ -27,12 +40,14 @@
             />
         <Button
             android:id="@+id/btnOK1"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100dp"
             android:text="Siguiente"
-            android:textColor="@color/colorPrimary"/>
+            android:background="@drawable/borde_btn"
+            />
 
     </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

@@ -174,7 +174,7 @@ public class ruta extends Fragment implements LocationListener {
             longitudDest=misSuper.get(k).getLongitud();
             dest= new LatLng(latitudDest,longitudDest);
             map.addMarker(new MarkerOptions().position(dest).title(misSuper.get(k).getNombre()));
-            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + LatitudOrigen + "," + LongitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
+            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + LatitudOrigen + "," + LongitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyDeG9BSnnCYevYV6tGPSQrc6v8Fm4v0rVc";
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

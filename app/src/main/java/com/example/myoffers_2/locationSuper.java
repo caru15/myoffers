@@ -59,11 +59,13 @@ private GoogleMap map;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        LatLng sydney = new LatLng(lat, lon);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title(nom));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        // Asigno un nivel de zoom mas grande el numero se acerca mas la camara'
+        LatLng supermercado = new LatLng(lat, lon);
+        googleMap.addMarker(new MarkerOptions().position(supermercado).title(nom));
+        map.moveCamera(CameraUpdateFactory.newLatLng(supermercado));
         CameraUpdate ZoomCam = CameraUpdateFactory.zoomTo(17);
         map.animateCamera(ZoomCam);
+        // Asigno un nivel de zoom mas grande el numero se acerca mas la camara'
+
+
     }
 }

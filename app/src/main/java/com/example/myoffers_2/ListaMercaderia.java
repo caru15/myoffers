@@ -15,14 +15,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,6 +45,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -54,8 +61,8 @@ import cz.msebera.android.httpclient.Header;
 
 import static com.example.myoffers_2.R.*;
 
-public class ListaMercaderia extends Fragment implements LocationListener,listAdapter.RecycleItemClick, SearchView.OnQueryTextListener{
-
+public class ListaMercaderia extends Fragment implements listAdapter.RecycleItemClick, SearchView.OnQueryTextListener{
+    public static final int REQUEST_CODE = 1;
     private listAdapter myAdapter;
     private ListAdaptador adapter;
    private List<Modelo> myLista;
@@ -77,10 +84,10 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
     private  String dir;
     private String mParam1;
     private String mParam2;
+    FusedLocationProviderClient fusedLocationProviderClient;
+
     public ListaMercaderia() {
-
     }
-
     public static ListaMercaderia newInstance(String param1, String param2) {
         ListaMercaderia fragment = new ListaMercaderia();
         Bundle args = new Bundle();
@@ -107,7 +114,7 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        final FrameLayout frameLayout=view.findViewById(id.fl);
         recyclerView=view.findViewById(id.idlistView);
         Button btnfiltrar = view.findViewById(id.btnFiltrar);
         Button btnBuscar = view.findViewById(id.btnbuscar);
@@ -115,15 +122,23 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
         kilometros=0;
         llenaLista();
         searchView.setOnQueryTextListener(this);
+        /////////////
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+        } else {
+            getCoordenada();
+        }
 
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+//////////////////
+       /* if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                ActivityCompat.checkSelfPermission(this.getContext(), Manifest.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
         } else {
             locationStart(); }
-        final FrameLayout frameLayout=view.findViewById(id.fl);
+*/
 
  btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +179,7 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
                 }); }
         });
  
-    btnBuscar.setOnClickListener(new View.OnClickListener() {
+ btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String cadena = "";
@@ -181,6 +196,36 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
                action.setLongitud(longitud);
               Navigation.findNavController(v).navigate(action);
             } });
+    }
+
+    private void getCoordenada() {
+        try {
+            LocationRequest locationRequest = new LocationRequest();
+            locationRequest.setInterval(10000);
+            locationRequest.setFastestInterval(3000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            LocationServices.getFusedLocationProviderClient(this.getContext()).requestLocationUpdates(locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    super.onLocationResult(locationResult);
+                    LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                    if (locationResult != null && locationResult.getLocations().size() > 0) {
+                        int latestLocationIndex = locationResult.getLocations().size() - 1;
+                        double latitu = locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                        double longitu = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+                       latitud=String.valueOf(latitu);
+                       longitud=String.valueOf(longitu);
+                    }
+                }
+
+            }, Looper.myLooper());
+
+        }catch (Exception ex){
+            System.out.println("Error es :" + ex);
+        }
     }
 
     private void llenaLista() {
@@ -225,7 +270,7 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
         myAdapter=new listAdapter(getContext(),myLista, this);
         recyclerView.setAdapter(myAdapter);
     }
-
+/*
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
         final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -240,42 +285,27 @@ public class ListaMercaderia extends Fragment implements LocationListener,listAd
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
             return;
         }
-        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
+    }*/
+@Override
+public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    if (requestCode == REQUEST_CODE && grantResults.length > 0) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getCoordenada();
+        } else {
+            Toast.makeText(getContext(), "Permiso Denegado ..", Toast.LENGTH_SHORT).show();
+        }
     }
+}
+/*
     @Override
     public void onLocationChanged(Location location) {
        latitud=String.valueOf(location.getLatitude());
        longitud=String.valueOf(location.getLongitude());
     }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        switch (status) {
-            case LocationProvider.AVAILABLE:
-                Log.d("debug", "LocationProvider.AVAILABLE");
-                break;
-            case LocationProvider.OUT_OF_SERVICE:
-                Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
-                break;
-            case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
-                break;
-    }}
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1000) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationStart();
-                return;
-            } } }
+*/
 
     @Override
     public boolean onQueryTextSubmit(String query) {

@@ -4,6 +4,7 @@
     xmlns:apps="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#253E3C"
     android:layout_height="match_parent"
     tools:context=".Nueva_clave">
 
@@ -11,15 +12,15 @@
         android:id="@+id/cv_conte"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        apps:cardBackgroundColor="#4C6570"
-        android:layout_margin="35dp"
-        apps:cardCornerRadius="30dp"
+        apps:cardBackgroundColor="#FFFFFF"
+        android:layout_margin="30dp"
+        apps:cardCornerRadius="20dp"
         apps:cardElevation="5dp"
         apps:contentPadding="10dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/AppTheme">
+            >
 
             <TextView
                 android:id="@+id/txtTitulo"
@@ -29,6 +30,7 @@
                 android:layout_above="@id/txtMensaje"
                 android:textStyle="bold"
                 android:typeface="sans"
+                android:text="usuario"
                 android:textSize="25dp"
                 android:layout_marginBottom="40dp" />
             <TextView
@@ -53,7 +55,8 @@
                 <Button
                     android:id="@+id/btnRecuperar"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/borde_btn"
                     android:text="Inicio" />
             </LinearLayout>
         </RelativeLayout>
