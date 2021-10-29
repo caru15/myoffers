@@ -23,7 +23,7 @@ public class AdminBD {
     public AdminBD() {
 
        Uri="http://192.168.0.95/myOffers/";
-                     }
+    }
 
 //me devuelve la uri de mi producto
     public String dirProd(){

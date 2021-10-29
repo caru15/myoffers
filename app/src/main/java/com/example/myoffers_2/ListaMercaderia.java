@@ -122,23 +122,13 @@ public class ListaMercaderia extends Fragment implements listAdapter.RecycleItem
         kilometros=0;
         llenaLista();
         searchView.setOnQueryTextListener(this);
-        /////////////
+
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
         } else {
             getCoordenada();
         }
-
-//////////////////
-       /* if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this.getContext(), Manifest.Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-        } else {
-            locationStart(); }
-*/
 
  btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,14 +289,6 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
         }
     }
 }
-/*
-    @Override
-    public void onLocationChanged(Location location) {
-       latitud=String.valueOf(location.getLatitude());
-       longitud=String.valueOf(location.getLongitude());
-    }
-*/
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;

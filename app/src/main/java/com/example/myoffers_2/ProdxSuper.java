@@ -16,7 +16,6 @@ public class ProdxSuper {
     private int id_super;
 
     public ProdxSuper() {
-
     }
 
     public ProdxSuper(int id,String nombre, int cant,String descripcion,String superNom, double precio, String imagen){

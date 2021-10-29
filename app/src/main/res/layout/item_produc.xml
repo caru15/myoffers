@@ -9,9 +9,12 @@
     <TextView
         android:id="@+id/txtNombreSuper"
         android:text="NombreProd"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title">
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="?android:attr/textAppearanceLarge">
     </TextView>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,8 +23,12 @@
     <TextView
         android:id="@+id/txtNombre"
         android:text="Nombre"
-        android:layout_width="120dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:textAppearance="?textAppearanceListItem"
         >
     </TextView>
     <TextView
@@ -34,12 +41,14 @@
     <TextView
         android:id="@+id/txtDescripcion"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:textAppearance="?textAppearanceListItem">
     </TextView>
     <TextView
         android:id="@+id/txtPrecio"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="30dp"
+        android:textSize="20dp">
     </TextView>
 
 

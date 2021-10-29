@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -48,7 +47,6 @@ import com.google.maps.android.PolyUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,8 +61,10 @@ public class ruta extends Fragment implements LocationListener {
     Boolean actualposition = true;
     JSONObject jso;
     private ArrayList<supermercados> misSuper=new ArrayList<>();
-    Double latitudOrigen, longitudOrigen;
-    Double latitudDest, longitudDest;
+    private Double latitudOrigen, longitudOrigen;
+    private Double LatitudOrigen,LongitudOrigen;
+    private Double latitudDest=0.0;
+    private Double longitudDest=0.0;
     LatLng dest;
     Toolbar toolbar;
     LatLng mipos;
@@ -75,8 +75,6 @@ public class ruta extends Fragment implements LocationListener {
     private int[] prod=new int[2];
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
-
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
@@ -86,8 +84,7 @@ public class ruta extends Fragment implements LocationListener {
                             PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            map.setMyLocationEnabled(true);
-        }
+            map.setMyLocationEnabled(true); }
     };
     private LocationManager locationManager;
 
@@ -102,12 +99,11 @@ public class ruta extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         String lat=rutaArgs.fromBundle(getArguments()).getLatitud();
         latitudDest=Double.parseDouble(lat);
         String longi=rutaArgs.fromBundle(getArguments()).getLongitud();
         longitudDest=Double.parseDouble(longi);
-       dest= new LatLng(latitudDest,longitudDest);
+        dest= new LatLng(latitudDest,longitudDest);
        //recibo aqui la lista de los super ordenados por distancia
        int[] Super=rutaArgs.fromBundle(getArguments()).getMisSuper();
 
@@ -122,11 +118,11 @@ public class ruta extends Fragment implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,4, (android.location.LocationListener) this);
         }catch (SecurityException e){
             e.printStackTrace();}
+
  if (longi=="0"){
      BuscarSupermercados(Super);
  }
     }
-
     private void BuscarSupermercados(int[] supermer) {
         int id=0;
         ArrayList<supermercados> misSuper=new ArrayList<>();
@@ -155,28 +151,29 @@ public class ruta extends Fragment implements LocationListener {
                             super1.setLat(jsonArray.getJSONObject(i).getDouble("latitud"));
                             super1.setLongitud(jsonArray.getJSONObject(i).getDouble("longitud"));
                             misSuper.add(super1);
+                            MandarRuta(super1);
                         }
-                        MandarRuta(misSuper);
                     }
                     catch (Exception e){
                         e.printStackTrace();
                         Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
                     } }
             }); }
+
     }
 
-    private void MandarRuta(ArrayList<supermercados> misSuper) {
+    private void MandarRuta(supermercados misSuper) {
        // map.addMarker(new MarkerOptions().position(mipos).title("Estas Aqui"));
-        Double LatitudOrigen=latitudOrigen;
-        Double LongitudOrigen=longitudOrigen;
-        for (int k=0;k<misSuper.size();k++) {
-            latitudDest=misSuper.get(k).getLat();
-            longitudDest=misSuper.get(k).getLongitud();
+        LatitudOrigen=latitudOrigen;
+        LongitudOrigen=longitudOrigen;
+        latitudDest=misSuper.getLat();
+        longitudDest=misSuper.getLongitud();
             dest= new LatLng(latitudDest,longitudDest);
-            map.addMarker(new MarkerOptions().position(dest).title(misSuper.get(k).getNombre()));
-            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + LatitudOrigen + "," + LongitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyDeG9BSnnCYevYV6tGPSQrc6v8Fm4v0rVc";
+            map.addMarker(new MarkerOptions().position(dest).title(misSuper.getNombre()));
+            String url ="https://maps.googleapis.com/maps/api/directions/json?origin=" + LatitudOrigen + "," + LongitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyDeG9BSnnCYevYV6tGPSQrc6v8Fm4v0rVc";
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-
+            latitudOrigen=latitudDest;
+            longitudOrigen=longitudDest;
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -194,9 +191,6 @@ public class ruta extends Fragment implements LocationListener {
                 }
             });
             requestQueue.add(stringRequest);
-            LatitudOrigen=latitudDest;
-            LongitudOrigen=longitudDest;
-        }
     }
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -207,10 +201,10 @@ public class ruta extends Fragment implements LocationListener {
     }
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        LatLng mipos = new LatLng(location.getLatitude(), location.getLongitude());
-       // map.moveCamera(CameraUpdateFactory.newLatLngZoom(mipos,14));
+       mipos = new LatLng(location.getLatitude(), location.getLongitude());
+      map.moveCamera(CameraUpdateFactory.newLatLngZoom(mipos,14));
         latitudOrigen=location.getLatitude();
-        longitudOrigen=location.getLongitude();
+       longitudOrigen=location.getLongitude();
         map.addMarker(new MarkerOptions().position(mipos).title("Estas Aqui"));
         map.addMarker(new MarkerOptions().position(dest).title("Super"));
         CameraPosition cameraPosition= new CameraPosition.Builder()
@@ -218,6 +212,7 @@ public class ruta extends Fragment implements LocationListener {
                 .zoom(16)
                 .build();
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
 if (longitudDest!=0.0) {
     String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latitudOrigen + "," + longitudOrigen + "&destination=" + latitudDest + ",%20" + longitudDest + "&key=AIzaSyBNL9KGx-ir7crVB-j7xMcwaQeYrApllH4";
     RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -234,14 +229,11 @@ if (longitudDest!=0.0) {
     }, new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-
         }
     });
     requestQueue.add(stringRequest);
-}
-    }
-
-    private void dibujarRuta(JSONObject jso) {
+}    }
+ private void dibujarRuta(JSONObject jso) {
         JSONArray JsonRoutes;
         JSONArray JsonLegs;
         JSONArray JsonSteps;
@@ -253,9 +245,8 @@ if (longitudDest!=0.0) {
                      JsonSteps=((JSONObject)JsonLegs.get(j)).getJSONArray("steps");
                      for (int k=0;k<JsonSteps.length();k++){
                          String polyline=""+((JSONObject)((JSONObject) JsonSteps.get(k)).get("polyline")).get("points");
-                         Log.d("end"," "+polyline);
                          List<LatLng> list= PolyUtil.decode(polyline);
-                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.Rojo).width(14));
+                         map.addPolyline(new PolylineOptions().addAll(list).color(R.color.Rojo).width(13));
                      }
                  }
             }

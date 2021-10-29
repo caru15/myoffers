@@ -43,7 +43,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
   holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-
           String latitud=String.valueOf(listProd.get(position).getLatitud());
           String longitud=String.valueOf(listProd.get(position).getLongitud());
           ResultBusquedaDirections.ActionResultBusquedaToRuta action=ResultBusquedaDirections.actionResultBusquedaToRuta(miarray);
