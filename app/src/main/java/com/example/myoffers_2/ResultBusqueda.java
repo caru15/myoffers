@@ -33,6 +33,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import org.json.JSONArray;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
@@ -44,6 +45,7 @@ public class ResultBusqueda extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private int[] prod;//recibe los id de los prod cargados en la pantalla anterior
     private int[] vector;
+    private  ArrayList<supermercados> supe = new ArrayList<supermercados>();
     private Double miLatitud;
     private Double milongitud;
     private TextView textView1;
@@ -55,8 +57,7 @@ public class ResultBusqueda extends Fragment {
     private int[] distancia;
     private int dist;
     private float midis;
-    private Location mipos = new Location("mipos");;
-   private List<ProdxSuper> myList = new ArrayList<>();
+    private Location mipos = new Location("mipos");
    private List<ProdxSuper> myList2=new ArrayList<ProdxSuper>();//aqui se guardan los productos que no cumplen con la distancia pedida
     private String mParam1;
     private String mParam2;
@@ -65,7 +66,7 @@ public class ResultBusqueda extends Fragment {
     private productos producto= new productos();
     private AdapterProductos adapterProductos;
     private String uri;
-    RecyclerView recycler;
+    private RecyclerView recycler;
     private RecyclerView.LayoutManager layoutManager;
     private LocationManager locManager;
     private Location loc;
@@ -106,6 +107,8 @@ public class ResultBusqueda extends Fragment {
         recycler=(RecyclerView)view.findViewById(R.id.RecView);
         layoutManager=new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL,false);
         recycler.setLayoutManager(layoutManager);
+        adapterProductos = new AdapterProductos(myList2, this.getContext());
+        recycler.setHasFixedSize(true);
         prod=ResultBusquedaArgs.fromBundle(getArguments()).getProductos();//RECIBE LOS ID DE LOS PRODUCTOS CARGADOS EN LA PANTALLA ANTERIOR
         dist=ResultBusquedaArgs.fromBundle(getArguments()).getDistancia();
         lati=ResultBusquedaArgs.fromBundle(getArguments()).getLatitud();
@@ -116,7 +119,7 @@ public class ResultBusqueda extends Fragment {
         mipos.setLongitude(milongitud);
         textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
         BuscarSuper(prod);
-
+        Log.d("supe afuera",String.valueOf(supe.size()));
    //CON ESTE BOTON SE VE LA RUTA COMPLETA A SEGUIR
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,20 +135,23 @@ public class ResultBusqueda extends Fragment {
     //con los productos de la lista pro busco en la BD y traigo toda la info
     public void BuscarSuper(int[] pro){
         int id=0;
+        int tam=pro.length;
         uri=bd.dirProdSuper();
-       for (int j=0;j<pro.length;j++){
-            params.put("id",pro[j]);}
+        List<ProdxSuper> myList = new ArrayList<>();
+      for (int j=0;j<tam;j++){
+             id=pro[j];
             params.put("type","join");
             params.put("super","nada");
             params.put("prod","nada");
             params.put("usuario","nada");
             params.put("pre","nada");
             params.put("oferta","nada");
-           // params.put("id",pro);
+            params.put("id",id);
             params.put("dist",dist);
-            params.put("latitu",miLatitud);
-            params.put("longitu",milongitud);
-            conexion.post(uri, params, new TextHttpResponseHandler() {
+            params.put("latitu",lati);
+            params.put("longitu",longi);
+          int finalJ = j;
+          conexion.post(uri, params, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     Log.d("Error","no se conecto "+responseString);
@@ -153,6 +159,7 @@ public class ResultBusqueda extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
                     try {
+
                         JSONArray jsonArray= new JSONArray(responseString);
                         for (int i = 0;i < jsonArray.length();i++){
                             ProdxSuper produc=new ProdxSuper();
@@ -169,17 +176,20 @@ public class ResultBusqueda extends Fragment {
                             Float distancia_1=distancia_2.floatValue();
                             produc.setDistancia(distancia_1);
                             myList.add(produc);
-                          //  OrdenarPorDistancia(myList);
+                            DejarSuper(myList);
                             }
-                       // ordenaArray(myList);
-                       Mostrar(myList);
+                        Mostrar(myList);
+                        adapterProductos.notifyDataSetChanged();
+                        if (tam - 1 == finalJ) {
+                            Ordena(supe);
+                        }
                     }
                     catch (Exception e){
                         e.printStackTrace();
                         Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
                     } }
             });
-       //}
+       }
     }
 /*
     public Boolean Guardar(ProdxSuper produc) {
@@ -209,32 +219,88 @@ public class ResultBusqueda extends Fragment {
        myDivider.setDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.cutm_dvdr));
        recycler.addItemDecoration(myDivider );
     }
-    private void OrdenarPorDistancia(List<ProdxSuper> myList) {
-   //tam tiene la cantidad de elementos
-//hace sto llenando directamente al vector
-        //ala laista dejala tal cual te al amandan
+    //aqui se va armando la lista supe con todos los super sin repetir
+    private void DejarSuper(List<ProdxSuper> myList) {
         int tam=myList.size();
-        ProdxSuper aux=new ProdxSuper();
-        if (tam>1){
-        aux=myList.get(tam-1);
-        for (int i=0;i<tam-1;i++){
-              if (myList.get(i).getId_super()==aux.getId_super()){
-
+        Boolean bandera=true;
+        supermercados aux=new supermercados();
+        if (tam<1){
+            aux.setDistancia(myList.get(0).getDistancia());
+            aux.setId(myList.get(0).getId_super());
+            supe.add(aux);
+            bandera=false;
+        }else{
+            aux.setDistancia(myList.get(tam-1).getDistancia());
+            aux.setId(myList.get(tam-1).getId_super());
+            int c=0;
+            while (bandera && c<supe.size()){
+              if (supe.get(c).getId()==aux.getId()){
+                bandera=false;
               }else{
-                  if (myList.get(i).getDistancia()>aux.getDistancia()){
-
-                      for (int j=i;j<tam-1;j++){
-                          myList.add(myList.get(j));
-                      }
-                      myList.add(i,aux);
-                  } } }
+                  c++;
+              }
+            }
+            if (bandera){
+                supe.add(aux);
+            }
         }
    }
-        private void ordenaArray(List<ProdxSuper> lista_1){
+
+   private void Ordena(List<supermercados> unico){
+       int b=unico.size();
+       int m=b;
+       vector=new int[b];
+       Boolean band=true;
+       int l=0;
+       int k=0;
+      while(l<m) {
+          supermercados menor=unico.get(0);
+          k=0;
+       for (int i=1;i<b;i++){
+           if (menor.getDistancia()>unico.get(i).getDistancia()){
+               menor=unico.get(i);
+               k=i;
+           }     }
+       vector[l]=menor.getId();
+       unico.remove(k);
+       b--;
+       l++;
+      }
+   }
+/**
+   private void ordenaArray(List<ProdxSuper> lista_1){
        int tam=lista_1.size();
-       vector=new int[tam];
-        for (int j=0;j<tam;j++){
-            vector[j]=lista_1.get(j).getId_super();
-        }
-    }
+       supermercados aux=new supermercados();
+       if (tam<1){
+           vector[0]=lista_1.get(0).getId_super();
+           aux.setDistancia(lista_1.get(0).getDistancia());
+           aux.setId(lista_1.get(0).getId_super());
+           supe.add(aux);
+       }
+       else
+           {
+           aux.setDistancia(lista_1.get(tam-1).getDistancia());
+           aux.setId(lista_1.get(tam-1).getId_super());
+           int j=0;
+           while (j<supe.size()){
+               if (vector[j]!=aux.getId()){
+                   if (supe.get(j).getDistancia()>aux.getDistancia()){
+                       for (int k=supe.size();k>j;k--){
+                           vector[k]=vector[k-1];
+                           supe.add(k,supe.get(k-1));
+                       }
+                       vector[j]=aux.getId();
+                       supe.add(j,aux);
+                       j=tam+1;
+                   }else{
+                       j++; }
+               }else{
+                   j=tam+2; }
+           }
+           if (j==supe.size()){
+               vector[j]=aux.getId();
+               supe.add(aux);
+           }
+         }
+   }*/
 }

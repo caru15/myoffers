@@ -247,8 +247,6 @@ public class nearby_super extends Fragment implements OnMapReadyCallback, Locati
         switch (item.getItemId()) {
             case R.id.idDistancia:
                 return true;
-            case R.id.idVistas:
-                    return true;
             case R.id.id1:
                 Toast.makeText(this.getContext(),"distancia 1",Toast.LENGTH_LONG).show();
                 map.clear();

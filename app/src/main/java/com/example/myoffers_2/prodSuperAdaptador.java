@@ -1,5 +1,6 @@
 package com.example.myoffers_2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.util.Pair;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.prodViewHolder> {
+public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.prodViewHolder>{
 
     private List<ProdxSuper> items;
     private Context micontext;
@@ -43,33 +45,33 @@ public class prodSuperAdaptador extends RecyclerView.Adapter<prodSuperAdaptador.
 
     @NonNull
     @Override
-    public prodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public prodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int positions) {
         //inicializa la interfaz de un item de la lista a partir del layaut utilizando para ello LayoutInflater
         vista = LayoutInflater.from(micontext).inflate(R.layout.list_layout, parent, false);
         return new prodViewHolder(vista);
     }
 
     @Override
-    public void onBindViewHolder( prodViewHolder holder,final int position) {
+    public void onBindViewHolder(prodViewHolder holder,@SuppressLint("RecyclerView") int positions) {
 
        // holder.image.setImageResource(R.mipmap.logo);
-         ProdxSuper obj=items.get(position);
+         ProdxSuper obj=items.get(positions);
         //aqui estoy cargando la imagen junto con los demas datos
         Glide.with(micontext).load(obj.getImagen()).into(holder.image);
         holder.titulo.setText(obj.getNombre());
-        holder.descripcion.setText(items.get(position).getDescripcion());
-        holder.precio.setText(String.valueOf(items.get(position).getPrecio()));
+        holder.descripcion.setText(items.get(positions).getDescripcion());
+        holder.precio.setText(String.valueOf(items.get(positions).getPrecio()));
         //este es el evento onClickk
-        final int pos=position;
+         int pos=positions;
        prodViewHolder.cv.setOnClickListener(new OnClickListener() {
            @Override
            public void onClick(View v) {
                PosicionMarcada=pos;
-               Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+position, Toast.LENGTH_SHORT);
+               Toast toast = Toast.makeText(v.getContext(), "Eleji la tarjeta numero"+positions, Toast.LENGTH_SHORT);
                toast.show();
                notifyDataSetChanged(); }
                                             });
-       if (PosicionMarcada==position){
+       if (PosicionMarcada==positions){
            prodViewHolder.cv.setCardElevation(vista.getResources().getDimension(R.dimen.cardView1));
        }else{
            prodViewHolder.cv.setCardElevation(vista.getResources().getDimension(R.dimen.cardView));

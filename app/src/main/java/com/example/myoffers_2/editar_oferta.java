@@ -85,7 +85,6 @@ ProdxSuper element;
         String nom=editar_ofertaArgs.fromBundle(getArguments()).getNombre();
         int pos=editar_ofertaArgs.fromBundle(getArguments()).getPosicion();
         Log.d("este es el producto:",String.valueOf(pos));
-        //tit.setText(nom);
 
         dir=bd.dirProdSuper();//"prodxsuper.php
         params.put("type","join");
@@ -95,6 +94,9 @@ ProdxSuper element;
         params.put("pre","nada");
         params.put("oferta","nada");
         params.put("id",pos);
+        params.put("latitu",-25);
+        params.put("longitu",-66);
+        params.put("dist",1000);
         conexion.post(dir, params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

@@ -38,7 +38,8 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class RegisProducto extends Fragment {
+public class
+RegisProducto extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,12 +119,10 @@ public class RegisProducto extends Fragment {
                         int cant= jsonArray.getJSONObject(i).getInt("cantidad");
                         String descripcion =jsonArray.getJSONObject(i).getString("des");
                         String supNombre =jsonArray.getJSONObject(i).getString("super");
-
                         double pre=jsonArray.getJSONObject(i).getDouble("precio");
                         String imagen=jsonArray.getJSONObject(i).getString("imagen");
                         PS=new ProdxSuper(id,nom,cant,descripcion,supNombre,pre,imagen);
                         PS.setId_prod(jsonArray.getJSONObject(i).getInt("idprod"));
-
                         marca=jsonArray.getJSONObject(i).getString("marca");
                         items.add(PS);
                         adapter.notifyDataSetChanged();

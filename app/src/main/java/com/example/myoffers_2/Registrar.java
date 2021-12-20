@@ -86,7 +86,6 @@ public class Registrar extends Fragment {
                 String usuario = Usuario.getText().toString();
                 String email = Email.getText().toString();
                 String contraseña = Password.getText().toString();
-
                 params.put("type","alta");
                 params.put("ape", apellido);
                 params.put("name", nombre);
@@ -110,7 +109,8 @@ public class Registrar extends Fragment {
                             Toast.makeText(v.getContext() ,prueba, Toast.LENGTH_LONG).show();
                             Snackbar.make(v, prueba,Snackbar.LENGTH_LONG).setAction("Action",null).show();
                             Navigation.findNavController(v).navigate(R.id.inicio);
-                            }catch (Exception e){
+                            }
+                        catch (Exception e){
                             e.printStackTrace();
                             Snackbar.make(v, "json no lee",Snackbar.LENGTH_LONG).setAction("Action",null).show();
                             }

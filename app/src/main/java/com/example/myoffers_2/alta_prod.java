@@ -129,6 +129,7 @@ public class alta_prod extends Fragment{
         Ima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 MostrarDialogoOpciones();
             }
         });
@@ -165,38 +166,43 @@ public class alta_prod extends Fragment{
         });builder.show();
     }
 
-    /**
- instancias que invocan el metodo
-     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-     String imagen = getStringImagen(bitmap);
-     desp de hacer esto lo manda a guardar ala base de datos como parametro
-     //fijate esto va en el php
-     file_put_contents($path, base64_decode($imagen));
-     * */
     private void TomarFoto() {
+        //aqui abre la camara
         Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //aqui solo me valida que puedo usar este recurso de la camara
        if (intent.resolveActivity(getContext().getPackageManager())!=null){
                 File photoFile=null;
                 try {
+                    //en esta variable guardo el archivo temporal en donde guarde mi foto
+                    //abajo esta este metodo
                     photoFile=createImageFile();
-                }catch (IOException ex){
+                }
+                //es caso de error sale por aqui
+                catch (IOException ex){
                     Log.d("error",ex.toString());
                 }
+                //me pregunta si el archivo no esta vacio
                 if (photoFile!=null){
+                    //en photo guardo la ruta del archivo photoFile
                   Uri photo=FileProvider.getUriForFile(getContext(),"com.example.myoffers_2.provider",photoFile);
+                  //pasamos este objeto uri por el intent
                   intent.putExtra(MediaStore.EXTRA_OUTPUT,photo);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    //esto me manda un codigo al metodo onActivityResult que me dice que esta abriendo la camara CODE_FOTO=20
                     startActivityForResult(intent,CODE_FOTO);
                 } }
     }
-
+//este metodo es el resultado de la actividad de tomar foto en donde le paso el codigo que genero
+    //dicha actividad y la fotografia este metodo lo que hace es traer la imagen y mostarla en mi IMAGEN VIEW
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //aqui hago un switch con 2 opciones o viene de la camara(20) o la foto viene de la galeria de imagenes(10)
         switch (requestCode){
             case 10:
                 Uri mypath=data.getData();
                 try {
+                    //decodifico la imagen que esta en la galeria y la mando al imagen view
                     bitmap=android.provider.MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),mypath);
                     imagen.setImageBitmap(bitmap);
                 }catch (IOException e){
@@ -204,6 +210,7 @@ public class alta_prod extends Fragment{
                 }
                 break;
             case 20:
+                //se toma la imagen se la decodifica en bitmap y se la manda al imagenview
                 bitmap=BitmapFactory.decodeFile(Ruta_Imagen);
                 imagen.setImageBitmap(bitmap);
               //  bitmap=(Bitmap) data.getExtras().get("data");
@@ -237,10 +244,8 @@ public class alta_prod extends Fragment{
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                    Log.d("entro 1",responseString);
                 try {
-                    Log.d("entro 2",responseString);
                     JSONObject JO=new JSONObject(responseString);
                     String respuesta=JO.getString("message");
-                    Log.d("entro 3",respuesta);
                     Toast toast=Toast.makeText(getContext(),respuesta,Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -250,11 +255,14 @@ public class alta_prod extends Fragment{
                 } }
         });
     }
-
+//este metodo retorna un archivo temp en donde esta guardada mi foto
     private File createImageFile() throws IOException{
         String imageFileName=(String.valueOf(System.currentTimeMillis()/100));
+        //este archivo tiene en donde se va a ubicar el archivo
         File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);;
+        //creamos un archivo temporal de nuestra fotografia estara en el storageDir antes creado
         File image=File.createTempFile(imageFileName,".jpg",storageDir);
+        //ruta absoluta de donde esta guardando mi archivo junto con su nombre
         Ruta_Imagen=image.getAbsolutePath();
         return image;
     }

@@ -4,6 +4,7 @@ public class supermercados {
     private int id;
     private String nombre, direccion,localidad;
     private Double lat, longitud;
+    private Float distancia;
 
     public supermercados(String nombre, String direccion, String localidad, Double Lat, Double longitud) {
         this.nombre = nombre;
@@ -65,4 +66,11 @@ public class supermercados {
         this.localidad = localidad;
     }
 
+    public Float getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(Float distancia) {
+        this.distancia = distancia;
+    }
 }
