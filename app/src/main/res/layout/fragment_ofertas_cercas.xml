@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#656363"
+    android:background="#F0EAF1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ofertasCercas">
 
@@ -88,5 +88,15 @@
         android:backgroundTint="@color/cardview_light_background"
         android:onClick="Damesco"
         app:srcCompat="@mipmap/damesco" /></LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="750dp"
+        android:background="#7029AF"
+        app:menu="@menu/bottom_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
 
 </FrameLayout>

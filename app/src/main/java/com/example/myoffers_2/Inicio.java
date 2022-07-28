@@ -86,8 +86,8 @@ public class Inicio extends Fragment {
         final Button Olvide= view.findViewById(R.id.btnRecup);
         final String a ="admin";
         final String b= "admin";
-
          dir=bd.dirLogin();
+
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

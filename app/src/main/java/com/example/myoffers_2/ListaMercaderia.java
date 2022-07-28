@@ -4,6 +4,7 @@ package com.example.myoffers_2;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,6 +30,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.DialogInterface;
@@ -50,6 +52,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -118,9 +122,12 @@ public class ListaMercaderia extends Fragment implements listAdapter.RecycleItem
         recyclerView=view.findViewById(id.idlistView);
         Button btnfiltrar = view.findViewById(id.btnFiltrar);
         Button btnBuscar = view.findViewById(id.btnbuscar);
+        BottomNavigationView bottonNav=view.findViewById(id.bottom_navi);
         searchView=view.findViewById(id.sv1);
         kilometros=0;
         llenaLista();
+
+        bottonNav.setOnNavigationItemSelectedListener(OnListenerSelect);
         searchView.setOnQueryTextListener(this);
 
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -129,6 +136,7 @@ public class ListaMercaderia extends Fragment implements listAdapter.RecycleItem
         } else {
             getCoordenada();
         }
+
 
  btnfiltrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +176,7 @@ public class ListaMercaderia extends Fragment implements listAdapter.RecycleItem
                         popupWindow.dismiss(); }
                 }); }
         });
- 
+
  btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,4 +316,23 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
         adapter= new ListAdaptador(otraLista,getContext());
         recyclerView.setAdapter(adapter);
     }
+    private final BottomNavigationView.OnNavigationItemSelectedListener OnListenerSelect= new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case id.id_principal:
+                    Navigation.findNavController(getView()).navigate(id.bienvenida);
+                    return true;
+                case id.id_ofertas:
+                    Navigation.findNavController(getView()).navigate(id.ofertasCercas);
+                    return true;
+                case id.id_super:
+                    Navigation.findNavController(getView()).navigate(id.nearby_super);
+                    return true;
+                case id.id_ingresarprod:
+                    Navigation.findNavController(getView()).navigate(id.regisProducto);
+                    return true;
+            }return false;
+        }
+    };
 }

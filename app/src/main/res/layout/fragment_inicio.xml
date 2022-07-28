@@ -16,9 +16,9 @@
         android:layout_above="@id/username"
         android:layout_marginBottom="0dp"
         android:gravity="center"
-        android:text="Ingrese usuario y contraseña"
-        android:textSize="40dp"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:text="Ingrese usuario  y contraseña"
+        android:textColor="#A0A9DC"
+        android:textSize="30dp"
         android:textStyle="italic"
         android:typeface="serif" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/cv_contenedora"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        apps:cardBackgroundColor="#583695"
+        apps:cardBackgroundColor="#351C4D"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
@@ -44,11 +44,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginLeft="25dp"
-               android:layout_marginTop="25dp"
+                android:layout_marginTop="25dp"
                 android:background="@drawable/border"
                 android:ems="15"
                 android:hint="Usuario"
-                android:padding="10dp" />
+                android:textColorHighlight="@color/design_default_color_on_primary"
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <requestFocus />
 
@@ -59,6 +61,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/username"
                 android:layout_marginLeft="25dp"
+                android:textColor="#FFFFFF"
                 android:layout_marginTop="29dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/border"

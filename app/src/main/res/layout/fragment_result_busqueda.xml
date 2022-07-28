@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="#B99BD3"
     tools:context=".ResultBusqueda">
 
  <LinearLayout
@@ -14,9 +15,9 @@
      <TextView
          android:id="@+id/text3"
          android:layout_width="match_parent"
-         android:layout_height="55dp"
-         android:textStyle="bold"
-         android:textSize="20dp"
+         android:layout_height="60dp"
+         android:fontFamily="@font/mustardo"
+         android:textSize="25dp"
          android:text="nada"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -35,8 +36,8 @@
          android:layout_width="match_parent"
          android:layout_height="50dp"
          android:text="Ver Ruta Completa"
-         style="@style/amu_Bubble.TextAppearance.Light"
-         android:background="@color/common_google_signin_btn_text_light_focused">
+         android:background="@android:drawable/button_onoff_indicator_off"
+         android:textStyle="bold">
 
      </Button>
  </LinearLayout>

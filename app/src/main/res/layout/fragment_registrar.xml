@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo3"
+    android:background="#D17EDF"
     tools:context=".Registrar">
 
 
@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Cargue sus Datos"
-        android:textSize="30dp"
-        android:textColor="@color/cardview_light_background"/>
+        android:fontFamily="@font/mustardo"
+        android:textSize="35dp"
+        android:textColor="#0B0A0A"/>
 <LinearLayout
     android:id="@+id/lineLay"
     android:layout_width="match_parent"
@@ -26,10 +27,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/border"
+        android:textSize="15dp"
         android:padding="10dp"
-        android:textColorHint="@color/cardview_light_background"
+        android:textColorHint="@android:color/black"
         android:ems="10"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColor="@android:color/black"
         android:hint="Apellido" />
 
 
@@ -38,20 +40,22 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:textColorHint="@color/cardview_light_background"
+        android:textColorHint="@android:color/black"
         android:padding="10dp"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColor="@android:color/black"
         android:background="@drawable/border"
         android:ems="10"
+        android:textSize="15dp"
         android:hint="Nombre" />
     <EditText
         android:id="@+id/idDNI"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:textColorHint="@color/cardview_light_background"
+        android:textColorHint="@android:color/black"
         android:padding="10dp"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textSize="15dp"
+        android:textColor="@android:color/black"
         android:background="@drawable/border"
         android:ems="10"
         android:hint="Documento" />
@@ -61,10 +65,11 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:textColorHint="@color/cardview_light_background"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColorHint="@android:color/black"
+        android:textColor="@android:color/black"
         android:background="@drawable/border"
         android:padding="10dp"
+        android:textSize="15dp"
         android:ems="10"
         android:hint="Usuario" />
 
@@ -73,9 +78,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:textColorHint="@color/cardview_light_background"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:textColorHint="@android:color/black"
+        android:textColor="@android:color/black"
         android:padding="10dp"
+        android:textSize="15dp"
         android:background="@drawable/border"
         android:ems="10"
         android:hint="E-mail" />
@@ -83,10 +89,11 @@
     <EditText
         android:id="@+id/idPassword"
         android:layout_width="match_parent"
-        android:textColorHint="@color/cardview_light_background"
+        android:textColorHint="@android:color/black"
         android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:layout_marginTop="30dp"
         android:padding="10dp"
+        android:textSize="15dp"
         android:layout_height="50dp"
         android:background="@drawable/border"
         android:ems="10"
@@ -102,13 +109,16 @@
 
     <Button
         android:id="@+id/btnGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="275dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/border"
+        android:layout_marginTop="30dp"
+        android:background="#F5F0F6"
         android:text="Guardar"
-        android:textColor="@color/cardview_light_background"></Button>
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:typeface="serif"
+        android:textColor="#141415"></Button>
 
 </LinearLayout>
 

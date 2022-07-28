@@ -58,16 +58,15 @@ public class ruta extends Fragment implements LocationListener {
    private ArrayList<supermercados> misSuper=new ArrayList<>();
     Boolean actualposition = true;
   private  JSONObject jso;
-
     private Double latitudOrigen, longitudOrigen;
     private Double LatitudOrigen,LongitudOrigen;
     private Double latitudDest=0.0;
     private Double longitudDest=0.0;
     LatLng dest;
-    private String longi;
-private Location local;
-    Toolbar toolbar;
     LatLng mipos;
+    private String longi;
+    private Location local;
+    Toolbar toolbar;
     AsyncHttpClient conexion=new AsyncHttpClient();
     RequestParams params= new RequestParams();
     private String uri;
@@ -104,9 +103,9 @@ private Location local;
         String longi=rutaArgs.fromBundle(getArguments()).getLongitud();
         longitudDest=Double.parseDouble(longi);
         dest= new LatLng(latitudDest,longitudDest);
-       //recibo aqui la lista de los super ordenados por distancia
+       //recibo aqui la lista de los id de los supermercados, ordenados
        int[] Super=rutaArgs.fromBundle(getArguments()).getMisSuper();
-
+        Log.d("que trae Super",String.valueOf(Super.length));
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -169,9 +168,9 @@ private Location local;
             params.put("dir","nada");
             params.put("localidad","nada");
             params.put("id",id);
-            params.put("latitu",-24.849605632504083);
-            params.put("longitu",-65.43188041158692);
-
+            params.put("latitu",-24.849603627389325);
+            params.put("longitu",-65.431997404894);
+            Log.d("LatitudOrigen",String.valueOf(latitudOrigen)+"-"+String.valueOf(longitudOrigen));
             conexion.post(uri, params, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

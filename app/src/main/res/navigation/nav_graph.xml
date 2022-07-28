@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/inicio">
+    app:startDestination="@id/fragment_Splash1">
 
     <fragment
         android:id="@+id/inicio"
@@ -19,6 +19,7 @@
         <action
             android:id="@+id/action_inicio_to_recupClave"
             app:destination="@id/recupClave" />
+
     </fragment>
     <fragment
         android:id="@+id/bienvenida"
@@ -289,5 +290,17 @@
             android:name="nombreSup"
             app:argType="string"
             android:defaultValue="nada" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_Splash1"
+        android:name="com.example.myoffers_2.Fragment_Splash1"
+        android:label="fragment__splash1"
+        tools:layout="@layout/fragment__splash1" >
+        <action
+            android:id="@+id/action_fragment_Splash1_to_inicio"
+            app:destination="@id/inicio"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/inicio"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

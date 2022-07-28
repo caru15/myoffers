@@ -1,98 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6872AA"
+    android:background="#D17EDF"
     tools:context=".Bienvenida">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/IdUsua"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme">
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/mustardo"
+        android:text="Bienvenido a My Offers que desea hacer:"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="4dp"
+        tools:ignore="MissingConstraints"></TextView>
 
-    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/bntLista"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFF"
+        android:linksClickable="true"
+        android:textStyle="italic"
+        android:text="Lista de mercaderia"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatImageView"></androidx.appcompat.widget.AppCompatButton>
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#BD3FD3"
-        app:popupTheme="@style/AppTheme.PopupOverlay" >
-    </androidx.appcompat.widget.Toolbar>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnOfertas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#6246C5"
+        android:text="Ver Ofertas"
+        android:textColor="@android:color/black"
+        android:textStyle="italic"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bntLista"></androidx.appcompat.widget.AppCompatButton>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSuper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#FFFF"
+        android:text="Supermercados mas Cercanos"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnOfertas"></androidx.appcompat.widget.AppCompatButton>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnProductos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#6246C5"
+        android:text="Ingresar Producto en Oferta"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSuper"
+        app:layout_constraintVertical_bias="0.0"></androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
+        android:id="@+id/appCompatImageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="70dp"
+        android:layout_marginTop="80dp"
+
         android:src="@drawable/avatar_bienvenida"
-       >
-
-    </androidx.appcompat.widget.AppCompatImageView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/IdUsua"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bienvenido a My Offers que desea hacer:"
-            android:textSize="30dp"
-            android:fontFamily="@font/mustardo"
-            android:textStyle="normal"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:layout_marginBottom="30dp">
-        </TextView>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bntLista"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="150dp"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFF"
-            android:linksClickable="true"
-            android:textSize="18dp"
-            android:textColor="@android:color/black"
-            android:text="Lista de mercaderia"></androidx.appcompat.widget.AppCompatButton>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnOfertas"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="18dp"
-            android:textColor="@android:color/black"
-            android:text="Ver Ofertas"></androidx.appcompat.widget.AppCompatButton>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSuper"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFF"
-            android:textSize="18dp"
-            android:textColor="@android:color/black"
-            android:text="Supermercados mas Cercanos"></androidx.appcompat.widget.AppCompatButton>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnProductos"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:textSize="18dp"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="10dp"
-            android:text="Ingresar Producto en Oferta"></androidx.appcompat.widget.AppCompatButton>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></androidx.appcompat.widget.AppCompatImageView>
 
 
-    </LinearLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

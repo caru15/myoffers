@@ -45,7 +45,7 @@ public class ResultBusqueda extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private int[] prod;//recibe los id de los prod cargados en la pantalla anterior
     private int[] vector;
-    private  ArrayList<supermercados> supe = new ArrayList<supermercados>();
+    private  List<supermercados> supe = new ArrayList<supermercados>();
     private Double miLatitud;
     private Double milongitud;
     private TextView textView1;
@@ -120,6 +120,7 @@ public class ResultBusqueda extends Fragment {
         textView2.setText("Lista de Supermercados a "+dist+"km de distancia");
         BuscarSuper(prod);
         Log.d("supe afuera",String.valueOf(supe.size()));
+
    //CON ESTE BOTON SE VE LA RUTA COMPLETA A SEGUIR
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,12 +177,12 @@ public class ResultBusqueda extends Fragment {
                             Float distancia_1=distancia_2.floatValue();
                             produc.setDistancia(distancia_1);
                             myList.add(produc);
-                            DejarSuper(myList);
+                            //DejarSuper(myList);
                             }
                         Mostrar(myList);
                         adapterProductos.notifyDataSetChanged();
-                        if (tam - 1 == finalJ) {
-                            Ordena(supe);
+                        if (tam==(myList.size())) {
+                            CreaSuper(myList);
                         }
                     }
                     catch (Exception e){
@@ -189,6 +190,7 @@ public class ResultBusqueda extends Fragment {
                         Log.d("ERROR","entramos por el catch del ultimo"+e.toString());
                     } }
             });
+
        }
     }
 /*
@@ -217,7 +219,7 @@ public class ResultBusqueda extends Fragment {
        adapterProductos.notifyDataSetChanged();
        DividerItemDecoration myDivider = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
        myDivider.setDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.cutm_dvdr));
-       recycler.addItemDecoration(myDivider );
+       recycler.addItemDecoration(myDivider);
     }
     //aqui se va armando la lista supe con todos los super sin repetir
     private void DejarSuper(List<ProdxSuper> myList) {
@@ -245,62 +247,58 @@ public class ResultBusqueda extends Fragment {
             }
         }
    }
-
-   private void Ordena(List<supermercados> unico){
-       int b=unico.size();
-       int m=b;
-       vector=new int[b];
-       Boolean band=true;
-       int l=0;
-       int k=0;
-      while(l<m) {
-          supermercados menor=unico.get(0);
-          k=0;
-       for (int i=1;i<b;i++){
-           if (menor.getDistancia()>unico.get(i).getDistancia()){
-               menor=unico.get(i);
-               k=i;
-           }     }
-       vector[l]=menor.getId();
-       unico.remove(k);
-       b--;
-       l++;
-      }
-   }
-/**
-   private void ordenaArray(List<ProdxSuper> lista_1){
-       int tam=lista_1.size();
-       supermercados aux=new supermercados();
-       if (tam<1){
-           vector[0]=lista_1.get(0).getId_super();
-           aux.setDistancia(lista_1.get(0).getDistancia());
-           aux.setId(lista_1.get(0).getId_super());
-           supe.add(aux);
+   public void CreaSuper(List<ProdxSuper> myLista2){
+       int t=myLista2.size();
+       float di=0;
+       int id_s=0;
+       for (int j=0;j<myLista2.size();j++){
+           supermercados aux=new supermercados("","","",0.0,0.0);
+           aux.setDistancia(0.00F);
+           aux.setId(0);
+           di=myLista2.get(j).getDistancia();
+           id_s=myLista2.get(j).getId_super();
+           aux.setDistancia(di);
+           aux.setId(id_s);
+           supe.add(j,aux);
        }
-       else
-           {
-           aux.setDistancia(lista_1.get(tam-1).getDistancia());
-           aux.setId(lista_1.get(tam-1).getId_super());
-           int j=0;
-           while (j<supe.size()){
-               if (vector[j]!=aux.getId()){
-                   if (supe.get(j).getDistancia()>aux.getDistancia()){
-                       for (int k=supe.size();k>j;k--){
-                           vector[k]=vector[k-1];
-                           supe.add(k,supe.get(k-1));
-                       }
-                       vector[j]=aux.getId();
-                       supe.add(j,aux);
-                       j=tam+1;
-                   }else{
-                       j++; }
-               }else{
-                   j=tam+2; }
-           }
-           if (j==supe.size()){
-               vector[j]=aux.getId();
-               supe.add(aux);
-           }
-         }
-   }*/
+       Ordena(supe);
+   }
+    private void Ordena(List<supermercados> unico){
+        int b=unico.size();
+        int m=b;
+       float menor=0;
+        vector=new int[b];
+        Boolean band=true;
+        int l=0;
+        while(l<m) {
+             menor = unico.get(0).getDistancia();
+            int k = 0;
+            for (int i = 1; i < b; i++) {
+                if (menor > unico.get(i).getDistancia()) {
+                    menor = unico.get(i).getDistancia();
+                    k=i;
+                }
+            }
+            vector[l] = unico.get(k).getId();
+            unico.remove(k);
+            b--;
+            l++;
+        }
+//            int tam=vector.length;
+//            int tam_1=tam;
+//            for(int c=0;c<tam-1;c++){
+//                int j=c+1;
+//                Boolean b1=true;
+//                while (b1){
+//                    if (vector[c]==vector[j]){
+//                        for (int h=j+1;h<tam_1;h++){
+//                            vector[h-1]=vector[h];
+//                        }
+//                        tam_1=tam_1-1;
+//                        vector[tam_1]=0;
+//                    }else{
+//                        b1=false;
+//                    }
+//                } }
+    }
 }

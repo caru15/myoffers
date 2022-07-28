@@ -3,13 +3,30 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/drawable/borde_btn.xml" value="0.155" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment__splash1.xml" value="0.1" />
         <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_alta_prod.xml" value="0.15" />
-        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_bienvenida.xml" value="0.18" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_bienvenida.xml" value="0.16" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_editar_oferta.xml" value="0.12138157894736842" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_inicio.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_lista_mercaderia.xml" value="0.25" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_nearby_super.xml" value="0.1" />
         <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_nueva_oferta.xml" value="0.15" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_ofertas_cercas.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_recup_clave.xml" value="0.1" />
         <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_regis_producto.xml" value="0.1" />
-        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_result_busqueda.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_registrar.xml" value="0.18" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_result_busqueda.xml" value="0.2" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_ruta.xml" value="0.1" />
         <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_seleccion_prod.xml" value="0.1" />
-        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/item_produc.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/fragment_splash.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/item_produc.xml" value="0.25" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/item_row.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/layout/list_layout.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/menu/bottom_menu.xml" value="0.17083333333333334" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/menu/bottom_menu2.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/menu/bottom_menu3.xml" value="0.1" />
+        <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/menu/bottom_menu4.xml" value="0.1" />
         <entry key="..\:/Users/Carina/AndroidStudioProjects/MyOffers_2/app/src/main/res/menu/menu_mapa.xml" value="0.21" />
       </map>
     </option>
